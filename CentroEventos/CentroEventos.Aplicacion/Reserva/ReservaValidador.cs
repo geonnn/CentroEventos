@@ -1,6 +1,6 @@
 using System.Text;
 
-namespace CentroEventos.Aplicacion;
+namespace CentroEventos.Aplicacion.Reserva;
 
 public class ReservaValidador
 {

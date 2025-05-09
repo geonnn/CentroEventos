@@ -1,5 +1,5 @@
 using System.Text;
-namespace CentroEventos.Aplicacion;
+namespace CentroEventos.Aplicacion.EventoDeportivo;
 
 public class EventoDeportivoValidador
 {
