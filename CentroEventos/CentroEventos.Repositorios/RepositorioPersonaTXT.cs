@@ -2,20 +2,29 @@ namespace CentroEventos.Repositorios;
 using CentroEventos.Aplicacion.Persona;
     public class RepositorioPersonaTXT : IRepositorioPersona
     {
-        readonly string _nombreArch = "personas.txt";
-        public void AgregarPersona(Persona persona){
-            using var sw = new StreamWriter(_nombreArch, true);
-            
-            sw.WriteLine(persona.Id);
-            sw.WriteLine(persona.Dni);
-            sw.WriteLine(persona.Nombre);
-            sw.WriteLine(persona.Apellido);
-            sw.WriteLine(persona.Email);
-            sw.WriteLine(persona.Telefono);
+        readonly string _archPersonas = "../../../../CentroEventos.Repositorios/txt_files/personas.txt";
+        readonly string _archUltimaId = "../../../../CentroEventos.Repositorios/txt_files/ultima_id_personas.txt";
+
+        public RepositorioPersonaTXT() {
+            if(!File.Exists(_archUltimaId)) {
+                using StreamWriter sw = new StreamWriter(_archUltimaId);
+                sw.Write(0);
+            }
         }
+        
+        public void AgregarPersona(Persona persona){
+                using var sw = new StreamWriter(_archPersonas, true);
+                
+                sw.WriteLine(persona.Id);
+                sw.WriteLine(persona.Dni);
+                sw.WriteLine(persona.Nombre);
+                sw.WriteLine(persona.Apellido);
+                sw.WriteLine(persona.Email);
+                sw.WriteLine(persona.Telefono);
+            }
         public List<Persona> ListarPersonas(){
             var resultado = new List<Persona>();
-            using var sr = new StreamReader(_nombreArch);
+            using var sr = new StreamReader(_archPersonas);
 
             while (!sr.EndOfStream)
             {
@@ -33,13 +42,13 @@ using CentroEventos.Aplicacion.Persona;
         }
 
         public void EliminarPersona(int id){
-            using var sw = new StreamWriter(_nombreArch, true);
+            using var sw = new StreamWriter(_archPersonas, true);
 
             
         }
 
         public void ModificarPersona(int id){
-            using var sr = new StreamReader(_nombreArch);
+            using var sr = new StreamReader(_archPersonas);
             bool encontre = false; 
             while (!sr.EndOfStream && !encontre)
             {
@@ -58,18 +67,47 @@ using CentroEventos.Aplicacion.Persona;
                 string personaApellido;
                 string personaEmail;
                 string personaTelefono;
-                AgregarPersona(PedirDatosPersona(id));
+                AgregarPersona(PedirDatos(id));
             }    
         }
 
-        public Persona PedirDatosPersona(int id){
+        public Persona PedirDatos(int id){
 
-            string personaDni;
-            string personaNombre;
-            string personaApellido;
-            string personaEmail;
-            string personaTelefono;
-            Persona per = new Persona(id,);
-            
+            Console.WriteLine("ingrese dni: ");
+            string dni = Console.ReadLine();
+            Console.WriteLine("ingrese nombre: ");
+            string nombre = Console.ReadLine();
+            Console.WriteLine("ingrese apellido: ");
+            string apellido = Console.ReadLine();
+            Console.WriteLine("ingrese email: ");
+            string email = Console.ReadLine();
+            Console.WriteLine("ingrese telefono: ");
+            string telefono = Console.ReadLine();
+            Persona per = new Persona(id, dni, nombre, apellido, email, telefono);
+            return per;
         }
+
+        public bool PersonaExiste(int id)
+        {
+            foreach (Persona p in ListarPersonas())
+                if (id == p.Id)
+                    return true;
+
+            return false;
+        }
+
+    private int NuevoId()
+    {
+        // implementar try catch.
+        using StreamReader sr = new StreamReader(_archUltimaId);
+        string? s = sr.ReadLine();
+        Console.WriteLine(s);
+        int id = int.Parse(s);
+        id++;
+        sr.Close();
+        using StreamWriter sw = new StreamWriter(_archUltimaId);
+        sw.WriteLine(id);
+        sw.Close();
+        return id;
+    }
 }

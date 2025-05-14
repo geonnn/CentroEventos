@@ -4,6 +4,6 @@ public class ModificarPersonaUseCase(IRepositorioPersona repo)
 {
 public void Ejecutar(Persona persona)
 {
-repo.ModificarPersona(persona);
+repo.ModificarPersona(persona.Id);
 }
 }

@@ -2,8 +2,8 @@ namespace CentroEventos.Aplicacion.Reserva;
 
 public class EliminarReservaUseCase(IRepositorioReserva repoReserva) {
     
-    public List<Reserva> Ejecutar() {
+    public void Ejecutar(int id) {
 
-        return repoReserva.EliminarReserva();
+        repoReserva.EliminarReserva(id);
     }
 }

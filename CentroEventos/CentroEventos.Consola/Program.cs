@@ -7,11 +7,13 @@ using CentroEventos.Repositorios;
 // Dependencias
 
 IRepositorioEventoDeportivo repoEventoDeportivo = new RepositorioEventoDeportivoTXT();
-IRepositorioReserva repoReserva = new RepositorioReservaTXT();
+// IRepositorioReserva repoReserva = new RepositorioReservaTXT();
 IRepositorioPersona repoPersona = new RepositorioPersonaTXT();
 
 // Casos de uso
 
-var AgregarEventoDeportivo = new AgregarEventoDeportivoUseCase(repoEventoDeportivo);
+AgregarEventoDeportivoUseCase agregarEventoDeportivo = new AgregarEventoDeportivoUseCase(repoEventoDeportivo);
 
 // Ejecución los casos de uso
+
+agregarEventoDeportivo.Ejecutar(new EventoDeportivo("uno", "evento1", new DateTime(2025, 10, 10), 90, 100, 5));

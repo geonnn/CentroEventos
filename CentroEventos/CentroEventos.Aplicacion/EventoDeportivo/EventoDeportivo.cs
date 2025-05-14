@@ -2,13 +2,23 @@ namespace CentroEventos.Aplicacion.EventoDeportivo;
 
 public class EventoDeportivo
 {
-    public int Id {get;}
-    public string Nombre {get;}
-    public string Descripcion {get;}
-    public DateTime FechaHoraInicio {get;}
-    public double DuracionHoras {get;}
-    public int CupoMaximo {get;}
-    public int ResponsableId {get;}
+    public int Id {get; private set;}
+    public string Nombre {get; private set;}
+    public string Descripcion {get; private set;}
+    public DateTime FechaHoraInicio {get; private set; }
+    public double DuracionHoras {get; private set; }
+    public int CupoMaximo {get; private set; }
+    public int ResponsableId {get; private set;}
+
+    public EventoDeportivo(string nom, string desc, DateTime fechaInicio, double duracion, int cupoMax, int respId)
+    {
+        Nombre = nom;
+        Descripcion = desc;
+        FechaHoraInicio = fechaInicio;
+        DuracionHoras = duracion;
+        CupoMaximo = cupoMax;
+        ResponsableId = respId;
+    }
 
     public string ToStringParaTXT(int id)
     {
@@ -20,5 +30,4 @@ public class EventoDeportivo
                 CupoMaximo + "\n" +
                 ResponsableId;
     }
-    
 }

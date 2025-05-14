@@ -4,22 +4,55 @@ using CentroEventos.Aplicacion.Reserva;
 
 public class RepositorioReservaTXT : IRepositorioReserva
 {
-    readonly string _NombreArch = "Reservas.txt";
-    public void AgregarReserva(Reserva reserva) {
-        using var sw = new StreamWriter(_NombreArch, true);
-        while (sw.EndOfStream)
-        sw.WriteLine(reserva.ToStringParaTXT())
+    readonly string _archReservas = "../../../../CentroEventos.Repositorios/txt_files/reservas.txt";
+    readonly string _archUltimaId = "../../../../CentroEventos.Repositorios/txt_files/ultima_id_reservas.txt";
+
+    public RepositorioReservaTXT() {
+        if (!File.Exists(_archUltimaId)) {
+            using StreamWriter sw = new StreamWriter(_archUltimaId);
+            sw.Write(0);
+        }
     }
 
-    public void EliminarReserva(Reserva r) {
+    public void AgregarReserva(Reserva reserva) {
+        string r = reserva.ToStringParaTXT(NuevoId());
+        using StreamWriter sw = new StreamWriter(_archReservas, true);
+        sw.WriteLine(r);
+    }
+
+    public void EliminarReserva(int id) {
+
+    }
         
-   public void ModificarReserva(Reserva r) {
+   public void ModificarReserva(int id) {
         
     }
     
-    public void ListarReserva(Reserva r) {
+    public List<Reserva> ListarReserva() {
         
+        using var sr = new StreamReader(_archReservas);
+        sr.ReadLine();
+        Reserva r;
+        List<Reserva> ListaReserva = new List<Reserva>{};
+        while (!sr.EndOfStream) {
+            r = new Reserva();
+            //r.Id = int.Parse(sr.ReadLine());
+        }
+        return new List<Reserva> ();
     }
 
-    public
+    private int NuevoId()
+    {
+        // implementar try catch.
+        using StreamReader sr = new StreamReader(_archUltimaId);
+        string? s = sr.ReadLine();
+        Console.WriteLine(s);
+        int id = int.Parse(s);
+        id++;
+        sr.Close();
+        using StreamWriter sw = new StreamWriter(_archUltimaId);
+        sw.WriteLine(id);
+        sw.Close();
+        return id;
+    }
 }

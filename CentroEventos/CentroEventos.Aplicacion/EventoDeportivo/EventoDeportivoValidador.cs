@@ -3,7 +3,7 @@ namespace CentroEventos.Aplicacion.EventoDeportivo;
 
 public class EventoDeportivoValidador
 {
-    public bool Validar(EventoDeportivo e, out string mensajeError)
+    public bool Validar(EventoDeportivo e, out string mensajeError, List<Persona.Persona> listaPersonas)
     {
 
         mensajeError = "";
@@ -29,11 +29,20 @@ public class EventoDeportivoValidador
             mensaje.Append("La duración debe del evento ser mayor a 0.\n");
         }
 
-        if (/* TO-DO comprobar que el e.ResponsableId exista*/) {
+        if (PersonaExiste(e.ResponsableId, listaPersonas)) {
             mensaje.Append("La persona responsable no existe.\n");
         }
 
         mensajeError = mensaje.ToString();
         return (mensajeError == "");
+    }
+
+    private bool PersonaExiste(int id, List<Persona.Persona> lista)
+    {
+        foreach (Persona.Persona p in lista)
+            if (id == p.Id)
+                return true;
+
+        return false;
     }
 }

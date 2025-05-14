@@ -2,9 +2,9 @@ namespace CentroEventos.Aplicacion.Reserva;
 
 public class ModificarReservaUseCase(IRepositorioReserva repoReserva) {
 
-    public List<Reserva> Ejecutar() {
+    public void Ejecutar(int id) {
 
-        return repoReserva.ModificarReserva();
+        repoReserva.ModificarReserva(id);
 
     }
 }

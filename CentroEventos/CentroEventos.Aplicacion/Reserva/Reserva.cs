@@ -3,10 +3,10 @@ namespace CentroEventos.Aplicacion.Reserva;
 public class Reserva
 {
     public int Id {get;}
-    public int PersonaId {get;}
-    public int EventoDeportivoId {get;}
-    public DateTime FechaAltaReserva {get;}
-    public EstadoAsistencia Estado {get; }
+    public int PersonaId {get; private set;}
+    public int EventoDeportivoId {get; private set;}
+    public DateTime FechaAltaReserva {get; private set;}
+    public EstadoAsistencia Estado {get; private set;}
 
     public string ToStringParaTXT(int id)
     {
