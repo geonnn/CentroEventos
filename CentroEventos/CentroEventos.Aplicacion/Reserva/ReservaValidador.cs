@@ -21,9 +21,9 @@ public class ReservaValidador
         mensajeError = "";
         StringBuilder mensaje = new StringBuilder("");
 
-        // if (/* TO-DO consultar si r.PersonaId existe.*/) {
-        //     mensaje.Append("El id de persona ingresado no existe.\n");
-        // }
+        if (!_repoPersona.PersonaExiste(r.PersonaId)) {
+            mensaje.Append("El id de persona ingresado no existe.\n");
+        }
 
         // if (/* TO-DO consultar si r.EventoDeportivoId existe.*/) {
         //     mensaje.Append("El id del evento ingresado no existe.\n");

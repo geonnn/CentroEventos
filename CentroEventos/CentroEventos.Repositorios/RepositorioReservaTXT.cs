@@ -19,13 +19,14 @@ public class RepositorioReservaTXT : IRepositorioReserva
 
     public void AgregarReserva(Reserva reserva)
     {
+        //Agrego un comentario pa ver como lo maneja el rebase
         using StreamWriter sw = new StreamWriter(_archReservas, true);
         sw.WriteLine(reserva.ToStringParaTXT(_idGetter.GetNuevoId(_archUltimaId)));
     }
 
     public void EliminarReserva(int id)
     {
-
+        Console.WriteLine("Agrego un comentario pa ver como lo maneja el rebase");
     }
 
     public void ModificarReserva(int id)
