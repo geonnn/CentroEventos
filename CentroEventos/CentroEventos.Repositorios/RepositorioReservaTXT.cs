@@ -26,7 +26,8 @@ public class RepositorioReservaTXT : IRepositorioReserva
 
     public void EliminarReserva(int id)
     {
-        Console.WriteLine("Agrego un comentario pa ver como lo maneja el rebase");        List<Reserva> reservas = ListarReserva();
+        Console.WriteLine("Agrego un comentario pa ver como lo maneja el rebase");
+        List<Reserva> reservas = ListarReserva();
         List<Reserva> reservasN = new List<Reserva> {};
         foreach(Reserva r in reservas)
         {
