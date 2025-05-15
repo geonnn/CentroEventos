@@ -26,12 +26,39 @@ public class RepositorioReservaTXT : IRepositorioReserva
 
     public void EliminarReserva(int id)
     {
-        Console.WriteLine("Agrego un comentario pa ver como lo maneja el rebase");
+        Console.WriteLine("Agrego un comentario pa ver como lo maneja el rebase");        List<Reserva> reservas = ListarReserva();
+        List<Reserva> reservasN = new List<Reserva> {};
+        foreach(Reserva r in reservas)
+        {
+            if (!(r.Id == id))
+            {
+                reservasN.Append(r);
+            }
+        }
+        using StreamWriter sw = new StreamWriter(_archReservas, false);
+        foreach(Reserva r in reservasN)
+        {
+            sw.WriteLine(r.ToStringParaTXT());
+        }
+
     }
 
-    public void ModificarReserva(int id)
+    public void ModificarReserva(Reserva NuevaReserva)
     {
-
+        List<Reserva> reservas = ListarReserva();
+        List<Reserva> reservasN = new List<Reserva> {};
+        foreach(Reserva r in reservas)
+        {
+            if (r.Id == NuevaReserva.Id)
+                reservasN.Append(r);
+            else
+                reservasN.Append(NuevaReserva);
+        }
+        using StreamWriter sw = new StreamWriter(_archReservas, false);
+        foreach(Reserva r in reservasN)
+        {
+            sw.WriteLine(r.ToStringParaTXT());
+        }
     }
     
     public List<Reserva> ListarReserva() {
