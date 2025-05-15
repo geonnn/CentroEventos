@@ -8,12 +8,14 @@ public class AgregarEventoDeportivoUseCase(IRepositorioEventoDeportivo repo, Eve
         {
             if (!validador.Validar(evento, out string mensajeError))
                 throw new Exception(mensajeError);
+
             repo.AgregarEventoDeportivo(evento);
+            Console.WriteLine($"Evento ID {evento.Id} añadido exitosamente.");
         }
         catch (Exception e)
         {
-            System.Console.WriteLine("Excepción: " + e);
-            System.Console.WriteLine("El evento no se pudo añadir.");
+            Console.WriteLine("Excepción: " + e);
+            Console.WriteLine($"Error al añadir el evento ID {evento.Id}.");
         }
 
     }
