@@ -25,11 +25,19 @@ public class Reserva
 
     public string ToStringParaTXT(int id)
     {
-        return $"{id}\n" +
-               $"{PersonaId}\n" +
-               $"{EventoDeportivoId}\n" +
-               $"{FechaAltaReserva:dd/MM/yyyy}\n" +
-               $"{Estado}";
+        return id + "\n" +
+               PersonaId + "\n" +
+               EventoDeportivoId + "\n" +
+               $"{FechaAltaReserva:dd/MM/yyyy}" + "\n" +
+               Estado;
+    }
+    public string ToStringParaTXT()
+    {
+        return Id + "\n" +
+               PersonaId + "\n" +
+               EventoDeportivoId + "\n" +
+               $"{FechaAltaReserva:dd/MM/yyyy}" + "\n" +
+               Estado;
     }
 }
 
