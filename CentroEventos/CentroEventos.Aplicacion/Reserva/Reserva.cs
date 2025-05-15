@@ -2,7 +2,7 @@ namespace CentroEventos.Aplicacion.Reserva;
 
 public class Reserva
 {
-    public int Id {get;}
+    public int Id {get; private set;}
     public int PersonaId {get; private set;}
     public int EventoDeportivoId {get; private set;}
     public DateTime FechaAltaReserva {get; private set;}
