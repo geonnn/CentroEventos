@@ -4,6 +4,6 @@ public interface IRepositorioReserva
 {
     void AgregarReserva(Reserva reserva);
     void EliminarReserva(int id);
-    void ModificarReserva(int id);
+    void ModificarReserva(Reserva r);
     List<Reserva> ListarReserva();
 }
