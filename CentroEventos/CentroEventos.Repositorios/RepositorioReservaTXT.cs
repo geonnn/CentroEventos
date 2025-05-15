@@ -68,8 +68,12 @@ public class RepositorioReservaTXT : IRepositorioReserva
         Reserva r;
         List<Reserva> ListaReserva = new List<Reserva>{};
         while (!sr.EndOfStream) {
-            // r = new Reserva();
-            //r.Id = int.Parse(sr.ReadLine());
+            int Id = int.Parse(sr.ReadLine() ?? "");
+            int PersonaId = int.Parse(sr.ReadLine() ?? "");
+            int EventoDeportivoId = int.Parse(sr.ReadLine() ?? "");
+            DateTime FechaAltaReserva = DateTime.Parse(sr.ReadLine() ?? "");
+            EstadoAsistencia Estado = Enum.Parse<EstadoAsistencia>(sr.ReadLine() ?? "");
+            r = new Reserva(Id, PersonaId, EventoDeportivoId, FechaAltaReserva, Estado);
         }
         return new List<Reserva> ();
     }
