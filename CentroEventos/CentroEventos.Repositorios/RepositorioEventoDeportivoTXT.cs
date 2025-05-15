@@ -1,23 +1,26 @@
 namespace CentroEventos.Repositorios;
+
+using CentroEventos.Aplicacion;
 using CentroEventos.Aplicacion.EventoDeportivo;
 
 public class RepositorioEventoDeportivoTXT : IRepositorioEventoDeportivo
 {
+    readonly IIdGetter _idgetter;
+    readonly IFileManager _fileManager;
     readonly string _archEventos = "../../../../CentroEventos.Repositorios/txt_files/eventos_deportivos.txt";
     readonly string _archUltimaId = "../../../../CentroEventos.Repositorios/txt_files/ultima_id_eventos_deportivos.txt";
 
-    public RepositorioEventoDeportivoTXT(){
-        if(!File.Exists(_archUltimaId)) {
-            using StreamWriter sw = new StreamWriter(_archUltimaId);
-            sw.Write(0);
-        }
+    public RepositorioEventoDeportivoTXT(IIdGetter idg, IFileManager fm)
+    {
+        _idgetter = idg;
+        _fileManager = fm;
+        _fileManager.InicializarArchivo(_archUltimaId);
     }
 
     public void AgregarEventoDeportivo(EventoDeportivo evento)
     {
-        string e = evento.ToStringParaTXT(NuevoId());
         using StreamWriter sw = new StreamWriter(_archEventos, true);
-        sw.WriteLine(e);
+        sw.WriteLine(evento.ToStringParaTXT(_idgetter.GetNuevoId(_archUltimaId)));
     }
 
     public void EliminarEventoDeportivo(int id)
@@ -36,19 +39,4 @@ public class RepositorioEventoDeportivoTXT : IRepositorioEventoDeportivo
         
         return lista;
     }
-
-    private int NuevoId() {
-        // implementar try catch.
-        using StreamReader sr = new StreamReader(_archUltimaId);
-        string? s = sr.ReadLine();
-        Console.WriteLine(s);
-        int id = int.Parse(s);
-        id++;
-        sr.Close();
-        using StreamWriter sw = new StreamWriter(_archUltimaId);
-        sw.WriteLine(id);
-        sw.Close();
-        return id;
-    }
-
 }

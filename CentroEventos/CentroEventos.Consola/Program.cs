@@ -5,10 +5,9 @@ using CentroEventos.Aplicacion.Reserva;
 using CentroEventos.Repositorios;
 
 // Dependencias
-
-IRepositorioEventoDeportivo repoEventoDeportivo = new RepositorioEventoDeportivoTXT();
-// IRepositorioReserva repoReserva = new RepositorioReservaTXT();
-IRepositorioPersona repoPersona = new RepositorioPersonaTXT();
+IRepositorioEventoDeportivo repoEventoDeportivo = new RepositorioEventoDeportivoTXT(new IdGetter(), new FileManager());
+IRepositorioReserva repoReserva = new RepositorioReservaTXT(new IdGetter(), new FileManager());
+IRepositorioPersona repoPersona = new RepositorioPersonaTXT(new IdGetter(), new FileManager());
 
 // Casos de uso
 
