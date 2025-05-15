@@ -40,7 +40,7 @@ public class RepositorioReservaTXT : IRepositorioReserva
         Reserva r;
         List<Reserva> ListaReserva = new List<Reserva>{};
         while (!sr.EndOfStream) {
-            r = new Reserva();
+            // r = new Reserva();
             //r.Id = int.Parse(sr.ReadLine());
         }
         return new List<Reserva> ();

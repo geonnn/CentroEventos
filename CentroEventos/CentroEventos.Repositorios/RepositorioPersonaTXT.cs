@@ -20,7 +20,7 @@ public class RepositorioPersonaTXT : IRepositorioPersona
     public void AgregarPersona(Persona persona)
     {
         using StreamWriter sw = new StreamWriter(_archPersonas, true);
-        sw.Write(persona.ToStringParaTXT(_idGetter.GetNuevoId(_archUltimaId)));
+        sw.WriteLine(persona.ToStringParaTXT(_idGetter.GetNuevoId(_archUltimaId)));
     }
 
     public List<Persona> ListarPersonas()

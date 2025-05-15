@@ -1,9 +1,20 @@
 using System.Text;
+using CentroEventos.Aplicacion.EventoDeportivo;
+using CentroEventos.Aplicacion.Persona;
 
 namespace CentroEventos.Aplicacion.Reserva;
 
 public class ReservaValidador
 {
+    IRepositorioPersona _repoPersona;
+    IRepositorioEventoDeportivo _repoEventos;
+
+    public ReservaValidador(IRepositorioPersona repoPersona, IRepositorioEventoDeportivo repoEventos)
+    {
+        _repoPersona = repoPersona;
+        _repoEventos = repoEventos;
+    }
+
     public bool Validar(Reserva r, out string mensajeError)
     {
 

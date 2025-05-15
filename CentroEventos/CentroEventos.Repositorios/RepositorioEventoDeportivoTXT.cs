@@ -2,6 +2,7 @@ namespace CentroEventos.Repositorios;
 
 using CentroEventos.Aplicacion;
 using CentroEventos.Aplicacion.EventoDeportivo;
+using CentroEventos.Aplicacion.Persona;
 
 public class RepositorioEventoDeportivoTXT : IRepositorioEventoDeportivo
 {

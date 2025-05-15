@@ -1,9 +1,17 @@
-using System.Text;
 namespace CentroEventos.Aplicacion.EventoDeportivo;
+using System.Text;
+using CentroEventos.Aplicacion.Persona;
 
 public class EventoDeportivoValidador
 {
-    public bool Validar(EventoDeportivo e, out string mensajeError, List<Persona.Persona> listaPersonas)
+    IRepositorioPersona _repoPersona;
+
+    public EventoDeportivoValidador(IRepositorioPersona repoP)
+    {
+        _repoPersona = repoP;
+    }
+
+    public bool Validar(EventoDeportivo e, out string mensajeError)
     {
 
         mensajeError = "";
@@ -29,20 +37,11 @@ public class EventoDeportivoValidador
             mensaje.Append("La duración debe del evento ser mayor a 0.\n");
         }
 
-        if (PersonaExiste(e.ResponsableId, listaPersonas)) {
+        if (!_repoPersona.PersonaExiste(e.ResponsableId)) {
             mensaje.Append("La persona responsable no existe.\n");
         }
 
         mensajeError = mensaje.ToString();
-        return (mensajeError == "");
-    }
-
-    private bool PersonaExiste(int id, List<Persona.Persona> lista)
-    {
-        foreach (Persona.Persona p in lista)
-            if (id == p.Id)
-                return true;
-
-        return false;
+        return mensajeError == "";
     }
 }
