@@ -9,6 +9,7 @@ public class Persona
     public string Email { get; private set; } // único
     public string Telefono { get; private set; }
 
+    // Constructor con todos los parámetros.
     public Persona(int id, string dni, string nom, string ap, string email, string tel)
     {
         this.Id = id;
@@ -18,6 +19,21 @@ public class Persona
         this.Email = email;
         this.Telefono = tel;
     }
+
+    // Constructor sin teléfono.
+    public Persona(int id, string dni, string nom, string ap, string email)
+        : this(id, dni, nom, ap, email, "")
+    { }
+
+    // Constructor sin ID.
+    public Persona(string dni, string nom, string ap, string email, string tel)
+        : this(0, dni, nom, ap, email, tel)
+    { }
+
+    // Constructor sin ID ni teléfono.
+    public Persona(string dni, string nom, string ap, string email) 
+        : this(0, dni, nom, ap, email, "")
+    { }
 
     public override string ToString()
     {

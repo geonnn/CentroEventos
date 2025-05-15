@@ -10,8 +10,10 @@ public class EventoDeportivo
     public int CupoMaximo {get; private set; }
     public int ResponsableId {get; private set;}
 
-    public EventoDeportivo(string nom, string desc, DateTime fechaInicio, double duracion, int cupoMax, int respId)
+    // Constructor con todos los parámetros.
+    public EventoDeportivo(int id, string nom, string desc, DateTime fechaInicio, double duracion, int cupoMax, int respId)
     {
+        Id = id;
         Nombre = nom;
         Descripcion = desc;
         FechaHoraInicio = fechaInicio;
@@ -20,10 +22,20 @@ public class EventoDeportivo
         ResponsableId = respId;
     }
 
+    // Constructor sin ID.
+    public EventoDeportivo(string nom, string desc, DateTime fechaInicio, double duracion, int cupoMax, int respId)
+        : this(0, nom, desc, fechaInicio, duracion, cupoMax, respId)
+    { }
+
+    /// <summary>
+    /// Genera un string apto para escribir en un archivo .txt los datos de un evento.
+    /// </summary>
+    /// <param name="id">ID que se le asignará al evento. Manejado por el repositorio.</param>
+    /// <returns>String para escribir en archivo .txt</returns>
     public string ToStringParaTXT(int id)
     {
-        return  id + "\n" +
-                Nombre +"\n" +
+        return id + "\n" +
+                Nombre + "\n" +
                 Descripcion + "\n" +
                 FechaHoraInicio + "\n" +
                 DuracionHoras + "\n" +

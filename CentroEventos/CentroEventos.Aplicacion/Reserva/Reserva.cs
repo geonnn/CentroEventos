@@ -8,6 +8,21 @@ public class Reserva
     public DateTime FechaAltaReserva {get; private set;}
     public EstadoAsistencia Estado {get; private set;}
 
+    // Constructor con todos los parámetros.
+    public Reserva(int id, int personaId, int eventoDeportivoId, DateTime fechaAltaReserva, EstadoAsistencia estado)
+    {
+        Id = id;
+        PersonaId = personaId;
+        EventoDeportivoId = eventoDeportivoId;
+        FechaAltaReserva = fechaAltaReserva;
+        Estado = estado;
+    }
+
+    // Constructor sin ID.
+    public Reserva(int personaId, int eventoDeportivoId, DateTime fechaAltaReserva, EstadoAsistencia estado)
+        : this(0, personaId, eventoDeportivoId, fechaAltaReserva, estado)
+    { }
+
     public string ToStringParaTXT(int id)
     {
         return $"{id}\n" +
