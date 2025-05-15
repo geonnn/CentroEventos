@@ -73,6 +73,7 @@ public class RepositorioReservaTXT : IRepositorioReserva
             DateTime FechaAltaReserva = DateTime.Parse(sr.ReadLine() ?? "");
             EstadoAsistencia Estado = Enum.Parse<EstadoAsistencia>(sr.ReadLine() ?? "");
             r = new Reserva(Id, PersonaId, EventoDeportivoId, FechaAltaReserva, Estado);
+            ListaReserva.Append(r);
         }
         return new List<Reserva> ();
     }
