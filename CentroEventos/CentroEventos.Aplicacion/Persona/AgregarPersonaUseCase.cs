@@ -6,18 +6,14 @@ public class AgregarPersonaUseCase(IRepositorioPersona repo, PersonaValidador va
     {
         try
         {
-            if (!validador.Validar(persona, out string mensajeError))
-                throw new ValidacionException(mensajeError);
+            // if (!validador.Validar(persona, out string mensajeError))
+            //     throw new ValidacionException(mensajeError);
 
+            validador.Validar(persona);
             //if(!TienePermiso) Validar que tenga permiso el usuario
             //    throw new FalloAutorizacionException("No tiene permiso para añadir una persona");
 
-            if(repo.DniExiste(persona.Dni))
-                throw new DuplicadoException("El DNI ya existe");
-
-            if(repo.EmailExiste(persona.Email))
-                throw new DuplicadoException("El Email ya existe");
-
+            
             repo.AgregarPersona(persona);
             Console.WriteLine($"Persona ID {persona.Id} añadido exitosamente.");
         }
