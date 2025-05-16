@@ -6,8 +6,8 @@ namespace CentroEventos.Aplicacion.Reserva;
 
 public class ReservaValidador
 {
-    IRepositorioPersona _repoPersona;
-    IRepositorioEventoDeportivo _repoEventos;
+    readonly IRepositorioPersona _repoPersona;
+    readonly IRepositorioEventoDeportivo _repoEventos;
 
     public ReservaValidador(IRepositorioPersona repoPersona, IRepositorioEventoDeportivo repoEventos)
     {
