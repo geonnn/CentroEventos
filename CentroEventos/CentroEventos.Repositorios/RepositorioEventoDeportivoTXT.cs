@@ -3,6 +3,7 @@ namespace CentroEventos.Repositorios;
 using CentroEventos.Aplicacion;
 using CentroEventos.Aplicacion.EventoDeportivo;
 using CentroEventos.Aplicacion.Persona;
+using CentroEventos.Aplicacion.Reserva;
 
 public class RepositorioEventoDeportivoTXT : IRepositorioEventoDeportivo
 {
@@ -72,15 +73,34 @@ public class RepositorioEventoDeportivoTXT : IRepositorioEventoDeportivo
     }
 
     public bool Finalizo(int id)
-{
-    foreach (EventoDeportivo evento in ListarEventoDeportivo())
     {
-        if (evento.Id == id)
-            return evento.FechaHoraInicio < DateTime.Now;
+        foreach (EventoDeportivo evento in ListarEventoDeportivo())
+        {
+            if (evento.Id == id)
+                return evento.FechaHoraInicio < DateTime.Now;
+        }
+        return false;
     }
-    return false;
-}
 
-        
+    public List<EventoDeportivo> ListarEventosConCupoDisponible(IRepositorioReserva repoReserva)
+    {
+        List<EventoDeportivo> EventosFuturos = ListarEventoDeportivo(DateTime.Now);
+        List<Reserva> reservas = repoReserva.ListarReserva();
+        foreach (EventoDeportivo e in EventosFuturos)
+        {
+            
+            int contador = 0;
+            foreach (Reserva r in reservas)
+            {
+                if (r.EventoDeportivoId == e.Id)
+                    contador++;
+            }
+            if (contador < e.CupoMaximo)
+                EventosFuturos.Append(e);
+        }
+
+        return EventosFuturos;
+    }
+
 }
 

@@ -1,19 +1,15 @@
 namespace CentroEventos.Aplicacion.Persona;
 
-public class AgregarPersonaUseCase(IRepositorioPersona repo, PersonaValidador validador)
+public class AgregarPersonaUseCase(IRepositorioPersona repo, PersonaValidador validador, int Autorizacion)
 {
     public void Ejecutar (Persona persona) 
     {
         try
         {
-            // if (!validador.Validar(persona, out string mensajeError))
-            //     throw new ValidacionException(mensajeError);
+            if (Autorizacion != 1)
+                throw new FalloAutorizacionException("No tiene permiso para añadir una persona");
 
             validador.Validar(persona);
-            //if(!TienePermiso) Validar que tenga permiso el usuario
-            //    throw new FalloAutorizacionException("No tiene permiso para añadir una persona");
-
-            
             repo.AgregarPersona(persona);
             Console.WriteLine($"Persona ID {persona.Id} añadido exitosamente.");
         }

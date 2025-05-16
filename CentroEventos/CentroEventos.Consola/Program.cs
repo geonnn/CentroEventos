@@ -21,6 +21,7 @@ ReservaValidador validadorReserva = new ReservaValidador(repoPersona, repoEvento
 AgregarEventoDeportivoUseCase agregarEventoDeportivo = new AgregarEventoDeportivoUseCase(repoEventoDeportivo, validadorEvento);
 AgregarPersonaUseCase agregarPersona = new AgregarPersonaUseCase(repoPersona, validadorPersona);
 AgregarReservaUseCase agregarReserva = new AgregarReservaUseCase(repoReserva, validadorReserva);
+ListarEventosConCupoDisponibleUseCase listarEventosConCupoDisponible = new ListarEventosConCupoDisponibleUseCase(repoEventoDeportivo, repoReserva);
 
 // Ejecución los casos de uso
 
