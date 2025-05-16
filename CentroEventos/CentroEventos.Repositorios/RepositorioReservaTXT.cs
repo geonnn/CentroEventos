@@ -49,9 +49,9 @@ public class RepositorioReservaTXT : IRepositorioReserva
         foreach(Reserva r in reservas)
         {
             if (r.Id == NuevaReserva.Id)
-                reservasN.Append(r);
+                reservasN.Add(r);
             else
-                reservasN.Append(NuevaReserva);
+                reservasN.Add(NuevaReserva);
         }
         using StreamWriter sw = new StreamWriter(_archReservas, false);
         foreach(Reserva r in reservasN)

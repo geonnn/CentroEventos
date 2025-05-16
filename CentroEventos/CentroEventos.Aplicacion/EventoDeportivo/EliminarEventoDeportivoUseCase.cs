@@ -1,39 +1,23 @@
+using CentroEventos.Aplicacion.Interfaces;
+using CentroEventos.Aplicacion.Clases;
+
 namespace CentroEventos.Aplicacion.EventoDeportivo;
 
-public class EliminarEventoDeportivoUseCase(IRepositorioEventoDeportivo repo)
+public class EliminarEventoDeportivoUseCase(IRepositorioEventoDeportivo repo, IServicioAutorizacion autorizador)
 {
-    public void Ejecutar(int id)
+    public void Ejecutar(int id, int idUsuario)
     {
-        try
-        {
-            //if(!TienePermiso) Validar que tenga permiso el usuario
-            //    throw new FalloAutorizacionException("No tiene permiso para añadir una persona");
+        if (!autorizador.PoseeElPermiso(idUsuario, Permiso.EventoBaja))
+            throw new FalloAutorizacionException("No tiene permiso para añadir una persona.");
 
-            if (!repo.EventoExiste(id))
-                throw new EntidadNotFoundException("Evento no encontrado");
-            
-            //if (evento tiene reserva)
-            //    throw new OperacionInvalidaException("No se puede eliminar un evento con reservas"); FALTA REPO RESERVA
-
-            repo.EliminarEventoDeportivo(id);
-            Console.WriteLine($"Persona ID {id} eliminada exitosamente.");
-        }
-        catch(FalloAutorizacionException e)
-        {
-            Console.WriteLine("Excepción: " + e);
-            Console.WriteLine($"Error al eliminar el evento ID {id}.");
-        }
-        catch(EntidadNotFoundException e)
-        {
-            Console.WriteLine("Excepción: " + e);
-            Console.WriteLine($"Error al eliminar el evento ID {id}.");
-        }
-        catch(OperacionInvalidaException e)
-        {
-            Console.WriteLine("Excepción: " + e);
-            Console.WriteLine($"Error al eliminar el evento ID {id}.");
-        }
+        if (!repo.EventoExiste(id))
+            throw new EntidadNotFoundException("Evento no encontrado");
         
+        //if (evento tiene reserva)
+        //    throw new OperacionInvalidaException("No se puede eliminar un evento con reservas"); FALTA REPO RESERVA
+
+        repo.EliminarEventoDeportivo(id);
+        Console.WriteLine($"Persona ID {id} eliminada exitosamente.");    
     }
 }
 

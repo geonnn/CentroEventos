@@ -1,29 +1,27 @@
 namespace CentroEventos.Aplicacion.Persona;
+using Interfaces;
+using Clases;
 
-public class ModificarPersonaUseCase(IRepositorioPersona repo)
+public class ModificarPersonaUseCase(IRepositorioPersona repo, PersonaValidador validador, IServicioAutorizacion autorizador)
 {
-    public void Ejecutar(Persona persona) // La persona que recibe esta validada?? de lo contrario pensar como validar
+    public void Ejecutar(Persona persona, int idUsuario) // La persona que recibe esta validada?? de lo contrario pensar como validar
     {
-        try
-        {
-            if(!repo.PersonaExiste(persona.Id))
-                throw new EntidadNotFoundException("Persona no encontrada");
-            
-            //if(!TienePermiso) Validar que tenga permiso el usuario
-            //    throw new FalloAutorizacionException("No tiene permiso para eliminar una persona");
+        if (!autorizador.PoseeElPermiso(idUsuario, Permiso.UsuarioModificacion))
+            throw new FalloAutorizacionException("No tiene permiso para modificar una persona.");
 
-            repo.ModificarPersona(persona);
-            Console.WriteLine($"Persona ID {persona.Id} modificada exitosamente.");
-        }
-        catch(EntidadNotFoundException e)
         {
-            Console.WriteLine("Excepción: " + e);
-            Console.WriteLine($"Error al modificar ID {persona.Id}.");
+            if (!validador.ValidarConstruccion(persona, out string mensajeError))
+                throw new ValidacionException(mensajeError);
         }
-        catch (FalloAutorizacionException e)
-        {
-            Console.WriteLine("Excepción: " + e);
-            Console.WriteLine($"Error al eliminar persona ID {persona.Id}.");
+
+        if (!repo.PersonaExiste(persona.Id))
+            throw new EntidadNotFoundException("Persona no encontrada");
+
+        { 
+            if (!validador.ValidarDuplicadoModificar(persona, out string mensajeError))
+                throw new DuplicadoException(mensajeError);
         }
+
+        repo.ModificarPersona(persona);
     }
 }

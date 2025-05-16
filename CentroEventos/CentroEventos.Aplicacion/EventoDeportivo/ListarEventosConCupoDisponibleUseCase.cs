@@ -4,8 +4,23 @@ namespace CentroEventos.Aplicacion.EventoDeportivo;
 
 public class ListarEventosConCupoDisponibleUseCase(IRepositorioEventoDeportivo repoEventoDeportivo, IRepositorioReserva repoReserva)
 {
-    public void Ejecutar()
+    public List<EventoDeportivo> Ejecutar()
     {
-        repoEventoDeportivo.ListarEventosConCupoDisponible(repoReserva);
+        List<EventoDeportivo> EventosFuturos = repoEventoDeportivo.ListarEventoDeportivoFuturo(DateTime.Now);
+        List<Reserva.Reserva> reservas = repoReserva.ListarReserva();
+        foreach (EventoDeportivo e in EventosFuturos)
+        {
+            
+            int contador = 0;
+            foreach (Reserva.Reserva r in reservas)
+            {
+                if (r.EventoDeportivoId == e.Id)
+                    contador++;
+            }
+            if (contador < e.CupoMaximo)
+                EventosFuturos.Add(e);
+        }
+
+        return EventosFuturos;
     }
 }

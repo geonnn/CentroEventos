@@ -27,6 +27,16 @@ public class EventoDeportivo
         : this(0, nom, desc, fechaInicio, duracion, cupoMax, respId)
     { }
 
+    public string ToStringParaTXT()
+    {
+        return Id + "\n" +
+                Nombre + "\n" +
+                Descripcion + "\n" +
+                FechaHoraInicio + "\n" +
+                DuracionHoras + "\n" +
+                CupoMaximo + "\n" +
+                ResponsableId;
+    }
     /// <summary>
     /// Genera un string apto para escribir en un archivo .txt los datos de un evento.
     /// </summary>
@@ -43,3 +53,4 @@ public class EventoDeportivo
                 ResponsableId;
     }
 }
+    

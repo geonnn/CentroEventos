@@ -1,32 +1,24 @@
 namespace CentroEventos.Aplicacion.Persona;
+using Interfaces;
+using Clases;
 
-public class AgregarPersonaUseCase(IRepositorioPersona repo, PersonaValidador validador, int Autorizacion)
+public class AgregarPersonaUseCase(IRepositorioPersona repo, PersonaValidador validador, IServicioAutorizacion autorizador)
 {
-    public void Ejecutar (Persona persona) 
+    public void Ejecutar(Persona persona, int idUsuario)
     {
-        try
-        {
-            if (Autorizacion != 1)
-                throw new FalloAutorizacionException("No tiene permiso para añadir una persona");
+        if (!autorizador.PoseeElPermiso(idUsuario, Permiso.UsuarioAlta))
+            throw new FalloAutorizacionException("No tiene permiso para añadir una persona.");
 
-            validador.Validar(persona);
-            repo.AgregarPersona(persona);
-            Console.WriteLine($"Persona ID {persona.Id} añadido exitosamente.");
-        }
-        catch (ValidacionException e)
         {
-            Console.WriteLine("Excepción: " + e);
-            Console.WriteLine($"Error al añadir la persona ID {persona.Id}.");
+            if (!validador.ValidarConstruccion(persona, out string mensajeError))
+                throw new ValidacionException(mensajeError);
         }
-        catch (FalloAutorizacionException e)
+        
         {
-            Console.WriteLine("Excepción: " + e);
-            Console.WriteLine($"Error al añadir persona {persona.Id}.");
+            if (!validador.ValidarDuplicado(persona, out string mensajeError))
+                throw new DuplicadoException(mensajeError);
         }
-        catch (DuplicadoException e)
-        {
-            Console.WriteLine("Excepción: " + e);
-            Console.WriteLine($"Error al añadir persona {persona.Id}.");
-        }
+
+        repo.AgregarPersona(persona);
     }
 }

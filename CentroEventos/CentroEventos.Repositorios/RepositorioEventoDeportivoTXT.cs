@@ -27,12 +27,25 @@ public class RepositorioEventoDeportivoTXT : IRepositorioEventoDeportivo
 
     public void EliminarEventoDeportivo(int id)
     {
-
+        //TODO: dale hdp
     }
 
-    public void ModificarEventoDeportivo(int id)
+    public void ModificarEventoDeportivo(EventoDeportivo NuevoEventoDeportivo)
     {
-
+        List<EventoDeportivo> eventoDeportivos = ListarEventoDeportivo();
+        List<EventoDeportivo> eventoDeportivosN = new List<EventoDeportivo> {};
+        foreach(EventoDeportivo e in eventoDeportivos)
+        {
+            if (e.Id == NuevoEventoDeportivo.Id)
+                eventoDeportivosN.Add(e);
+            else
+                eventoDeportivosN.Add(NuevoEventoDeportivo);
+        }
+        using StreamWriter sw = new StreamWriter(_archEventos, false);
+        foreach(EventoDeportivo e in eventoDeportivosN)
+        {
+            sw.WriteLine(e.ToStringParaTXT());
+        }
     }
 
     public List<EventoDeportivo> ListarEventoDeportivo()
@@ -56,7 +69,14 @@ public class RepositorioEventoDeportivoTXT : IRepositorioEventoDeportivo
         return resultado;
     }
 
-    public List<EventoDeportivo> ListarEventoDeportivo(DateTime fecha)
+    public List<EventoDeportivo> ListarEventoDeportivoFuturo(DateTime fecha)
+    {
+        List<EventoDeportivo> eventos = ListarEventoDeportivo();
+        eventos.RemoveAll(e => e.FechaHoraInicio < fecha);
+        return eventos;
+    }
+
+    public List<EventoDeportivo> ListarEventoDeportivoPasado(DateTime fecha)
     {
         List<EventoDeportivo> eventos = ListarEventoDeportivo();
         eventos.RemoveAll(e => e.FechaHoraInicio < fecha);
@@ -82,25 +102,7 @@ public class RepositorioEventoDeportivoTXT : IRepositorioEventoDeportivo
         return false;
     }
 
-    public List<EventoDeportivo> ListarEventosConCupoDisponible(IRepositorioReserva repoReserva)
-    {
-        List<EventoDeportivo> EventosFuturos = ListarEventoDeportivo(DateTime.Now);
-        List<Reserva> reservas = repoReserva.ListarReserva();
-        foreach (EventoDeportivo e in EventosFuturos)
-        {
-            
-            int contador = 0;
-            foreach (Reserva r in reservas)
-            {
-                if (r.EventoDeportivoId == e.Id)
-                    contador++;
-            }
-            if (contador < e.CupoMaximo)
-                EventosFuturos.Append(e);
-        }
-
-        return EventosFuturos;
-    }
+    
 
 }
 

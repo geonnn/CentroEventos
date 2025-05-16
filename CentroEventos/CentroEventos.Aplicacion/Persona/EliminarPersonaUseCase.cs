@@ -1,15 +1,17 @@
+using CentroEventos.Aplicacion.Interfaces;
+using CentroEventos.Aplicacion.Clases;
+
 namespace CentroEventos.Aplicacion.Persona;
 
-public class EliminarPersonaUseCase(IRepositorioPersona repo)
+public class EliminarPersonaUseCase(IRepositorioPersona repo, IServicioAutorizacion autorizador)
 {
-    public void Ejecutar(Persona persona)
+    public void Ejecutar(int id, int idUsuario)
     {
-        try {
-            if(!repo.PersonaExiste(persona.Id))
-                throw new EntidadNotFoundException("Persona no encontrada");
+        if (!autorizador.PoseeElPermiso(idUsuario, Permiso.UsuarioBaja))
+            throw new FalloAutorizacionException("No tiene permiso para eliminar una persona");
 
-            //if(!TienePermiso) Validar que tenga permiso el usuario
-            //    throw new FalloAutorizacionException("No tiene permiso para eliminar una persona");
+        if (!repo.PersonaExiste(id))
+            throw new EntidadNotFoundException("Persona no encontrada");
 
             //if(persona tiene reserva)
             //    throw new OperacionInvalidaException("No se puede eliminar una persona con reservas"); FALTA REPO RESERVA
@@ -17,24 +19,7 @@ public class EliminarPersonaUseCase(IRepositorioPersona repo)
             //if(persona es responsable de evento)
             //    throw new OperacionInvalidaException("No se puede eliminar una persona con eventos"); FALTA REPO EVENTODEPORTIVO
 
-            repo.EliminarPersona(persona.Id);
-            Console.WriteLine($"Persona ID {persona.Id} eliminada exitosamente.");
-        }
-        catch (EntidadNotFoundException e)
-        {
-            Console.WriteLine("Excepción: " + e);
-            Console.WriteLine($"Error al eliminar persona ID {persona.Id}.");
-        }
-        catch (FalloAutorizacionException e)
-        {
-            Console.WriteLine("Excepción: " + e);
-            Console.WriteLine($"Error al eliminar persona ID {persona.Id}.");
-        }
-        catch (OperacionInvalidaException e)
-        {
-            Console.WriteLine("Excepción: " + e);
-            Console.WriteLine($"Error al eliminar persona ID {persona.Id}.");
-        }
-        
+            repo.EliminarPersona(id);
+            Console.WriteLine($"Persona ID {id} eliminada exitosamente.");
     }
 }

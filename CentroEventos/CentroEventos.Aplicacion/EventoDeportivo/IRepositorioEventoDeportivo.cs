@@ -5,10 +5,10 @@ public interface IRepositorioEventoDeportivo
 {
     void AgregarEventoDeportivo(EventoDeportivo evento);
     void EliminarEventoDeportivo(int id);
-    void ModificarEventoDeportivo(int id);
+    void ModificarEventoDeportivo(EventoDeportivo evento);
     List<EventoDeportivo> ListarEventoDeportivo();
-    List<EventoDeportivo> ListarEventoDeportivo(DateTime fecha);
+    List<EventoDeportivo> ListarEventoDeportivoFuturo(DateTime fecha);
+    List<EventoDeportivo> ListarEventoDeportivoPasado(DateTime fecha);
     public bool EventoExiste(int id);
     public bool Finalizo(int id);
-    public List<EventoDeportivo> ListarEventosConCupoDisponible(IRepositorioReserva repoReserva);
 }

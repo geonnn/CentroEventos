@@ -9,4 +9,5 @@ public interface IRepositorioPersona
     bool PersonaExiste(int id);
     public bool DniExiste(String dni);
     public bool EmailExiste(String email);
+    public Persona ConsultaPersona(int id);
 }

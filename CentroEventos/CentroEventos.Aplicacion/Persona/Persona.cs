@@ -40,6 +40,16 @@ public class Persona
         return $"Id: {Id}, Dni: {Dni}, Nombre: {Nombre}, Apellido: {Apellido}, Email: {Email}, Telefono: {Telefono}";
     }
 
+    public string ToStringParaTXT()
+    {
+        return Id + "\n" +
+               Dni + "\n" +
+               Nombre + "\n" +
+               Apellido + "\n" +
+               Email + "\n" +
+               Telefono;
+    }
+
     public string ToStringParaTXT(int id)
     {
         return id + "\n" +

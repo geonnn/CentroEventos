@@ -23,6 +23,17 @@ public class RepositorioPersonaTXT : IRepositorioPersona
         sw.WriteLine(persona.ToStringParaTXT(_idGetter.GetNuevoId(_archUltimaId)));
     }
 
+    public void EliminarPersona(int id)
+    {
+        List<Persona> personas = ListarPersonas();
+        personas.RemoveAt(personas.FindIndex(p => p.Id == id));
+        using StreamWriter sw = new StreamWriter(_archPersonas, false);
+        foreach (Persona p in personas)
+        {
+            sw.WriteLine(p.ToStringParaTXT());
+        }
+    }
+
     public List<Persona> ListarPersonas()
     {
         var resultado = new List<Persona>();
@@ -43,51 +54,35 @@ public class RepositorioPersonaTXT : IRepositorioPersona
         return resultado;
     }
 
-    public void EliminarPersona(int id)
+
+    public void ModificarPersona(Persona nuevaPersona)
     {
         List<Persona> personas = ListarPersonas();
-        personas.RemoveAll(p => p.Id == id);
-        using StreamWriter sw = new StreamWriter(_archPersonas, false);
-        foreach (var p in personas)
+        List<Persona> PersonasN = new List<Persona> {};
+
+        foreach (Persona p in personas)
         {
-            sw.WriteLine(p.ToStringParaTXT(p.Id));
+            if (p.Id == nuevaPersona.Id)
+                PersonasN.Add(nuevaPersona);
+            else
+                PersonasN.Add(p);
+        }
+        using StreamWriter sw = new StreamWriter(_archPersonas, false);
+        foreach(Persona p in PersonasN)
+        {
+            sw.WriteLine(p.ToStringParaTXT());
         }
     }
 
-    public void ModificarPersona(Persona persona) //FALTA TERMINAR
-    {   
-        EliminarPersona(persona.Id);
-        using StreamWriter sw = new StreamWriter(_archPersonas, true);
-        sw.WriteLine(persona.ToStringParaTXT(persona.Id));
-    }
-    
+    public Persona ConsultaPersona(int id)
+        => ListarPersonas().Find(p => p.Id == id) ?? throw new EntidadNotFoundException($"La persona con id {id} no existe.");
 
     public bool PersonaExiste(int id)
-    {
-        foreach (Persona p in ListarPersonas())
-            if (id == p.Id)
-                return true;
+        => ListarPersonas().Exists(p => p.Id == id);
 
-        return false;
-    }
+    public bool DniExiste(string dni)
+        => ListarPersonas().Exists(p => p.Dni == dni);
 
-    public bool DniExiste(String dni)
-    {
-        foreach (Persona p in ListarPersonas())
-            if (dni == p.Dni)
-                return true;
-
-        return false;
-    }
-
-    public bool EmailExiste(String email)
-    {
-        foreach (Persona p in ListarPersonas())
-            if (email == p.Email)
-                return true;
-
-        return false;
-    }
-
-
+    public bool EmailExiste(string email)
+        => ListarPersonas().Exists(p => p.Email == email);
 }

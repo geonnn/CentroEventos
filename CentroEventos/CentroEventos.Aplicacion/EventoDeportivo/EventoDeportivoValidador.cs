@@ -1,16 +1,10 @@
 namespace CentroEventos.Aplicacion.EventoDeportivo;
 using System.Text;
 using CentroEventos.Aplicacion.Persona;
+using CentroEventos.Aplicacion.Reserva;
 
-public class EventoDeportivoValidador
+public class EventoDeportivoValidador(IRepositorioPersona repoP, IRepositorioReserva repoR)
 {
-    IRepositorioPersona _repoPersona;
-
-    public EventoDeportivoValidador(IRepositorioPersona repoP)
-    {
-        _repoPersona = repoP;
-    }
-
     public bool Validar(EventoDeportivo e, out string mensajeError)
     {
 
