@@ -1,4 +1,4 @@
-public class FalloAutorizacionException: : Exception {
+public class FalloAutorizacionException : Exception {
     
     public FalloAutorizacionException() { }
 

@@ -36,8 +36,44 @@ public class RepositorioEventoDeportivoTXT : IRepositorioEventoDeportivo
 
     public List<EventoDeportivo> ListarEventoDeportivo()
     {
-        List<EventoDeportivo> lista = new(); 
-        
-        return lista;
+        var resultado = new List<EventoDeportivo>();
+        using var sr = new StreamReader(_archEventos);
+
+        while (!sr.EndOfStream)
+        {
+
+            int eventoId = int.Parse(sr.ReadLine() ?? "");
+            string eventoNombre = sr.ReadLine() ?? "";
+            string personaDescripcion = sr.ReadLine() ?? "";
+            DateTime eventoHoraInicio = DateTime.Parse(sr.ReadLine() ?? "");
+            double eventoDuracion = double.Parse(sr.ReadLine() ?? "");
+            int eventoCupoMaximo = int.Parse(sr.ReadLine() ?? "");
+            int eventoResponsableId = int.Parse(sr.ReadLine() ?? "");
+            var evento = new EventoDeportivo(eventoId, eventoNombre, personaDescripcion, eventoHoraInicio, eventoDuracion, eventoCupoMaximo, eventoResponsableId);
+            resultado.Add(evento);
+        }
+        return resultado;
     }
+
+    public bool EventoExiste(int id)
+    {
+        foreach (EventoDeportivo e in ListarEventoDeportivo())
+            if (id == e.Id)
+                return true;
+
+        return false;
+    }
+
+    public bool Finalizo(int id)
+{
+    foreach (EventoDeportivo evento in ListarEventoDeportivo())
+    {
+        if (evento.Id == id)
+            return evento.FechaHoraInicio < DateTime.Now;
+    }
+    return false;
 }
+
+        
+}
+

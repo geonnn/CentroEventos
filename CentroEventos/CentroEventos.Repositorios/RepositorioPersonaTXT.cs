@@ -45,52 +45,22 @@ public class RepositorioPersonaTXT : IRepositorioPersona
 
     public void EliminarPersona(int id)
     {
-        using var sw = new StreamWriter(_archPersonas, true);
-    }
-
-    public void ModificarPersona(int id)
-    {
-        using var sr = new StreamReader(_archPersonas);
-        bool encontre = false;
-        while (!sr.EndOfStream && !encontre)
+        List<Persona> personas = ListarPersonas();
+        personas.RemoveAll(p => p.Id == id);
+        using StreamWriter sw = new StreamWriter(_archPersonas, false);
+        foreach (var p in personas)
         {
-            int personaId = int.Parse(sr.ReadLine() ?? "");
-            if (personaId == id)
-                encontre = true;
-            else
-            {
-                for (int i = 0; i < 5; i++)
-                {
-                    string aux = sr.ReadLine() ?? "";
-                }
-            }
-        }
-        if (encontre)
-        {
-            string personaDni;
-            string personaNombre;
-            string personaApellido;
-            string personaEmail;
-            string personaTelefono;
-            AgregarPersona(PedirDatos(id));
+            sw.WriteLine(p.ToStringParaTXT(p.Id));
         }
     }
 
-    public Persona PedirDatos(int id)
-    {
-        Console.WriteLine("ingrese dni: ");
-        string dni = Console.ReadLine();
-        Console.WriteLine("ingrese nombre: ");
-        string nombre = Console.ReadLine();
-        Console.WriteLine("ingrese apellido: ");
-        string apellido = Console.ReadLine();
-        Console.WriteLine("ingrese email: ");
-        string email = Console.ReadLine();
-        Console.WriteLine("ingrese telefono: ");
-        string telefono = Console.ReadLine();
-        Persona per = new Persona(id, dni, nombre, apellido, email, telefono);
-        return per;
+    public void ModificarPersona(Persona persona) //FALTA TERMINAR
+    {   
+        EliminarPersona(persona.Id);
+        using StreamWriter sw = new StreamWriter(_archPersonas, true);
+        sw.WriteLine(persona.ToStringParaTXT(persona.Id));
     }
+    
 
     public bool PersonaExiste(int id)
     {
@@ -100,4 +70,24 @@ public class RepositorioPersonaTXT : IRepositorioPersona
 
         return false;
     }
+
+    public bool DniExiste(String dni)
+    {
+        foreach (Persona p in ListarPersonas())
+            if (dni == p.Dni)
+                return true;
+
+        return false;
+    }
+
+    public bool EmailExiste(String email)
+    {
+        foreach (Persona p in ListarPersonas())
+            if (email == p.Email)
+                return true;
+
+        return false;
+    }
+
+
 }

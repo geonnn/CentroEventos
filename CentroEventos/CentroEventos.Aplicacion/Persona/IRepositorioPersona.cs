@@ -4,8 +4,9 @@ public interface IRepositorioPersona
 {
     void AgregarPersona(Persona persona);
     void EliminarPersona(int id);
-    void ModificarPersona(int id);
+    void ModificarPersona(Persona persona);
     List<Persona> ListarPersonas();
-    Persona PedirDatos(int id);
     bool PersonaExiste(int id);
+    public bool DniExiste(String dni);
+    public bool EmailExiste(String email);
 }
