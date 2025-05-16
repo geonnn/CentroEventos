@@ -55,6 +55,13 @@ public class RepositorioEventoDeportivoTXT : IRepositorioEventoDeportivo
         return resultado;
     }
 
+    public List<EventoDeportivo> ListarEventoDeportivo(DateTime fecha)
+    {
+        List<EventoDeportivo> eventos = ListarEventoDeportivo();
+        eventos.RemoveAll(e => e.FechaHoraInicio < fecha);
+        return eventos;
+    }
+
     public bool EventoExiste(int id)
     {
         foreach (EventoDeportivo e in ListarEventoDeportivo())
