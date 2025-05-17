@@ -137,8 +137,6 @@ Se definen las siguientes clases de excepción:
 
 ## 👥 Autores
 
-- Gil, Gonzalo
-- Hassan, Ignacio
-- Lara, Gabriel
+- Gil, Gonzalo - Hassan, Ignacio - Lara, Gabriel
 
 ---
