@@ -25,7 +25,10 @@ public class RepositorioEventoDeportivoTXT : IRepositorioEventoDeportivo
 
     public void EliminarEventoDeportivo(int id)
     {
-        //TODO: dale hdp
+        List<EventoDeportivo> lista = ListarEventoDeportivo();
+        lista.RemoveAt(lista.FindIndex(e => e.Id == id));
+        using StreamWriter sw = new StreamWriter(_archEventos, false);
+        lista.ForEach(e => sw.WriteLine(e.ToStringParaTXT()));
     }
 
     public void ModificarEventoDeportivo(EventoDeportivo NuevoEventoDeportivo)

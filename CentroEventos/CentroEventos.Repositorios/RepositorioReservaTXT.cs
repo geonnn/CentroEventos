@@ -82,4 +82,6 @@ public class RepositorioReservaTXT : IRepositorioReserva
     public bool PersonaTieneReserva(int id)
         => ListarReservas().Exists(r => r.PersonaId == id);
 
+    public bool EventoTieneReserva(int id)
+        => ListarReservas().Exists(r => r.EventoDeportivoId == id);
 }
