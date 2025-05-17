@@ -38,12 +38,12 @@ public class PersonaValidador(IRepositorioPersona repo)
 
         if (repo.DniExiste(p.Dni))
         {
-            mensaje.Append("El DNI ya existe");
+            mensaje.Append("El DNI ya existe.\n");
         }
 
         if (repo.EmailExiste(p.Email))
         {
-            mensaje.Append("El Email ya existe");
+            mensaje.Append("El Email ya existe.\n");
         }
 
         mensajeError = mensaje.ToString();
