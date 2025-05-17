@@ -2,8 +2,6 @@ namespace CentroEventos.Repositorios;
 
 using CentroEventos.Aplicacion;
 using CentroEventos.Aplicacion.EventoDeportivo;
-using CentroEventos.Aplicacion.Persona;
-using CentroEventos.Aplicacion.Reserva;
 
 public class RepositorioEventoDeportivoTXT : IRepositorioEventoDeportivo
 {
@@ -33,8 +31,8 @@ public class RepositorioEventoDeportivoTXT : IRepositorioEventoDeportivo
     public void ModificarEventoDeportivo(EventoDeportivo NuevoEventoDeportivo)
     {
         List<EventoDeportivo> eventoDeportivos = ListarEventoDeportivo();
-        List<EventoDeportivo> eventoDeportivosN = new List<EventoDeportivo> {};
-        foreach(EventoDeportivo e in eventoDeportivos)
+        List<EventoDeportivo> eventoDeportivosN = new List<EventoDeportivo> { };
+        foreach (EventoDeportivo e in eventoDeportivos)
         {
             if (e.Id == NuevoEventoDeportivo.Id)
                 eventoDeportivosN.Add(e);
@@ -42,7 +40,7 @@ public class RepositorioEventoDeportivoTXT : IRepositorioEventoDeportivo
                 eventoDeportivosN.Add(NuevoEventoDeportivo);
         }
         using StreamWriter sw = new StreamWriter(_archEventos, false);
-        foreach(EventoDeportivo e in eventoDeportivosN)
+        foreach (EventoDeportivo e in eventoDeportivosN)
         {
             sw.WriteLine(e.ToStringParaTXT());
         }
@@ -102,7 +100,7 @@ public class RepositorioEventoDeportivoTXT : IRepositorioEventoDeportivo
         return false;
     }
 
-    
-
+    public bool PersonaEsResponsable(int id)
+        => ListarEventoDeportivo().Exists(e => e.ResponsableId == id);
 }
 

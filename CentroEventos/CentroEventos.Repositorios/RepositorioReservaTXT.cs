@@ -25,9 +25,9 @@ public class RepositorioReservaTXT : IRepositorioReserva
 
     public void EliminarReserva(int id)
     {
-        List<Reserva> reservas = ListarReserva();
-        List<Reserva> reservasN = new List<Reserva> {};
-        foreach(Reserva r in reservas)
+        List<Reserva> reservas = ListarReservas();
+        List<Reserva> reservasN = new List<Reserva> { };
+        foreach (Reserva r in reservas)
         {
             if (!(r.Id == id))
             {
@@ -35,7 +35,7 @@ public class RepositorioReservaTXT : IRepositorioReserva
             }
         }
         using StreamWriter sw = new StreamWriter(_archReservas, false);
-        foreach(Reserva r in reservasN)
+        foreach (Reserva r in reservasN)
         {
             sw.WriteLine(r.ToStringParaTXT());
         }
@@ -44,9 +44,9 @@ public class RepositorioReservaTXT : IRepositorioReserva
 
     public void ModificarReserva(Reserva NuevaReserva)
     {
-        List<Reserva> reservas = ListarReserva();
-        List<Reserva> reservasN = new List<Reserva> {};
-        foreach(Reserva r in reservas)
+        List<Reserva> reservas = ListarReservas();
+        List<Reserva> reservasN = new List<Reserva> { };
+        foreach (Reserva r in reservas)
         {
             if (r.Id == NuevaReserva.Id)
                 reservasN.Add(r);
@@ -54,19 +54,20 @@ public class RepositorioReservaTXT : IRepositorioReserva
                 reservasN.Add(NuevaReserva);
         }
         using StreamWriter sw = new StreamWriter(_archReservas, false);
-        foreach(Reserva r in reservasN)
+        foreach (Reserva r in reservasN)
         {
             sw.WriteLine(r.ToStringParaTXT());
         }
     }
-    
-    public List<Reserva> ListarReserva() {
-        
+
+    public List<Reserva> ListarReservas()
+    {
         using var sr = new StreamReader(_archReservas);
         sr.ReadLine();
         Reserva r;
-        List<Reserva> ListaReserva = new List<Reserva>{};
-        while (!sr.EndOfStream) {
+        List<Reserva> ListaReserva = new List<Reserva> { };
+        while (!sr.EndOfStream)
+        {
             int Id = int.Parse(sr.ReadLine() ?? "");
             int PersonaId = int.Parse(sr.ReadLine() ?? "");
             int EventoDeportivoId = int.Parse(sr.ReadLine() ?? "");
@@ -75,6 +76,10 @@ public class RepositorioReservaTXT : IRepositorioReserva
             r = new Reserva(Id, PersonaId, EventoDeportivoId, FechaAltaReserva, Estado);
             ListaReserva.Append(r);
         }
-        return new List<Reserva> ();
+        return new List<Reserva>();
     }
+
+    public bool PersonaTieneReserva(int id)
+        => ListarReservas().Exists(r => r.PersonaId == id);
+
 }

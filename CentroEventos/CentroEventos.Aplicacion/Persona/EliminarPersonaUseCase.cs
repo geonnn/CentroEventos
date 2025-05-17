@@ -3,23 +3,21 @@ using CentroEventos.Aplicacion.Clases;
 
 namespace CentroEventos.Aplicacion.Persona;
 
-public class EliminarPersonaUseCase(IRepositorioPersona repo, IServicioAutorizacion autorizador)
+public class EliminarPersonaUseCase(IRepositorioPersona repo, PersonaValidador validador, IServicioAutorizacion autorizador)
 {
     public void Ejecutar(int id, int idUsuario)
     {
         if (!autorizador.PoseeElPermiso(idUsuario, Permiso.UsuarioBaja))
-            throw new FalloAutorizacionException("No tiene permiso para eliminar una persona");
+            throw new FalloAutorizacionException("No tiene permiso para eliminar una persona.");
 
         if (!repo.PersonaExiste(id))
-            throw new EntidadNotFoundException("Persona no encontrada");
+            throw new EntidadNotFoundException($"Persona ID {id} no encontrada.");
 
-            //if(persona tiene reserva)
-            //    throw new OperacionInvalidaException("No se puede eliminar una persona con reservas"); FALTA REPO RESERVA
+        // PersonaValidador recibe todos los repositorios en su construcción.
+        // Hace las consultas a los repositorios que no sean de la entidad propia de este useCase.
+        if (!validador.ValidarReglas(id, out string mensajeError))
+            throw new OperacionInvalidaException(mensajeError);
 
-            //if(persona es responsable de evento)
-            //    throw new OperacionInvalidaException("No se puede eliminar una persona con eventos"); FALTA REPO EVENTODEPORTIVO
-
-            repo.EliminarPersona(id);
-            Console.WriteLine($"Persona ID {id} eliminada exitosamente.");
+        repo.EliminarPersona(id);
     }
 }

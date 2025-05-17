@@ -1,13 +1,15 @@
 using System.Text;
+using CentroEventos.Aplicacion.EventoDeportivo;
+using CentroEventos.Aplicacion.Reserva;
 
 namespace CentroEventos.Aplicacion.Persona;
 
-public class PersonaValidador(IRepositorioPersona repo)
+public class PersonaValidador(IRepositorioPersona repoP, IRepositorioEventoDeportivo repoED, IRepositorioReserva repoR)
 {
     public bool ValidarConstruccion(Persona p, out string mensajeError)
     {
         StringBuilder mensaje = new StringBuilder("");
-        
+
         if (string.IsNullOrWhiteSpace(p.Nombre))
         {
             mensaje.Append("El nombre no puede estar vacío o ser null.\n");
@@ -36,12 +38,12 @@ public class PersonaValidador(IRepositorioPersona repo)
     {
         StringBuilder mensaje = new StringBuilder("");
 
-        if (repo.DniExiste(p.Dni))
+        if (repoP.DniExiste(p.Dni))
         {
             mensaje.Append("El DNI ya existe.\n");
         }
 
-        if (repo.EmailExiste(p.Email))
+        if (repoP.EmailExiste(p.Email))
         {
             mensaje.Append("El Email ya existe.\n");
         }
@@ -57,9 +59,9 @@ public class PersonaValidador(IRepositorioPersona repo)
         // comparar contra esa lista.
         // si no hay duplicado enviar persona a modificar.
         // modificar se encarga de insertar la persona modificada en el lugar correcto. 
-        
+
         StringBuilder mensaje = new StringBuilder("");
-        var lista = repo.ListarPersonas();
+        var lista = repoP.ListarPersonas();
         lista.RemoveAt(lista.FindIndex(pe => pe.Id == p.Id));
 
         if (lista.Exists(pe => pe.Dni == p.Dni))
@@ -70,6 +72,21 @@ public class PersonaValidador(IRepositorioPersona repo)
 
         mensajeError = mensaje.ToString();
         return mensajeError == "";
-        
+
     }
+
+    public bool ValidarReglas(int id, out string mensajeError)
+    {
+        StringBuilder mensaje = new StringBuilder("");
+
+        if (repoR.PersonaTieneReserva(id))
+            mensaje.Append($"La persona ID {id} está registrada en una reserva.");
+
+        if (repoED.PersonaEsResponsable(id))
+            mensaje.Append($"La persona ID {id} es responsable de un evento.");
+
+        mensajeError = mensaje.ToString();
+        return mensajeError == "";
+    }
+
 }

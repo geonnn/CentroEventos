@@ -15,7 +15,7 @@ public class ModificarPersonaUseCase(IRepositorioPersona repo, PersonaValidador 
         }
 
         if (!repo.PersonaExiste(persona.Id))
-            throw new EntidadNotFoundException("Persona no encontrada");
+            throw new EntidadNotFoundException($"Persona ID {persona.Id} no encontrada.");
 
         { 
             if (!validador.ValidarDuplicadoModificar(persona, out string mensajeError))
