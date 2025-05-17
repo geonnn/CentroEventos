@@ -70,6 +70,11 @@ public class RepositorioEventoDeportivoTXT : IRepositorioEventoDeportivo
         return resultado;
     }
 
+    /// <summary>
+    /// Devuelve una lista de eventos deportivos cuya fecha de inicio es igual o posterior a la fecha recibidia como parámetro.
+    /// </summary>
+    /// <param name="fecha">Fecha desde la cual se consideran los eventos como futuros.</param>
+    /// <returns>Lista de eventos deportivos con fecha de inicio igual o posterior a la fecha especificada.</returns>
     public List<EventoDeportivo> ListarEventoDeportivoFuturo(DateTime fecha)
     {
         List<EventoDeportivo> eventos = ListarEventoDeportivo();
@@ -77,10 +82,15 @@ public class RepositorioEventoDeportivoTXT : IRepositorioEventoDeportivo
         return eventos;
     }
 
+    /// <summary>
+    /// Devuelve una lista de eventos deportivos cuya fecha de inicio es anterior a la fecha recibida como parámetro.
+    /// </summary>
+    /// <param name="fecha">Fecha hasta la cual se consideran los eventos como pasados.</param>
+    /// <returns>Lista de eventos deportivos con fecha de inicio anterior a la fecha especificada.</returns>
     public List<EventoDeportivo> ListarEventoDeportivoPasado(DateTime fecha)
     {
         List<EventoDeportivo> eventos = ListarEventoDeportivo();
-        eventos.RemoveAll(e => e.FechaHoraInicio < fecha);
+        eventos.RemoveAll(e => e.FechaHoraInicio >= fecha);
         return eventos;
     }
 
