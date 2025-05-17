@@ -7,4 +7,5 @@ public interface IRepositorioReserva
     void ModificarReserva(Reserva r);
     List<Reserva> ListarReservas();
     bool PersonaTieneReserva(int id);
+    bool EventoTieneReserva(int id);
 }
