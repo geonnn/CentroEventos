@@ -7,7 +7,7 @@ public class ListarEventosConCupoDisponibleUseCase(IRepositorioEventoDeportivo r
     public List<EventoDeportivo> Ejecutar()
     {
         List<EventoDeportivo> EventosFuturos = repoEventoDeportivo.ListarEventoDeportivoFuturo(DateTime.Now);
-        List<Reserva.Reserva> reservas = repoReserva.ListarReserva();
+        List<Reserva.Reserva> reservas = repoReserva.ListarReservas();
         foreach (EventoDeportivo e in EventosFuturos)
         {
             

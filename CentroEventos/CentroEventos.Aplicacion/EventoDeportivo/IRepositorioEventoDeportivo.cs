@@ -1,5 +1,4 @@
 namespace CentroEventos.Aplicacion.EventoDeportivo;
-using CentroEventos.Aplicacion.Reserva;
 
 public interface IRepositorioEventoDeportivo
 {

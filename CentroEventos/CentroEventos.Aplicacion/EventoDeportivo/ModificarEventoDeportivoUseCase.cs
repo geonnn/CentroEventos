@@ -3,24 +3,26 @@ using CentroEventos.Aplicacion.Clases;
 
 namespace CentroEventos.Aplicacion.EventoDeportivo;
 
-public class ModificarEventoDeportivoUseCase(IRepositorioEventoDeportivo repo, IServicioAutorizacion autorizador)
+public class ModificarEventoDeportivoUseCase(IRepositorioEventoDeportivo repo, EventoDeportivoValidador validador, IServicioAutorizacion autorizador)
 {
     public void Ejecutar(EventoDeportivo evento, int idUsuario) //el evento que recibe esta validada?? de lo contrario pensar como validar
     {
         if (!autorizador.PoseeElPermiso(idUsuario, Permiso.EventoModificacion))
-            throw new FalloAutorizacionException("No tiene permiso para añadir una persona.");
+            throw new FalloAutorizacionException("No tiene permiso para modificar un evento deportivo.");
 
-        if(!repo.EventoExiste(evento.Id))
-            throw new EntidadNotFoundException("Evento no encontrado");
+        if (!validador.ValidarConstruccion(evento, out string mensajeError))
+            throw new ValidacionException(mensajeError);
 
-        //if (nuevo responsable existe) REQUIERE REPO PERSONA
-        //    throw new EntidadNotFoundException("El responsable no existe");
+        if (!repo.EventoExiste(evento.Id))
+            throw new EntidadNotFoundException($"Evento ID {evento.Id} no encontrado.");
+
+        if (!validador.ValidarResponsable(evento.Id))
+            throw new EntidadNotFoundException($"El nuevo responsable ID {evento.ResponsableId} no existe.");
 
         if(repo.Finalizo(evento.Id))
-            throw new OperacionInvalidaException("No se puede modificar un evento en el pasado");
+            throw new OperacionInvalidaException($"No se puede modificar el evento {evento.Id}. El evento ya ocurrió.");
 
         repo.ModificarEventoDeportivo(evento);
-        Console.WriteLine($"Evento ID {evento.Id} modificado exitosamente.");
     }
 
 }

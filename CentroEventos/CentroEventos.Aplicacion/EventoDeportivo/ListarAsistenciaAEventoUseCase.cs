@@ -12,7 +12,7 @@ public class ListarAsistenciaAEventoUseCase(IRepositorioEventoDeportivo repoEven
         if (!repoEventoDeportivo.Finalizo(id))
             throw new OperacionInvalidaException("Quiere listar un evento que no terminó");
         
-        List<Reserva.Reserva> reservas = repoReserva.ListarReserva();
+        List<Reserva.Reserva> reservas = repoReserva.ListarReservas();
         List<Persona.Persona> asistentes = new List<Persona.Persona>();
         
             foreach (Reserva.Reserva r in reservas)

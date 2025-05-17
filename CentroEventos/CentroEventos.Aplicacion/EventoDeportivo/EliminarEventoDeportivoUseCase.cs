@@ -3,21 +3,19 @@ using CentroEventos.Aplicacion.Clases;
 
 namespace CentroEventos.Aplicacion.EventoDeportivo;
 
-public class EliminarEventoDeportivoUseCase(IRepositorioEventoDeportivo repo, IServicioAutorizacion autorizador)
+public class EliminarEventoDeportivoUseCase(IRepositorioEventoDeportivo repo, EventoDeportivoValidador validador, IServicioAutorizacion autorizador)
 {
     public void Ejecutar(int id, int idUsuario)
     {
         if (!autorizador.PoseeElPermiso(idUsuario, Permiso.EventoBaja))
-            throw new FalloAutorizacionException("No tiene permiso para añadir una persona.");
+            throw new FalloAutorizacionException("No tiene permiso para eliminar un evento deportivo.");
 
         if (!repo.EventoExiste(id))
-            throw new EntidadNotFoundException("Evento no encontrado");
+            throw new EntidadNotFoundException($"Evento ID {id} no encontrado.");
         
-        //if (evento tiene reserva)
-        //    throw new OperacionInvalidaException("No se puede eliminar un evento con reservas"); FALTA REPO RESERVA
+        if (validador.TieneReserva(id))
+            throw new OperacionInvalidaException($"No se puede eliminar el evento ID {id} porque tiene reservas.");
 
         repo.EliminarEventoDeportivo(id);
-        Console.WriteLine($"Persona ID {id} eliminada exitosamente.");    
     }
 }
-
