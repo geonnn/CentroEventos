@@ -95,21 +95,20 @@ public class RepositorioEventoDeportivoTXT : IRepositorioEventoDeportivo
     }
 
     public bool EventoExiste(int id)
-    {
-        foreach (EventoDeportivo e in ListarEventoDeportivo())
-            if (id == e.Id)
-                return true;
+        => ListarEventoDeportivo().Exists(e => e.Id == id);
 
-        return false;
+    // int.TryParse() usa algo como esto para evitar la null warning:
+    private bool TryGetEvento(int id, [System.Diagnostics.CodeAnalysis.NotNullWhen(true)] out EventoDeportivo? ev)
+    {
+        ev = ListarEventoDeportivo().Find(e => e.Id == id);
+        return ev is not null;
     }
 
     public bool Finalizo(int id)
     {
-        foreach (EventoDeportivo evento in ListarEventoDeportivo())
-        {
-            if (evento.Id == id)
-                return evento.FechaHoraInicio < DateTime.Now;
-        }
+        if (TryGetEvento(id, out EventoDeportivo? e))
+            return e.FechaHoraInicio < DateTime.Now;
+
         return false;
     }
 
