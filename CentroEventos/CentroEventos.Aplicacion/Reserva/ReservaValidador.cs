@@ -4,30 +4,21 @@ using CentroEventos.Aplicacion.Persona;
 
 namespace CentroEventos.Aplicacion.Reserva;
 
-public class ReservaValidador
+public class ReservaValidador(IRepositorioPersona repoP, IRepositorioEventoDeportivo repoE)
 {
-    readonly IRepositorioPersona _repoPersona;
-    readonly IRepositorioEventoDeportivo _repoEventos;
-
-    public ReservaValidador(IRepositorioPersona repoPersona, IRepositorioEventoDeportivo repoEventos)
-    {
-        _repoPersona = repoPersona;
-        _repoEventos = repoEventos;
-    }
 
     public bool Validar(Reserva r, out string mensajeError)
     {
 
-        mensajeError = "";
         StringBuilder mensaje = new StringBuilder("");
 
-        // if (/* TO-DO consultar si r.PersonaId existe.*/) {
-        //     mensaje.Append("El id de persona ingresado no existe.\n");
-        // }
+        if (!repoP.PersonaExiste(r.PersonaId)) {
+            mensaje.Append($"La persona ID {r.PersonaId} no existe.\n");
+        }
 
-        // if (/* TO-DO consultar si r.EventoDeportivoId existe.*/) {
-        //     mensaje.Append("El id del evento ingresado no existe.\n");
-        // }
+        if (!repoE.EventoExiste(r.EventoDeportivoId)) {
+            mensaje.Append($"El evento ID {r.EventoDeportivoId} no existe.\n");
+        }
 
         // if (/* TO-DO consultar que la persona no haya reservado para el mismo evento. */) {
         //     mensaje.Append("La persona ingresada ya se encuentra registrada para este evento.\n");
@@ -38,7 +29,7 @@ public class ReservaValidador
         // }
 
         mensajeError = mensaje.ToString();
-        return (mensajeError == "");
+        return mensajeError == "";
     }
 
 }
