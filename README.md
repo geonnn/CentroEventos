@@ -1,10 +1,10 @@
-# Sistema de Gestión del Centro Deportivo Universitario
+# Sistema de gestión del Centro Deportivo Universitario
 
 > Proyecto desarrollado para el Seminario de Lenguajes opción .NET – 1º Semestre 2025
 
 ---
 
-## 📂 Estructura del Proyecto
+## 📂 Estructura del proyecto
 
 Este proyecto se desarrolla bajo los principios de **Arquitectura Limpia**, separado en tres proyectos dentro de la solución `CentroEventos`:
 
@@ -14,11 +14,11 @@ Este proyecto se desarrolla bajo los principios de **Arquitectura Limpia**, sepa
 
 ---
 
-## ⚙️ Cómo Ejecutar y Probar el Proyecto
+## ⚙️ Cómo ejecutar y probar el proyecto
 
 A continuación se muestra un ejemplo de cómo probar las funcionalidades desarrolladas desde `Program.cs`.
 
-### 🔹 Crear una Persona
+### 🔹 Crear una persona
 
 ```csharp
 var personaUseCase = new PersonaAltaUseCase(repositorioPersona, servicioAutorizacion);
@@ -34,7 +34,7 @@ personaUseCase.Ejecutar(persona, 1); // Usuario 1 tiene todos los permisos
 Console.WriteLine("Persona creada exitosamente");
 ```
 
-### 🔹 Crear un Evento Deportivo
+### 🔹 Crear un evento deportivo
 
 ```csharp
 var eventoUseCase = new EventoDeportivoAltaUseCase(repositorioEvento, repositorioPersona, servicioAutorizacion);
@@ -51,7 +51,7 @@ eventoUseCase.Ejecutar(evento, 1);
 Console.WriteLine("Evento creado correctamente");
 ```
 
-### 🔹 Hacer una Reserva
+### 🔹 Hacer una reserva
 
 ```csharp
 var reservaUseCase = new ReservaAltaUseCase(repositorioReserva, repositorioEvento, repositorioPersona, servicioAutorizacion);
@@ -64,7 +64,7 @@ reservaUseCase.Ejecutar(reserva, 1);
 Console.WriteLine("Reserva realizada correctamente");
 ```
 
-### 🔹 Listar Eventos con Cupo Disponible
+### 🔹 Listar eventos con cupo disponible
 
 ```csharp
 var listarUseCase = new ListarEventosConCupoDisponibleUseCase(repositorioEvento, repositorioReserva);
@@ -77,7 +77,7 @@ foreach (var ev in eventosDisponibles)
 
 ---
 
-## 🧪 Casos de Uso Implementados
+## 🧪 Casos de uso implementados
 
 - Alta, baja, modificación y listado de:
   - Persona
@@ -88,7 +88,7 @@ foreach (var ev in eventosDisponibles)
 
 ---
 
-## 🔐 Servicio de Autorización
+## 🔐 Servicio de autorización
 
 Se utiliza `ServicioAutorizacionProvisorio`, que responde de la siguiente manera:
 
@@ -103,7 +103,7 @@ Los datos se almacenan en archivos de texto plano. Cada entidad tiene su propio 
 
 ---
 
-## 🧱 Validaciones Aplicadas
+## 🧱 Validaciones aplicadas
 
 ### Persona
 - DNI y Email únicos.
@@ -122,7 +122,7 @@ Los datos se almacenan en archivos de texto plano. Cada entidad tiene su propio 
 
 ---
 
-## ❗ Excepciones Personalizadas
+## ❗ Excepciones personalizadas
 
 Se definen las siguientes clases de excepción:
 
