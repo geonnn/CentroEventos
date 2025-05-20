@@ -58,20 +58,12 @@ public class RepositorioPersonaTXT : IRepositorioPersona
     public void ModificarPersona(Persona nuevaPersona)
     {
         List<Persona> personas = ListarPersonas();
-        List<Persona> PersonasN = new List<Persona> {};
 
-        foreach (Persona p in personas)
-        {
-            if (p.Id == nuevaPersona.Id)
-                PersonasN.Add(nuevaPersona);
-            else
-                PersonasN.Add(p);
-        }
+        int index = personas.FindIndex(p => p.Id == nuevaPersona.Id);
+        personas[index] = nuevaPersona;
+        
         using StreamWriter sw = new StreamWriter(_archPersonas, false);
-        foreach(Persona p in PersonasN)
-        {
-            sw.WriteLine(p.ToStringParaTXT());
-        }
+        personas.ForEach(p => sw.WriteLine(p.ToStringParaTXT()));
     }
 
     // int.TryParse() usa algo como esto para evitar la null warning:
