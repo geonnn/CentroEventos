@@ -31,22 +31,16 @@ public class RepositorioEventoDeportivoTXT : IRepositorioEventoDeportivo
         lista.ForEach(e => sw.WriteLine(e.ToStringParaTXT()));
     }
 
-    public void ModificarEventoDeportivo(EventoDeportivo NuevoEventoDeportivo)
+    public void ModificarEventoDeportivo(EventoDeportivo nuevoEventoDeportivo)
     {
-        List<EventoDeportivo> eventoDeportivos = ListarEventoDeportivo();
-        List<EventoDeportivo> eventoDeportivosN = new List<EventoDeportivo> { };
-        foreach (EventoDeportivo e in eventoDeportivos)
-        {
-            if (e.Id == NuevoEventoDeportivo.Id)
-                eventoDeportivosN.Add(e);
-            else
-                eventoDeportivosN.Add(NuevoEventoDeportivo);
-        }
+        List<EventoDeportivo> eventosDeportivos = ListarEventoDeportivo();
+
+        int index = eventosDeportivos.FindIndex(e => e.Id == nuevoEventoDeportivo.Id);
+        // no hace falta verificar index != -1, ya se validó que el evento existe.
+        eventosDeportivos[index] = nuevoEventoDeportivo;
+
         using StreamWriter sw = new StreamWriter(_archEventos, false);
-        foreach (EventoDeportivo e in eventoDeportivosN)
-        {
-            sw.WriteLine(e.ToStringParaTXT());
-        }
+        eventosDeportivos.ForEach(e => sw.WriteLine(e.ToStringParaTXT()));
     }
 
     public List<EventoDeportivo> ListarEventoDeportivo()
@@ -109,7 +103,7 @@ public class RepositorioEventoDeportivoTXT : IRepositorioEventoDeportivo
         if (TryGetEvento(id, out EventoDeportivo? e))
             return e.FechaHoraInicio < DateTime.Now;
 
-        return false;
+        throw new EntidadNotFoundException($"El evento ID {id} no existe.");
     }
 
     public bool PersonaEsResponsable(int id)
