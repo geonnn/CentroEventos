@@ -35,11 +35,24 @@ public class ReservaValidador(IRepositorioPersona repoP, IRepositorioEventoDepor
         return mensajeError == "";
     }
 
+    public bool ValidarDuplicadoModificar(Reserva r, out string mensajeError)
+    {
+        mensajeError = "";
+
+        var lista = repoR.ListarReservas();
+        lista.RemoveAt(lista.FindIndex(res => res.Id == r.Id));
+
+        if (lista.Exists(res => res.EventoDeportivoId == r.EventoDeportivoId && res.PersonaId == r.PersonaId))
+            mensajeError = $"La persona ID {r.PersonaId} ya se encuentra registrada para el evento ID {r.EventoDeportivoId}.";
+
+        return mensajeError == "";
+    }
+
     public bool ValidarCupo(Reserva r, out string mensajeError)
     {
         mensajeError = "";
 
-        if (/* TODO: consultar cupo. */)
+        if (!repoR.EventoTieneCupo(r.EventoDeportivoId, repoE.GetCupoMax(r.EventoDeportivoId)))
             mensajeError = $"El evento ID {r.EventoDeportivoId} ya ha alcanzado su cupo máximo.";
 
         return mensajeError == "";
