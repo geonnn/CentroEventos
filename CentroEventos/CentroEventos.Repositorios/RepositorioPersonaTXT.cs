@@ -74,8 +74,21 @@ public class RepositorioPersonaTXT : IRepositorioPersona
         }
     }
 
+    // int.TryParse() usa algo como esto para evitar la null warning:
+    private bool TryGetPersona(int id, [System.Diagnostics.CodeAnalysis.NotNullWhen(true)] out Persona? p)
+    {
+        p = ListarPersonas().Find(p => p.Id == id);
+        return p is not null;
+    }
+
+    // Generalmente siempre que se use ConsultaPersona la persona debería existir, considerar esto una última capa de seguridad por si se utiliza con algún id de persona no válido.
     public Persona ConsultaPersona(int id)
-        => ListarPersonas().Find(p => p.Id == id) ?? throw new EntidadNotFoundException($"La persona con id {id} no existe.");
+    {
+        if (TryGetPersona(id, out Persona? p))
+            return p;
+
+        throw new EntidadNotFoundException($"La persona ID {id} no existe.");
+    }
 
     public bool PersonaExiste(int id)
         => ListarPersonas().Exists(p => p.Id == id);
