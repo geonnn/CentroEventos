@@ -28,10 +28,7 @@ public class RepositorioPersonaTXT : IRepositorioPersona
         List<Persona> personas = ListarPersonas();
         personas.RemoveAt(personas.FindIndex(p => p.Id == id));
         using StreamWriter sw = new StreamWriter(_archPersonas, false);
-        foreach (Persona p in personas)
-        {
-            sw.WriteLine(p.ToStringParaTXT());
-        }
+        personas.ForEach(p => sw.WriteLine(p.ToStringParaTXT()));
     }
 
     public List<Persona> ListarPersonas()
@@ -60,7 +57,7 @@ public class RepositorioPersonaTXT : IRepositorioPersona
 
         int index = personas.FindIndex(p => p.Id == nuevaPersona.Id);
         personas[index] = nuevaPersona;
-        
+
         using StreamWriter sw = new StreamWriter(_archPersonas, false);
         personas.ForEach(p => sw.WriteLine(p.ToStringParaTXT()));
     }

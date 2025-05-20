@@ -26,20 +26,9 @@ public class RepositorioReservaTXT : IRepositorioReserva
     public void EliminarReserva(int id)
     {
         List<Reserva> reservas = ListarReservas();
-        List<Reserva> reservasN = new List<Reserva> { };
-        foreach (Reserva r in reservas)
-        {
-            if (!(r.Id == id))
-            {
-                reservasN.Append(r);
-            }
-        }
+        reservas.RemoveAt(reservas.FindIndex(p => p.Id == id));
         using StreamWriter sw = new StreamWriter(_archReservas, false);
-        foreach (Reserva r in reservasN)
-        {
-            sw.WriteLine(r.ToStringParaTXT());
-        }
-
+        reservas.ForEach(r => sw.WriteLine(r.ToStringParaTXT()));
     }
 
     public void ModificarReserva(Reserva nuevaReserva)
