@@ -54,7 +54,6 @@ public class RepositorioPersonaTXT : IRepositorioPersona
         return resultado;
     }
 
-
     public void ModificarPersona(Persona nuevaPersona)
     {
         List<Persona> personas = ListarPersonas();
