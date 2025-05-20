@@ -1,7 +1,7 @@
+namespace CentroEventos.Aplicacion.EventoDeportivo;
+
 using CentroEventos.Aplicacion.Interfaces;
 using CentroEventos.Aplicacion.Clases;
-
-namespace CentroEventos.Aplicacion.EventoDeportivo;
 
 public class ModificarEventoDeportivoUseCase(IRepositorioEventoDeportivo repo, EventoDeportivoValidador validador, IServicioAutorizacion autorizador)
 {
