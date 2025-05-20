@@ -11,4 +11,5 @@ public interface IRepositorioEventoDeportivo
     bool EventoExiste(int id);
     bool Finalizo(int id);
     bool PersonaEsResponsable(int id);
+    int GetCupoMax(int id);
 }
