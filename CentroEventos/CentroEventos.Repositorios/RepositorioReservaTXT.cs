@@ -47,7 +47,7 @@ public class RepositorioReservaTXT : IRepositorioReserva
         using var sr = new StreamReader(_archReservas);
         sr.ReadLine();
         Reserva r;
-        List<Reserva> ListaReserva = new List<Reserva> { };
+        List<Reserva> listaReserva = new List<Reserva> { };
         while (!sr.EndOfStream)
         {
             int Id = int.Parse(sr.ReadLine() ?? "");
@@ -56,9 +56,9 @@ public class RepositorioReservaTXT : IRepositorioReserva
             DateTime FechaAltaReserva = DateTime.Parse(sr.ReadLine() ?? "");
             EstadoAsistencia Estado = Enum.Parse<EstadoAsistencia>(sr.ReadLine() ?? "");
             r = new Reserva(Id, PersonaId, EventoDeportivoId, FechaAltaReserva, Estado);
-            ListaReserva.Append(r);
+            listaReserva.Add(r);
         }
-        return new List<Reserva>();
+        return listaReserva;
     }
 
     public bool PersonaTieneReserva(int id)
@@ -69,4 +69,10 @@ public class RepositorioReservaTXT : IRepositorioReserva
 
     public bool PersonaReservoEvento(int pId, int eId)
         => ListarReservas().Exists(r => r.PersonaId == pId && r.EventoDeportivoId == eId);
+
+    public bool EventoTieneCupo(int eId, int cupoMax)
+        => ListarReservas().FindAll(e => e.Id == eId).Count < cupoMax;
+
+    public bool ReservaExiste(int id)
+        => ListarReservas().Exists(r => r.Id == id);
 }

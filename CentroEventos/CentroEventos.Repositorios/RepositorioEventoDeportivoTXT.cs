@@ -108,5 +108,13 @@ public class RepositorioEventoDeportivoTXT : IRepositorioEventoDeportivo
 
     public bool PersonaEsResponsable(int id)
         => ListarEventoDeportivo().Exists(e => e.ResponsableId == id);
+
+    public int GetCupoMax(int id)
+    {
+        if (TryGetEvento(id, out EventoDeportivo? e))
+            return e.CupoMaximo;
+        
+        throw new EntidadNotFoundException($"El evento ID {id} no existe.");
+    }
 }
 
