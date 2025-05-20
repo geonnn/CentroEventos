@@ -8,4 +8,5 @@ public interface IRepositorioReserva
     List<Reserva> ListarReservas();
     bool PersonaTieneReserva(int id);
     bool EventoTieneReserva(int id);
+    bool PersonaReservoEvento(int pId, int eId);
 }
