@@ -42,22 +42,15 @@ public class RepositorioReservaTXT : IRepositorioReserva
 
     }
 
-    public void ModificarReserva(Reserva NuevaReserva)
+    public void ModificarReserva(Reserva nuevaReserva)
     {
         List<Reserva> reservas = ListarReservas();
-        List<Reserva> reservasN = new List<Reserva> { };
-        foreach (Reserva r in reservas)
-        {
-            if (r.Id == NuevaReserva.Id)
-                reservasN.Add(r);
-            else
-                reservasN.Add(NuevaReserva);
-        }
+
+        int index = reservas.FindIndex(r => r.Id == nuevaReserva.Id);
+        reservas[index] = nuevaReserva;
+
         using StreamWriter sw = new StreamWriter(_archReservas, false);
-        foreach (Reserva r in reservasN)
-        {
-            sw.WriteLine(r.ToStringParaTXT());
-        }
+        reservas.ForEach(r => sw.WriteLine(r.ToStringParaTXT()));
     }
 
     public List<Reserva> ListarReservas()
