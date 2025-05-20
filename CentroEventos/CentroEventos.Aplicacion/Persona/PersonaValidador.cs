@@ -45,7 +45,7 @@ public class PersonaValidador(IRepositorioPersona repoP, IRepositorioEventoDepor
 
         if (repoP.EmailExiste(p.Email))
         {
-            mensaje.Append("El Email ya existe.\n");
+            mensaje.Append("El Email ya existe.");
         }
 
         mensajeError = mensaje.ToString();
@@ -65,7 +65,7 @@ public class PersonaValidador(IRepositorioPersona repoP, IRepositorioEventoDepor
         lista.RemoveAt(lista.FindIndex(pe => pe.Id == p.Id));
 
         if (lista.Exists(pe => pe.Dni == p.Dni))
-            mensaje.Append("El DNI ya existe.");
+            mensaje.Append("El DNI ya existe.\n");
 
         if (lista.Exists(pe => pe.Email == p.Email))
             mensaje.Append("El Email ya existe.");
@@ -80,7 +80,7 @@ public class PersonaValidador(IRepositorioPersona repoP, IRepositorioEventoDepor
         StringBuilder mensaje = new StringBuilder("");
 
         if (repoR.PersonaTieneReserva(id))
-            mensaje.Append($"La persona ID {id} está registrada en una reserva.");
+            mensaje.Append($"La persona ID {id} está registrada en una reserva.\n");
 
         if (repoED.PersonaEsResponsable(id))
             mensaje.Append($"La persona ID {id} es responsable de un evento.");
