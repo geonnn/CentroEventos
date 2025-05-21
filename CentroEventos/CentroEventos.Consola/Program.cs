@@ -1,4 +1,4 @@
-﻿using CentroEventos.Aplicacion.Entidades;
+using CentroEventos.Aplicacion.Entidades;
 using CentroEventos.Aplicacion.Excepciones;
 using CentroEventos.Aplicacion.Interfaces;
 using CentroEventos.Aplicacion.UseCases;
@@ -21,12 +21,27 @@ ReservaValidador validadorReserva = new ReservaValidador(repoPersona, repoEvento
 // Casos de uso
 
 // Probar optimización: implementar que los constructores de los useCases reciban un tipo Repositorio y un tipo Validador.
-// P ej. que los repositorios y validadores hereden de una clase respectivamente en común o implementen una misma interfaz. 
-AgregarEventoDeportivoUseCase agregarEventoDeportivo = new AgregarEventoDeportivoUseCase(repoEventoDeportivo, validadorEvento, autorizador);
+// P ej. que los repositorios y validadores hereden de una clase respectivamente en común o implementen una misma interfaz.
+
+// Persona
 AgregarPersonaUseCase agregarPersona = new AgregarPersonaUseCase(repoPersona, validadorPersona, autorizador);
-AgregarReservaUseCase agregarReserva = new AgregarReservaUseCase(repoReserva, validadorReserva, autorizador);
+EliminarPersonaUseCase eliminarPersona = new EliminarPersonaUseCase(repoPersona, validadorPersona, autorizador);
+ModificarPersonaUseCase modificarPersona = new ModificarPersonaUseCase(repoPersona, validadorPersona, autorizador);
+ListarPersonaUseCase listarPersonas = new ListarPersonaUseCase(repoPersona);
+
+// Evento Deportivo
+AgregarEventoDeportivoUseCase agregarEventoDeportivo = new AgregarEventoDeportivoUseCase(repoEventoDeportivo, validadorEvento, autorizador);
+EliminarEventoDeportivoUseCase eliminarEvento = new EliminarEventoDeportivoUseCase(repoEventoDeportivo, validadorEvento, autorizador);
+ModificarEventoDeportivoUseCase modificarEvento = new ModificarEventoDeportivoUseCase(repoEventoDeportivo, validadorEvento, autorizador);
+ListarEventoDeportivoUseCase listarEventos = new ListarEventoDeportivoUseCase(repoEventoDeportivo);
 ListarEventosConCupoDisponibleUseCase listarEventosConCupoDisponible = new ListarEventosConCupoDisponibleUseCase(repoEventoDeportivo, repoReserva);
-ListarAsistenciaAEventoUseCase listaPersonasQueFueronAEvento = new ListarAsistenciaAEventoUseCase(repoEventoDeportivo, repoReserva, repoPersona, 3);
+ListarAsistenciaAEventoUseCase listarAsistenciaAEvento = new ListarAsistenciaAEventoUseCase(repoEventoDeportivo, repoReserva, repoPersona);
+
+// Reserva
+AgregarReservaUseCase agregarReserva = new AgregarReservaUseCase(repoReserva, validadorReserva, autorizador);
+EliminarReservaUseCase eliminarReserva = new EliminarReservaUseCase(repoReserva, autorizador);
+ModificarReservaUseCase modificarReserva = new ModificarReservaUseCase(repoReserva, validadorReserva, autorizador);
+ListarReservaUseCase listarReservas = new ListarReservaUseCase(repoReserva);
 
 // Ejecución los casos de uso
 try

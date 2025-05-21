@@ -4,9 +4,9 @@ using Entidades;
 using Excepciones;
 using Interfaces;
 
-public class ListarAsistenciaAEventoUseCase(IRepositorioEventoDeportivo repoEventoDeportivo, IRepositorioReserva repoReserva,IRepositorioPersona repoPersona, int id)
+public class ListarAsistenciaAEventoUseCase(IRepositorioEventoDeportivo repoEventoDeportivo, IRepositorioReserva repoReserva,IRepositorioPersona repoPersona)
 {
-    public List<Persona> Ejecutar()
+    public List<Persona> Ejecutar(int id)
     {
         if (!repoEventoDeportivo.EventoExiste(id))
             throw new EntidadNotFoundException("El evento que quiere listar no existe.");
