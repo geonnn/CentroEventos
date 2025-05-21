@@ -55,7 +55,7 @@ ListarReservaUseCase listarReservas = new ListarReservaUseCase(repoReserva);
 try
 {
     agregarPersona.Ejecutar(new Persona("33444555", "Nombre1", "Apellido1", "email1@gmail.com", "221222333"), Admin);
-    // agregarPersona.Ejecutar(new Persona("11222333", "Nombre2", "Apellido2", "email2@gmail.com", "221444555"), Admin);
+    agregarPersona.Ejecutar(new Persona("11222333", "Nombre2", "Apellido2", "email2@gmail.com", "221444555"), Admin);
 
     // listarPersonas.Ejecutar().ForEach(Console.WriteLine);
     // eliminarPersona.Ejecutar(3, Admin);
