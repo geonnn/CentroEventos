@@ -1,7 +1,7 @@
 namespace CentroEventos.Aplicacion.Validadores;
 using System.Text;
-using CentroEventos.Aplicacion.Entidades;
-using CentroEventos.Aplicacion.Interfaces;
+using Entidades;
+using Interfaces;
 
 public class EventoDeportivoValidador(IRepositorioPersona repoP, IRepositorioReserva repoR)
 {

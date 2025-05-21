@@ -1,8 +1,10 @@
 namespace CentroEventos.Aplicacion.Validadores;
 
 using System.Text;
-using CentroEventos.Aplicacion.EventoDeportivo;
-using CentroEventos.Aplicacion.Persona;
+using Entidades;
+using Interfaces;
+
+
 
 public class ReservaValidador(IRepositorioPersona repoP, IRepositorioEventoDeportivo repoE, IRepositorioReserva repoR)
 {
