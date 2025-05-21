@@ -17,6 +17,7 @@ public class RepositorioPersonaTXT : IRepositorioPersona
         _idGetter = idg;
         _fileManager = fm;
         _fileManager.InicializarArchivo(_archUltimaId);
+        _fileManager.InicializarRepo(_archPersonas);
     }
 
     public void AgregarPersona(Persona persona)

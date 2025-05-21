@@ -40,12 +40,12 @@ public class PersonaValidador(IRepositorioPersona repoP, IRepositorioEventoDepor
 
         if (repoP.DniExiste(p.Dni))
         {
-            mensaje.Append("El DNI ya existe.\n");
+            mensaje.Append($"El DNI {p.Dni} ya existe.\n");
         }
 
         if (repoP.EmailExiste(p.Email))
         {
-            mensaje.Append("El Email ya existe.");
+            mensaje.Append($"El Email {p.Email} ya existe.");
         }
 
         mensajeError = mensaje.ToString();
@@ -65,10 +65,10 @@ public class PersonaValidador(IRepositorioPersona repoP, IRepositorioEventoDepor
         lista.RemoveAt(lista.FindIndex(pe => pe.Id == p.Id));
 
         if (lista.Exists(pe => pe.Dni == p.Dni))
-            mensaje.Append("El DNI ya existe.\n");
+            mensaje.Append($"El DNI {p.Dni} ya existe.\n");
 
         if (lista.Exists(pe => pe.Email == p.Email))
-            mensaje.Append("El Email ya existe.");
+            mensaje.Append($"El Email {p.Email} ya existe.");
 
         mensajeError = mensaje.ToString();
         return mensajeError == "";

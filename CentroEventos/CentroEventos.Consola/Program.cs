@@ -1,4 +1,4 @@
-using CentroEventos.Aplicacion.Entidades;
+﻿using CentroEventos.Aplicacion.Entidades;
 using CentroEventos.Aplicacion.Excepciones;
 using CentroEventos.Aplicacion.Interfaces;
 using CentroEventos.Aplicacion.UseCases;
@@ -46,9 +46,19 @@ ListarReservaUseCase listarReservas = new ListarReservaUseCase(repoReserva);
 // Ejecución los casos de uso
 try
 {
-    agregarPersona.Ejecutar(new Persona("33444555", "Paul", "Auster", "paulauster@gmail.com", "221555666"),Admin);
+    //agregarPersona.Ejecutar(new Persona("33444555", "Pelo", "Hassan", "ppel@gmail.com", "221555666"),Admin);
+   //agregarPersona.Ejecutar(new Persona("33444555", "", "Lara", "gabilara@gmail.com", "221555666"), Admin);
+    //agregarPersona.Ejecutar(new Persona("12345678", "Gonzalo", "Gil", "gonzalo@gmail.com", "221444555"), Admin);
+    //agregarPersona.Ejecutar(new Persona("987654321", "Gabi", "Lara", "gabilara@gmail.com", "221555666"), Admin);
+    //agregarPersona.Ejecutar(new Persona("41294714", "Paula", "uster", "paulauster@gmail.com", "221555666"), Admin);
+
+    listarPersonas.Ejecutar().ForEach(p => Console.WriteLine(p.ToStringParaTXT()));
+    eliminarPersona.Ejecutar(3, Admin);
+    listarPersonas.Ejecutar().ForEach(p => Console.WriteLine(p.ToStringParaTXT()));
+
     agregarEventoDeportivo.Ejecutar(new EventoDeportivo("uno", "evento1", new DateTime(2025, 10, 10), 90, 100, 1),Admin);
-    agregarReserva.Ejecutar(new Reserva(1, 1, DateTime.Now, EstadoAsistencia.Pendiente),Usuario); // este no tienen que andar porque usuario no tiene la autorizacion pa hacerlo
+    agregarReserva.Ejecutar(new Reserva(1, 1, DateTime.Now, EstadoAsistencia.Pendiente),Admin); // este no tienen que andar porque usuario no tiene la autorizacion pa hacerlo
+
 }
 catch (ValidacionException e)
 {

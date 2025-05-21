@@ -11,4 +11,12 @@ public class FileManager : IFileManager
             sw.Write(0);
         }
     }
+
+    public void InicializarRepo(string archivo)
+    {
+        if (!File.Exists(archivo))
+        {
+            using StreamWriter sw = new StreamWriter(archivo);
+        }
+    }
 }

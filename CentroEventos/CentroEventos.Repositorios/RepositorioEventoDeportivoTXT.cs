@@ -16,6 +16,8 @@ public class RepositorioEventoDeportivoTXT : IRepositorioEventoDeportivo
         _idgetter = idg;
         _fileManager = fm;
         _fileManager.InicializarArchivo(_archUltimaId);
+        _fileManager.InicializarRepo(_archEventos);
+
     }
 
     public void AgregarEventoDeportivo(EventoDeportivo evento)

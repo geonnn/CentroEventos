@@ -16,6 +16,8 @@ public class RepositorioReservaTXT : IRepositorioReserva
         _idGetter = idg;
         _fileManager = fm;
         _fileManager.InicializarArchivo(_archUltimaId);
+        _fileManager.InicializarRepo(_archReservas);
+        
     }
 
     public void AgregarReserva(Reserva reserva)
@@ -46,7 +48,6 @@ public class RepositorioReservaTXT : IRepositorioReserva
     public List<Reserva> ListarReservas()
     {
         using var sr = new StreamReader(_archReservas);
-        sr.ReadLine();
         Reserva r;
         List<Reserva> listaReserva = new List<Reserva> { };
         while (!sr.EndOfStream)
