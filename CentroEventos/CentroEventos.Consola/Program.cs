@@ -6,13 +6,21 @@ using CentroEventos.Aplicacion.Validadores;
 using CentroEventos.Repositorios;
 
 // Dependencias
-IRepositorioPersona repoPersona = new RepositorioPersonaTXT(new IdGetter(), new FileManager());
-IRepositorioEventoDeportivo repoEventoDeportivo = new RepositorioEventoDeportivoTXT(new IdGetter(), new FileManager());
-IRepositorioReserva repoReserva = new RepositorioReservaTXT(new IdGetter(), new FileManager());
-IServicioAutorizacion autorizador = new ServicioAutorizacion();
 
+// IDGetter y FileManager
+IIdGetter idgetter = new IdGetter();
+IFileManager filemanager = new FileManager();
+
+// Servicio de autorizacion
+IServicioAutorizacion autorizador = new ServicioAutorizacion();
 int Admin = 1;
-int Usuario = 0;
+// int Usuario = 0; // usuario para testear validación de autorización.
+
+// Interfaces de repositorios
+IRepositorioPersona repoPersona = new RepositorioPersonaTXT(idgetter, filemanager);
+IRepositorioEventoDeportivo repoEventoDeportivo = new RepositorioEventoDeportivoTXT(idgetter, filemanager);
+IRepositorioReserva repoReserva = new RepositorioReservaTXT(idgetter, filemanager);
+
 // Validadores
 PersonaValidador validadorPersona = new PersonaValidador(repoPersona, repoEventoDeportivo, repoReserva);
 EventoDeportivoValidador validadorEvento = new EventoDeportivoValidador(repoPersona, repoReserva);
@@ -43,55 +51,28 @@ EliminarReservaUseCase eliminarReserva = new EliminarReservaUseCase(repoReserva,
 ModificarReservaUseCase modificarReserva = new ModificarReservaUseCase(repoReserva, validadorReserva, autorizador);
 ListarReservaUseCase listarReservas = new ListarReservaUseCase(repoReserva);
 
-// Ejecución los casos de uso
+// Ejecución de los casos de uso
 try
 {
-    //agregarPersona.Ejecutar(new Persona("33444555", "Pelo", "Hassan", "ppel@gmail.com", "221555666"),Admin);
-    //agregarPersona.Ejecutar(new Persona("33444555", "", "Lara", "gabilara@gmail.com", "221555666"), Admin);
-    //agregarPersona.Ejecutar(new Persona("12345678", "Gonzalo", "Gil", "gonzalo@gmail.com", "221444555"), Admin);
-    //agregarPersona.Ejecutar(new Persona("987654321", "Gabi", "Lara", "gabilara@gmail.com", "221555666"), Admin);
-    //agregarPersona.Ejecutar(new Persona("41294714", "Paula", "uster", "paulauster@gmail.com", "221555666"), Admin);
+    agregarPersona.Ejecutar(new Persona("33444555", "Nombre1", "Apellido1", "email1@gmail.com", "221222333"), Admin);
+    // agregarPersona.Ejecutar(new Persona("11222333", "Nombre2", "Apellido2", "email2@gmail.com", "221444555"), Admin);
 
-    // listarPersonas.Ejecutar().ForEach(p => Console.WriteLine(p.ToStringParaTXT()));
+    // listarPersonas.Ejecutar().ForEach(Console.WriteLine);
     // eliminarPersona.Ejecutar(3, Admin);
-    listarPersonas.Ejecutar().ForEach(p => Console.WriteLine(p));
+    // System.Console.WriteLine("");
+    // listarPersonas.Ejecutar().ForEach(Console.WriteLine);
     // modificarPersona.Ejecutar(new Persona(1, "12345678", "Pelo", "Hassan", "ppel@gmail.com", ""), Admin);
 
     // agregarEventoDeportivo.Ejecutar(new EventoDeportivo("uno", "evento1", new DateTime(2025, 10, 10), 90, 100, 9), Admin);
     // agregarReserva.Ejecutar(new Reserva(1, 1, DateTime.Now, EstadoAsistencia.Pendiente),Admin); // este no tienen que andar porque usuario no tiene la autorizacion pa hacerlo
     // modificarReserva.Ejecutar(new Reserva(1, 2, 1, DateTime.Now, EstadoAsistencia.Pendiente), Admin);
     // agregarEventoDeportivo.Ejecutar(new EventoDeportivo("tres", "evento3", DateTime.Now, 90, 100, 5), Admin);
-    System.Console.WriteLine("");
-    listarEventosConCupoDisponible.Ejecutar().ForEach(e => Console.WriteLine(e.ToStringParaTXT()));
-    System.Console.WriteLine("");
-    listarAsistenciaAEvento.Ejecutar(3).ForEach(Console.WriteLine);
-    
-
+    // System.Console.WriteLine("");
+    // listarEventosConCupoDisponible.Ejecutar().ForEach(e => Console.WriteLine(e.ToStringParaTXT()));
+    // System.Console.WriteLine("");
+    // listarAsistenciaAEvento.Ejecutar(3).ForEach(Console.WriteLine);
 }
-catch (ValidacionException e)
+catch (Exception e)
 {
-    Console.WriteLine(e.Message);
-}
-
-catch (CupoExcedidoException e)
-{
-    Console.WriteLine(e.Message);
-}
-
-catch (DuplicadoException e)
-{
-    Console.WriteLine(e.Message);
-}
-
-catch (EntidadNotFoundException e)
-{
-    Console.WriteLine(e.Message);
-}
-catch (FalloAutorizacionException e)
-{
-    Console.WriteLine(e.Message);
-}
-catch (OperacionInvalidaException e)
-{
-    Console.WriteLine(e.Message);
+    Console.WriteLine($"Excepción {e}:" + e.Message);
 }

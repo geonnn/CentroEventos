@@ -23,6 +23,11 @@ public class Reserva
         : this(0, personaId, eventoDeportivoId, fechaAltaReserva, estado)
     { }
 
+    public override string ToString()
+    {
+        return $"Reserva [Id: {Id}, PersonaId: {PersonaId}, EventoDeportivoId: {EventoDeportivoId}, FechaAltaReserva: {FechaAltaReserva:dd/MM/yyyy}, Estado: {Estado}]";
+    }
+
     public string ToStringParaTXT(int id)
     {
         return id + "\n" +

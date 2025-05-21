@@ -27,6 +27,11 @@ public class EventoDeportivo
         : this(0, nom, desc, fechaInicio, duracion, cupoMax, respId)
     { }
 
+    public override string ToString()
+    {
+        return $"EventoDeportivo [Id: {Id}, Nombre: {Nombre}, Descripcion: {Descripcion}, FechaHoraInicio: {FechaHoraInicio}, DuracionHoras: {DuracionHoras}, CupoMaximo: {CupoMaximo}, ResponsableId: {ResponsableId}]";
+    }
+
     public string ToStringParaTXT()
     {
         return Id + "\n" +

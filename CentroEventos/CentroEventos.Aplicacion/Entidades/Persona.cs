@@ -37,7 +37,7 @@ public class Persona
 
     public override string ToString()
     {
-        return $"Id: {Id}, Dni: {Dni}, Nombre: {Nombre}, Apellido: {Apellido}, Email: {Email}, Telefono: {Telefono}";
+        return $"Persona [Id: {Id}, Dni: {Dni}, Nombre: {Nombre}, Apellido: {Apellido}, Email: {Email}, Telefono: {Telefono}]";
     }
 
     public string ToStringParaTXT()

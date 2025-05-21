@@ -4,127 +4,79 @@
 
 ---
 
-## 📂 Estructura del proyecto
-
-Este proyecto se desarrolla bajo los principios de **Arquitectura Limpia**, separado en tres proyectos dentro de la solución `CentroEventos`:
-
-- `CentroEventos.Aplicacion`: contiene lógica de negocio, entidades, validadores, casos de uso e interfaces.
-- `CentroEventos.Repositorios`: contiene implementaciones de persistencia con archivos planos.
-- `CentroEventos.Consola`: aplicación de consola para probar los casos de uso.
-
----
-
 ## ⚙️ Cómo ejecutar y probar el proyecto
 
 A continuación se muestra un ejemplo de cómo probar las funcionalidades desarrolladas desde `Program.cs`.
 
-### 🔹 Crear una persona
+###  Inicializaciones
+
+#### 🔹 Sistema de gestión de IDs y archivos
 
 ```csharp
-var personaUseCase = new PersonaAltaUseCase(repositorioPersona, servicioAutorizacion);
-var persona = new Persona
-{
-    DNI = "12345678",
-    Nombre = "Juan",
-    Apellido = "Pérez",
-    Email = "juan.perez@ejemplo.com",
-    Telefono = "123456789"
-};
-personaUseCase.Ejecutar(persona, 1); // Usuario 1 tiene todos los permisos
-Console.WriteLine("Persona creada exitosamente");
+// IDGetter y FileManager
+IIdGetter idgetter = new IdGetter();
+IFileManager filemanager = new FileManager();
 ```
 
-### 🔹 Crear un evento deportivo
+#### 🔹 Servicio de autorización
 
 ```csharp
-var eventoUseCase = new EventoDeportivoAltaUseCase(repositorioEvento, repositorioPersona, servicioAutorizacion);
-var evento = new EventoDeportivo
-{
-    Nombre = "Clase de Spinning Avanzado",
-    Descripcion = "Entrenamiento de alto rendimiento",
-    FechaHoraInicio = DateTime.Now.AddDays(1),
-    DuracionHoras = 1.5,
-    CupoMaximo = 10,
-    ResponsableId = 1
-};
-eventoUseCase.Ejecutar(evento, 1);
-Console.WriteLine("Evento creado correctamente");
+// Servicio de autorizacion (provisorio)
+IServicioAutorizacion autorizador = new ServicioAutorizacion();
+int Admin = 1;
+int Usuario = 0;
 ```
 
-### 🔹 Hacer una reserva
+#### 🔹 Repositorios
 
 ```csharp
-var reservaUseCase = new ReservaAltaUseCase(repositorioReserva, repositorioEvento, repositorioPersona, servicioAutorizacion);
-var reserva = new Reserva
-{
-    PersonaId = 1,
-    EventoDeportivoId = 1
-};
-reservaUseCase.Ejecutar(reserva, 1);
-Console.WriteLine("Reserva realizada correctamente");
+IRepositorioPersona repoPersona = new RepositorioPersonaTXT(idgetter, filemanager);
+IRepositorioEventoDeportivo repoEventoDeportivo = new RepositorioEventoDeportivoTXT(idgetter, filemanager);
+IRepositorioReserva repoReserva = new RepositorioReservaTXT(idgetter, filemanager);
 ```
 
-### 🔹 Listar eventos con cupo disponible
+#### 🔹 Validadores
 
 ```csharp
-var listarUseCase = new ListarEventosConCupoDisponibleUseCase(repositorioEvento, repositorioReserva);
-var eventosDisponibles = listarUseCase.Ejecutar();
-foreach (var ev in eventosDisponibles)
-{
-    Console.WriteLine(ev);
-}
+PersonaValidador validadorPersona = new PersonaValidador(repoPersona, repoEventoDeportivo, repoReserva);
+EventoDeportivoValidador validadorEvento = new EventoDeportivoValidador(repoPersona, repoReserva);
+ReservaValidador validadorReserva = new ReservaValidador(repoPersona, repoEventoDeportivo, repoReserva);
+```
+
+#### 🔹 Casos de uso para entidad Persona
+
+```csharp
+var agregarPersona = new AgregarPersonaUseCase(repositorioPersona, servicioAutorizacion);
+var eliminarPersona = new EliminarPersonaUseCase(repoPersona, validadorPersona, autorizador);
+var modificarPersona = new ModificarPersonaUseCase(repoPersona, validadorPersona, autorizador);
+var listarPersonas = new ListarPersonaUseCase(repoPersona);
+```
+
+#### 🔹 Casos de uso para entidad EventoDeportivo
+
+```csharp
+var agregarEventoDeportivo = new AgregarEventoDeportivoUseCase(repositorioEventoDeportivo, servicioAutorizacion);
+var eliminarEventoDeportivo = new EliminarEventoDeportivoUseCase(repoEventoDeportivo, validadorEventoDeportivo, autorizador);
+var modificarEventoDeportivo = new ModificarEventoDeportivoUseCase(repoEventoDeportivo, validadorEventoDeportivo, autorizador);
+var listarEventosDeportivos = new ListarEventoDeportivoUseCase(repoEventoDeportivo);
+var listarEventosConCupoDisponible = new ListarEventosConCupoDisponibleUseCase(repositorioEventoDeportivo, repositorioReserva);
+var listarAsistenciaAEvento = new ListarAsistenciaAEventoUseCase(repoEventoDeportivo, repositorioReserva, repositorioPersona);
+```
+
+#### 🔹 Casos de uso para entidad Reserva
+
+```csharp
+var agregarReserva = new AgregarReservaUseCase(repositorioReserva, servicioAutorizacion);
+var eliminarReserva = new EliminarReservaUseCase(repoReserva, validadorReserva, autorizador);
+var modificarReserva = new ModificarReservaUseCase(repoReserva, validadorReserva, autorizador);
+var listarReservas = new ListarReservaUseCase(repoReserva);
 ```
 
 ---
 
-## 🧪 Casos de uso implementados
+### ▶️ Ejecución de los casos de uso
 
-- Alta, baja, modificación y listado de:
-  - Persona
-  - EventoDeportivo
-  - Reserva
-- Listar eventos con cupo disponible
-- Listar asistencia a evento
-
----
-
-## 🔐 Servicio de autorización
-
-Se utiliza `ServicioAutorizacionProvisorio`, que responde de la siguiente manera:
-
-- Si `IdUsuario == 1`, permite todas las operaciones.
-- Para cualquier otro `IdUsuario`, no permite ninguna operación.
-
----
-
-## 💾 Repositorios
-
-Los datos se almacenan en archivos de texto plano. Cada entidad tiene su propio archivo para la permanencia de datos y gestión de IDs, que se autogeneran de manera incremental y no reutilizable.
-
----
-
-## 🧱 Validaciones aplicadas
-
-### Persona
-- DNI y Email únicos.
-- Nombre, Apellido, DNI, Email no vacíos.
-
-### EventoDeportivo
-- Fecha de inicio futura.
-- Nombre y descripción no vacíos.
-- Cupo y duración mayor que cero.
-- ResponsableId válido.
-
-### Reserva
-- No se permite reservar más de una vez el mismo evento.
-- Verificación de existencia de persona y evento.
-- Validación de cupo disponible.
-
----
-
-## ❗ Excepciones personalizadas
-
-Se definen las siguientes clases de excepción:
+Para ejecutar los casos de uso estos deben estar dentro de un bloque **try**, seguido de un **catch** para manejar las posibles excepciones:
 
 - `ValidacionException`
 - `EntidadNotFoundException`
@@ -135,8 +87,71 @@ Se definen las siguientes clases de excepción:
 
 ---
 
+```csharp
+try
+{
+    // Ejecución de casos de uso
+
+    // Persona
+
+    agregarPersona.Ejecutar(new Persona("DNI", "Nombre", "Apellido", "email@gmail.com", "teléfono"), Autorizacion);
+    // También se pueden crear personas sin teléfono:
+    agregarPersona.Ejecutar(new Persona("DNI", "Nombre", "Apellido", "email@gmail.com"), Autorizacion); 
+
+    eliminarPersona.Ejecutar(int idPersona, Autorizacion);
+
+    modificarPersona.Ejecutar(new Persona(int idPersonaAModificar, "DNI", "Nombre", "Apellido", "email@gmail.com", "teléfono"), Autorizacion); // también se puede modificar sin teléfono.
+
+    listarPersona.Ejecutar(); // No requiere autorización.
+    // Fin Persona ------------------------------------------------
+
+    // Evento Deportivo
+
+    agregarEventoDeportivo.Ejecutar(new EventoDeportivo("Nombre", "Descripción", DateTime fechaInicio, double duracion, int cupoMáximo, int responsableId), Autorizacion);
+
+    eliminarEventoDeportivo.Ejecutar(idEventoDeportivo, Autorizacion);
+
+    modificarEventoDeportivo.Ejecutar(new EventoDeportivo(int idEventoAModificar, "Nombre", "Descripción", DateTime fechaInicio, double duracion, int cupoMáximo, int responsableId), Autorizacion); // también se puede modificar sin teléfono.
+
+    listarEventoDeportivo.Ejecutar(); // No requiere autorización.
+
+    listarEventosConCupoDisponible.Ejecutar();
+
+    listarAsistenciaAEvento.Ejecutar(int idEventoAConsultar);
+    // Fin Evento Deportivo ------------------------------------------------
+
+    // Reserva
+
+    agregarReserva.Ejecutar(new Reserva(int idPersona, int idEventoDeportivo, DateTime fechaAltaReserva, EstadoAsistencia estado), Autorizacion);
+
+    eliminarReserva.Ejecutar(int idReserva, Autorizacion);
+
+    modificarReserva.Ejecutar(new Reserva(int idReservaAModificar, int personaId, int eventoDeportivoId, DateTime fechaAltaReserva, EstadoAsistencia estado)); // también se puede modificar sin teléfono.
+
+    listarReserva.Ejecutar(); // No requiere autorización.
+    // Fin Reserva ------------------------------------------------
+
+}
+catch (Exception e)
+{
+    Console.WriteLine($"Excepción {e}:" + e.Message);
+}
+
+// Las excepciones también pueden manejarse individualmente con bloques catch específicos.
+```
+---
+
+## 💾 Repositorios
+
+Los datos se almacenan en archivos de texto plano. Cada entidad tiene su propio archivo para la permanencia de datos y gestión de IDs, que se autogeneran de manera incremental y no reutilizable.
+
+La ruta de los archivos está en una variable de instancia en su respectivo repositorio.
+Se entrega el proyecto con el directorio creado pero los archivos de texto se crean automáticamente en la ejecución del programa.
+
+---
+
 ## 👥 Autores
 
-- Gil, Gonzalo - Hassan, Ignacio - Lara, Gabriel
+    👨‍💻 Gil, Gonzalo 👨‍💻 Hassan, Ignacio 👨‍💻 Lara, Gabriel
 
 ---
