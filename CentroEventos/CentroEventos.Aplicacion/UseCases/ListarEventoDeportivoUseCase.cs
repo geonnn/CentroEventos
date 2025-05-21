@@ -1,11 +1,13 @@
 namespace CentroEventos.Aplicacion.UseCases;
+
+using CentroEventos.Aplicacion.Entidades;
 using Interfaces;
 
 
 public class ListarEventoDeportivoUseCase(IRepositorioEventoDeportivo repositorioEvento)
 {
-    public void Ejecutar()
+    public List<EventoDeportivo> Ejecutar()
     {
-        repositorioEvento.ListarEventoDeportivo();
+        return repositorioEvento.ListarEventoDeportivo();
     }
 }
