@@ -1,4 +1,4 @@
-namespace CentroEventos.Aplicacion.EventoDeportivo;
+namespace CentroEventos.Aplicacion.Entidades;
 
 public class EventoDeportivo
 {

@@ -1,4 +1,4 @@
-namespace CentroEventos.Aplicacion.Reserva;
+namespace CentroEventos.Aplicacion.Entidades;
 
 public class Reserva
 {

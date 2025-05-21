@@ -1,7 +1,8 @@
-namespace CentroEventos.Aplicacion.EventoDeportivo;
+namespace CentroEventos.Aplicacion.UseCases;
 
-using CentroEventos.Aplicacion.Persona;
-using CentroEventos.Aplicacion.Reserva;
+using Entidades;
+using Excepciones;
+using Interfaces;
 
 public class ListarAsistenciaAEventoUseCase(IRepositorioEventoDeportivo repoEventoDeportivo, IRepositorioReserva repoReserva,IRepositorioPersona repoPersona, int id)
 {

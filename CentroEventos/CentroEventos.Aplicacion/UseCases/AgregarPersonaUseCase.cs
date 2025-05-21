@@ -1,6 +1,8 @@
-namespace CentroEventos.Aplicacion.Persona;
+namespace CentroEventos.Aplicacion.UseCases;
 using Interfaces;
-using Clases;
+using Entidades;
+using Excepciones;
+using Validadores;
 
 public class AgregarPersonaUseCase(IRepositorioPersona repo, PersonaValidador validador, IServicioAutorizacion autorizador)
 {

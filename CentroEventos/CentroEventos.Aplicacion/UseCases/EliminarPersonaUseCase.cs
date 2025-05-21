@@ -1,7 +1,9 @@
-using CentroEventos.Aplicacion.Interfaces;
-using CentroEventos.Aplicacion.Clases;
+namespace CentroEventos.Aplicacion.UseCases;
+using Interfaces;
+using Entidades;
+using Excepciones;
+using Validadores;
 
-namespace CentroEventos.Aplicacion.Persona;
 
 public class EliminarPersonaUseCase(IRepositorioPersona repo, PersonaValidador validador, IServicioAutorizacion autorizador)
 {

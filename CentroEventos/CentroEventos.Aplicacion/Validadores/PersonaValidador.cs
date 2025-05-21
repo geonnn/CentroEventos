@@ -2,7 +2,7 @@ using System.Text;
 using CentroEventos.Aplicacion.EventoDeportivo;
 using CentroEventos.Aplicacion.Reserva;
 
-namespace CentroEventos.Aplicacion.Persona;
+namespace CentroEventos.Aplicacion.Validadores;
 
 public class PersonaValidador(IRepositorioPersona repoP, IRepositorioEventoDeportivo repoED, IRepositorioReserva repoR)
 {

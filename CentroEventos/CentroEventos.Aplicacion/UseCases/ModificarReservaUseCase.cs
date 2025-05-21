@@ -1,7 +1,10 @@
-using CentroEventos.Aplicacion.Interfaces;
-using CentroEventos.Aplicacion.Clases;
+namespace CentroEventos.Aplicacion.UseCases;
+using Entidades;
+using Excepciones;
+using Interfaces;
+using Validadores;
 
-namespace CentroEventos.Aplicacion.Reserva;
+
 
 public class ModificarReservaUseCase(IRepositorioReserva repoReserva, ReservaValidador validador, IServicioAutorizacion autorizador)
 {

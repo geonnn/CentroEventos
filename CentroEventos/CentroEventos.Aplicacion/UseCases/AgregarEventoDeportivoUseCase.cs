@@ -1,8 +1,8 @@
-using CentroEventos.Aplicacion.Interfaces;
-using CentroEventos.Aplicacion.Clases;
-
-namespace CentroEventos.Aplicacion.EventoDeportivo;
-
+namespace CentroEventos.Aplicacion.UseCases;
+using Interfaces;
+using Entidades;
+using Validadores;
+using Excepciones;
 public class AgregarEventoDeportivoUseCase(IRepositorioEventoDeportivo repo, EventoDeportivoValidador validador, IServicioAutorizacion autorizador)
 {
     public void Ejecutar(EventoDeportivo evento, int idUsuario)

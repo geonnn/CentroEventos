@@ -1,6 +1,10 @@
-namespace CentroEventos.Aplicacion.Persona;
+namespace CentroEventos.Aplicacion.UseCases;
+using Entidades;
+using Excepciones;
 using Interfaces;
-using Clases;
+using Validadores;
+
+
 
 public class ModificarPersonaUseCase(IRepositorioPersona repo, PersonaValidador validador, IServicioAutorizacion autorizador)
 {

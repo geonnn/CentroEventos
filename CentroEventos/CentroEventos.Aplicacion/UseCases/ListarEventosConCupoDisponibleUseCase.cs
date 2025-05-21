@@ -1,7 +1,6 @@
-namespace CentroEventos.Aplicacion.EventoDeportivo;
-
-using CentroEventos.Aplicacion.Reserva;
-
+namespace CentroEventos.Aplicacion.UseCases;
+using Entidades;
+using Interfaces;
 
 public class ListarEventosConCupoDisponibleUseCase(IRepositorioEventoDeportivo repoEventoDeportivo, IRepositorioReserva repoReserva)
 {

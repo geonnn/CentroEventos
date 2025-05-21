@@ -1,4 +1,4 @@
-using CentroEventos.Aplicacion;
+using CentroEventos.Aplicacion.Interfaces;
 namespace CentroEventos.Repositorios;
 
 public class IdGetter : IIdGetter

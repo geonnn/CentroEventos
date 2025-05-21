@@ -1,7 +1,8 @@
 namespace CentroEventos.Repositorios;
 
-using CentroEventos.Aplicacion;
-using CentroEventos.Aplicacion.EventoDeportivo;
+using CentroEventos.Aplicacion.Entidades;
+using CentroEventos.Aplicacion.Excepciones;
+using CentroEventos.Aplicacion.Interfaces;
 
 public class RepositorioEventoDeportivoTXT : IRepositorioEventoDeportivo
 {

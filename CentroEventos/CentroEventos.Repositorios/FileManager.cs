@@ -1,5 +1,5 @@
-using CentroEventos.Aplicacion;
 namespace CentroEventos.Repositorios;
+using CentroEventos.Aplicacion.Interfaces;
 
 public class FileManager : IFileManager
 {

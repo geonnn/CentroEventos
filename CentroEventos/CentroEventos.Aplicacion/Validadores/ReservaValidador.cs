@@ -1,4 +1,4 @@
-namespace CentroEventos.Aplicacion.Reserva;
+namespace CentroEventos.Aplicacion.Validadores;
 
 using System.Text;
 using CentroEventos.Aplicacion.EventoDeportivo;

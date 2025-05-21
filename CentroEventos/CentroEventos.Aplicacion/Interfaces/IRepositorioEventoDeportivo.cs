@@ -1,4 +1,5 @@
-namespace CentroEventos.Aplicacion.EventoDeportivo;
+namespace CentroEventos.Aplicacion.Interfaces;
+using Entidades;
 
 public interface IRepositorioEventoDeportivo
 {

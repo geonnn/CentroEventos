@@ -1,9 +1,8 @@
-﻿using CentroEventos.Aplicacion.EventoDeportivo;
+﻿using CentroEventos.Aplicacion.Entidades;
+using CentroEventos.Aplicacion.Excepciones;
 using CentroEventos.Aplicacion.Interfaces;
-using CentroEventos.Aplicacion.Persona;
-using CentroEventos.Aplicacion.Reserva;
-using CentroEventos.Aplicacion.Clases;
-
+using CentroEventos.Aplicacion.UseCases;
+using CentroEventos.Aplicacion.Validadores;
 using CentroEventos.Repositorios;
 
 // Dependencias

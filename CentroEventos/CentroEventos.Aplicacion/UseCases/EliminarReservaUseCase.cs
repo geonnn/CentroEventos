@@ -1,7 +1,8 @@
-namespace CentroEventos.Aplicacion.Reserva;
+namespace CentroEventos.Aplicacion.UseCases;
 
-using CentroEventos.Aplicacion.Interfaces;
-using CentroEventos.Aplicacion.Clases;
+using Interfaces;
+using Entidades;
+using Excepciones;
 
 public class EliminarReservaUseCase(IRepositorioReserva repoReserva, IServicioAutorizacion autorizador) {
     

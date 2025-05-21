@@ -1,7 +1,9 @@
 namespace CentroEventos.Repositorios;
 
-using CentroEventos.Aplicacion;
-using CentroEventos.Aplicacion.Persona;
+using CentroEventos.Aplicacion.Entidades;
+using CentroEventos.Aplicacion.Excepciones;
+using CentroEventos.Aplicacion.Interfaces;
+
 
 public class RepositorioPersonaTXT : IRepositorioPersona
 {

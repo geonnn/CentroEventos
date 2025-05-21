@@ -1,4 +1,4 @@
-namespace CentroEventos.Aplicacion.Persona;
+namespace CentroEventos.Aplicacion.Entidades;
 
 public class Persona
 {

@@ -1,5 +1,5 @@
 using CentroEventos.Aplicacion.Interfaces;
-using CentroEventos.Aplicacion.Clases;
+using CentroEventos.Aplicacion.Entidades;
 
 public class ServicioAutorizacion : IServicioAutorizacion
 {

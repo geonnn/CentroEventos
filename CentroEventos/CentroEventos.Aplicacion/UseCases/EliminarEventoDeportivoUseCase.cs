@@ -1,7 +1,9 @@
-namespace CentroEventos.Aplicacion.EventoDeportivo;
+namespace CentroEventos.Aplicacion.UseCases;
 
-using CentroEventos.Aplicacion.Interfaces;
-using CentroEventos.Aplicacion.Clases;
+using Entidades;
+using Excepciones;
+using Interfaces;
+using Validadores;
 
 public class EliminarEventoDeportivoUseCase(IRepositorioEventoDeportivo repo, EventoDeportivoValidador validador, IServicioAutorizacion autorizador)
 {

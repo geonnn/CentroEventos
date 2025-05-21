@@ -1,4 +1,5 @@
-namespace CentroEventos.Aplicacion.Persona;
+namespace CentroEventos.Aplicacion.Interfaces;
+using Entidades;
 
 public interface IRepositorioPersona
 {

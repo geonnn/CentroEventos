@@ -1,7 +1,9 @@
-namespace CentroEventos.Aplicacion.Reserva;
+namespace CentroEventos.Aplicacion.UseCases;
 
-using CentroEventos.Aplicacion.Interfaces;
-using CentroEventos.Aplicacion.Clases;
+using Entidades;
+using Excepciones;
+using Interfaces;
+using Validadores;
 
 public class AgregarReservaUseCase(IRepositorioReserva repoReserva, ReservaValidador validador, IServicioAutorizacion autorizador) {
     
