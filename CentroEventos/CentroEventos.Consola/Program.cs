@@ -17,7 +17,7 @@ int Usuario = 0;
 // Validadores
 PersonaValidador validadorPersona = new PersonaValidador(repoPersona, repoEventoDeportivo, repoReserva);
 EventoDeportivoValidador validadorEvento = new EventoDeportivoValidador(repoPersona, repoReserva);
-ReservaValidador validadorReserva = new ReservaValidador(repoPersona, repoEventoDeportivo);
+ReservaValidador validadorReserva = new ReservaValidador(repoPersona, repoEventoDeportivo, repoReserva);
 
 // Casos de uso
 
