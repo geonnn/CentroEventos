@@ -47,17 +47,25 @@ ListarReservaUseCase listarReservas = new ListarReservaUseCase(repoReserva);
 try
 {
     //agregarPersona.Ejecutar(new Persona("33444555", "Pelo", "Hassan", "ppel@gmail.com", "221555666"),Admin);
-   //agregarPersona.Ejecutar(new Persona("33444555", "", "Lara", "gabilara@gmail.com", "221555666"), Admin);
+    //agregarPersona.Ejecutar(new Persona("33444555", "", "Lara", "gabilara@gmail.com", "221555666"), Admin);
     //agregarPersona.Ejecutar(new Persona("12345678", "Gonzalo", "Gil", "gonzalo@gmail.com", "221444555"), Admin);
     //agregarPersona.Ejecutar(new Persona("987654321", "Gabi", "Lara", "gabilara@gmail.com", "221555666"), Admin);
     //agregarPersona.Ejecutar(new Persona("41294714", "Paula", "uster", "paulauster@gmail.com", "221555666"), Admin);
 
-    listarPersonas.Ejecutar().ForEach(p => Console.WriteLine(p.ToStringParaTXT()));
-    eliminarPersona.Ejecutar(3, Admin);
-    listarPersonas.Ejecutar().ForEach(p => Console.WriteLine(p.ToStringParaTXT()));
+    // listarPersonas.Ejecutar().ForEach(p => Console.WriteLine(p.ToStringParaTXT()));
+    // eliminarPersona.Ejecutar(3, Admin);
+    listarPersonas.Ejecutar().ForEach(p => Console.WriteLine(p));
+    // modificarPersona.Ejecutar(new Persona(1, "12345678", "Pelo", "Hassan", "ppel@gmail.com", ""), Admin);
 
-    agregarEventoDeportivo.Ejecutar(new EventoDeportivo("uno", "evento1", new DateTime(2025, 10, 10), 90, 100, 1),Admin);
-    agregarReserva.Ejecutar(new Reserva(1, 1, DateTime.Now, EstadoAsistencia.Pendiente),Admin); // este no tienen que andar porque usuario no tiene la autorizacion pa hacerlo
+    // agregarEventoDeportivo.Ejecutar(new EventoDeportivo("uno", "evento1", new DateTime(2025, 10, 10), 90, 100, 9), Admin);
+    // agregarReserva.Ejecutar(new Reserva(1, 1, DateTime.Now, EstadoAsistencia.Pendiente),Admin); // este no tienen que andar porque usuario no tiene la autorizacion pa hacerlo
+    // modificarReserva.Ejecutar(new Reserva(1, 2, 1, DateTime.Now, EstadoAsistencia.Pendiente), Admin);
+    // agregarEventoDeportivo.Ejecutar(new EventoDeportivo("tres", "evento3", DateTime.Now, 90, 100, 5), Admin);
+    System.Console.WriteLine("");
+    listarEventosConCupoDisponible.Ejecutar().ForEach(e => Console.WriteLine(e.ToStringParaTXT()));
+    System.Console.WriteLine("");
+    listarAsistenciaAEvento.Ejecutar(3).ForEach(Console.WriteLine);
+    
 
 }
 catch (ValidacionException e)

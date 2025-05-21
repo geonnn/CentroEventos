@@ -7,20 +7,13 @@ public class ListarEventosConCupoDisponibleUseCase(IRepositorioEventoDeportivo r
     public List<EventoDeportivo> Ejecutar()
     {
         List<EventoDeportivo> eventosFuturos = repoEventoDeportivo.ListarEventoDeportivoFuturo(DateTime.Now);
-        List<Reserva> reservas = repoReserva.ListarReservas();
+        var eventosConCupo = new List<EventoDeportivo>();
         foreach (EventoDeportivo e in eventosFuturos)
         {
-            
-            int contador = 0;
-            foreach (Reserva r in reservas)
-            {
-                if (r.EventoDeportivoId == e.Id)
-                    contador++;
-            }
-            if (contador < e.CupoMaximo)
-                eventosFuturos.Add(e);
+            if (repoReserva.EventoTieneCupo(e.Id, e.CupoMaximo))
+                eventosConCupo.Add(e);
         }
 
-        return eventosFuturos;
+        return eventosConCupo;
     }
 }

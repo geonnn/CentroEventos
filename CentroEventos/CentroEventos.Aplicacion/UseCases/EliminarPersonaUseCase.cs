@@ -12,7 +12,7 @@ public class EliminarPersonaUseCase(IRepositorioPersona repo, PersonaValidador v
         if (!autorizador.PoseeElPermiso(idUsuario, Permiso.UsuarioBaja))
             throw new FalloAutorizacionException("No tiene permiso para eliminar una persona.");
 
-        
+        if (!repo.PersonaExiste(id))
             throw new EntidadNotFoundException($"Persona ID {id} no encontrada.");
 
         // PersonaValidador recibe todos los repositorios en su construcción.
