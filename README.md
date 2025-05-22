@@ -13,7 +13,6 @@ A continuación se muestra un ejemplo de cómo probar las funcionalidades desarr
 #### 🔹 Sistema de gestión de IDs y archivos
 
 ```csharp
-// IDGetter y FileManager
 IIdGetter idgetter = new IdGetter();
 IFileManager filemanager = new FileManager();
 ```
@@ -47,8 +46,8 @@ ReservaValidador validadorReserva = new ReservaValidador(repoPersona, repoEvento
 
 ```csharp
 var agregarPersona = new AgregarPersonaUseCase(repositorioPersona, servicioAutorizacion);
-var eliminarPersona = new EliminarPersonaUseCase(repoPersona, validadorPersona, autorizador);
-var modificarPersona = new ModificarPersonaUseCase(repoPersona, validadorPersona, autorizador);
+var eliminarPersona = new EliminarPersonaUseCase(repoPersona, validadorPersona, servicioAutorizacion);
+var modificarPersona = new ModificarPersonaUseCase(repoPersona, validadorPersona, servicioAutorizacion);
 var listarPersonas = new ListarPersonaUseCase(repoPersona);
 ```
 
@@ -56,8 +55,8 @@ var listarPersonas = new ListarPersonaUseCase(repoPersona);
 
 ```csharp
 var agregarEventoDeportivo = new AgregarEventoDeportivoUseCase(repositorioEventoDeportivo, servicioAutorizacion);
-var eliminarEventoDeportivo = new EliminarEventoDeportivoUseCase(repoEventoDeportivo, validadorEventoDeportivo, autorizador);
-var modificarEventoDeportivo = new ModificarEventoDeportivoUseCase(repoEventoDeportivo, validadorEventoDeportivo, autorizador);
+var eliminarEventoDeportivo = new EliminarEventoDeportivoUseCase(repoEventoDeportivo, validadorEventoDeportivo, servicioAutorizacion);
+var modificarEventoDeportivo = new ModificarEventoDeportivoUseCase(repoEventoDeportivo, validadorEventoDeportivo, servicioAutorizacion);
 var listarEventosDeportivos = new ListarEventoDeportivoUseCase(repoEventoDeportivo);
 var listarEventosConCupoDisponible = new ListarEventosConCupoDisponibleUseCase(repositorioEventoDeportivo, repositorioReserva);
 var listarAsistenciaAEvento = new ListarAsistenciaAEventoUseCase(repoEventoDeportivo, repositorioReserva, repositorioPersona);
@@ -67,8 +66,8 @@ var listarAsistenciaAEvento = new ListarAsistenciaAEventoUseCase(repoEventoDepor
 
 ```csharp
 var agregarReserva = new AgregarReservaUseCase(repositorioReserva, servicioAutorizacion);
-var eliminarReserva = new EliminarReservaUseCase(repoReserva, validadorReserva, autorizador);
-var modificarReserva = new ModificarReservaUseCase(repoReserva, validadorReserva, autorizador);
+var eliminarReserva = new EliminarReservaUseCase(repoReserva, validadorReserva, servicioAutorizacion);
+var modificarReserva = new ModificarReservaUseCase(repoReserva, validadorReserva, servicioAutorizacion);
 var listarReservas = new ListarReservaUseCase(repoReserva);
 ```
 
@@ -76,7 +75,7 @@ var listarReservas = new ListarReservaUseCase(repoReserva);
 
 ### ▶️ Ejecución de los casos de uso
 
-Para ejecutar los casos de uso estos deben estar dentro de un bloque **try**, seguido de un **catch** para manejar las posibles excepciones:
+Para ejecutar los casos de uso estos deben estar dentro de un bloque **try**, seguido de un bloque **catch** para manejar las posibles excepciones:
 
 - `ValidacionException`
 - `EntidadNotFoundException`
@@ -145,13 +144,13 @@ catch (Exception e)
 
 Los datos se almacenan en archivos de texto plano. Cada entidad tiene su propio archivo para la permanencia de datos y gestión de IDs, que se autogeneran de manera incremental y no reutilizable.
 
-La ruta de los archivos está en una variable de instancia en su respectivo repositorio.
-Se entrega el proyecto con el directorio creado pero los archivos de texto se crean automáticamente en la ejecución del programa.
+La ruta de los archivos se guarda en una variable de instancia en su respectivo repositorio.
+Los archivos de texto actualmente se almacenan en CentroEventos\CentroEventos.Repositorios\txt_files. Los mismos se generan automáticamente durante la ejecución del programa.
 
 ---
 
 ## 👥 Autores
 
-    👨‍💻 Gil, Gonzalo 👨‍💻 Hassan, Ignacio 👨‍💻 Lara, Gabriel
+`👨‍💻 Gil, Gonzalo` **-** `👨‍💻 Hassan, Ignacio` **-** `👨‍💻 Lara, Gabriel`
 
 ---
