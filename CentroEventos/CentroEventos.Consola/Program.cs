@@ -1,4 +1,6 @@
-﻿using CentroEventos.Aplicacion.Entidades;
+﻿// Código de ejemplo para probar algunas de las funcionalidades:
+
+using CentroEventos.Aplicacion.Entidades;
 using CentroEventos.Aplicacion.Interfaces;
 using CentroEventos.Aplicacion.UseCases;
 using CentroEventos.Aplicacion.Validadores;
