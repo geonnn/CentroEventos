@@ -1,5 +1,4 @@
 ﻿using CentroEventos.Aplicacion.Entidades;
-using CentroEventos.Aplicacion.Excepciones;
 using CentroEventos.Aplicacion.Interfaces;
 using CentroEventos.Aplicacion.UseCases;
 using CentroEventos.Aplicacion.Validadores;
@@ -54,25 +53,77 @@ ListarReservaUseCase listarReservas = new ListarReservaUseCase(repoReserva);
 // Ejecución de los casos de uso
 try
 {
-    agregarPersona.Ejecutar(new Persona("33444555", "Nombre1", "Apellido1", "email1@gmail.com", "221222333"), Admin);
-    agregarPersona.Ejecutar(new Persona("11222333", "Nombre2", "Apellido2", "email2@gmail.com", "221444555"), Admin);
+    // Alta de personas
+    agregarPersona.Ejecutar(new Persona("123", "Juan", "Pérez", "juan@mail.com", "221111111"), Admin);
+    agregarPersona.Ejecutar(new Persona("456", "Ana", "García", "ana@mail.com"), Admin);
+    agregarPersona.Ejecutar(new Persona("789", "Luis", "Martínez", "luis@mail.com", "221222333"), Admin);
 
-    // listarPersonas.Ejecutar().ForEach(Console.WriteLine);
-    // eliminarPersona.Ejecutar(3, Admin);
-    // System.Console.WriteLine("");
-    // listarPersonas.Ejecutar().ForEach(Console.WriteLine);
-    // modificarPersona.Ejecutar(new Persona(1, "12345678", "Pelo", "Hassan", "ppel@gmail.com", ""), Admin);
+    // Listado de personas
+    Console.WriteLine("Personas:");
+    listarPersonas.Ejecutar().ForEach(Console.WriteLine);
+    Console.WriteLine();
 
-    // agregarEventoDeportivo.Ejecutar(new EventoDeportivo("uno", "evento1", new DateTime(2025, 10, 10), 90, 100, 9), Admin);
-    // agregarReserva.Ejecutar(new Reserva(1, 1, DateTime.Now, EstadoAsistencia.Pendiente),Admin); // este no tienen que andar porque usuario no tiene la autorizacion pa hacerlo
-    // modificarReserva.Ejecutar(new Reserva(1, 2, 1, DateTime.Now, EstadoAsistencia.Pendiente), Admin);
-    // agregarEventoDeportivo.Ejecutar(new EventoDeportivo("tres", "evento3", DateTime.Now, 90, 100, 5), Admin);
-    // System.Console.WriteLine("");
-    // listarEventosConCupoDisponible.Ejecutar().ForEach(e => Console.WriteLine(e.ToStringParaTXT()));
-    // System.Console.WriteLine("");
-    // listarAsistenciaAEvento.Ejecutar(3).ForEach(Console.WriteLine);
+    // Modificación de persona
+    modificarPersona.Ejecutar(new Persona(1, "123", "Juan Carlos", "Pérez", "juan@mail.com", "221111111"), Admin);
+
+    // Eliminación de persona
+    eliminarPersona.Ejecutar(2, Admin);
+
+    // Listado final de personas
+    Console.WriteLine("Personas después de modificar y eliminar:");
+    listarPersonas.Ejecutar().ForEach(Console.WriteLine);
+    Console.WriteLine();
+
+    // Alta de eventos deportivos
+    agregarEventoDeportivo.Ejecutar(
+        new EventoDeportivo("Fútbol 5", "Torneo amistoso", new DateTime(2025, 7, 15, 18, 0, 0), 2, 10, 1), Admin);
+    agregarEventoDeportivo.Ejecutar(
+        new EventoDeportivo("Básquet", "Torneo rápido", new DateTime(2025, 8, 20, 19, 0, 0), 4, 20, 1), Admin);
+
+    // Listado de eventos deportivos
+    Console.WriteLine("Eventos deportivos:");
+    listarEventos.Ejecutar().ForEach(Console.WriteLine);
+    Console.WriteLine();
+
+    // Alta de reservas
+    agregarReserva.Ejecutar(
+        new Reserva(1, 1, new DateTime(2025, 7, 10, 10, 0, 0), EstadoAsistencia.Pendiente), Admin);
+    agregarReserva.Ejecutar(
+        new Reserva(3, 2, new DateTime(2025, 8, 18, 15, 0, 0), EstadoAsistencia.Pendiente), Admin);
+
+    // Listado de reservas
+    Console.WriteLine("Reservas:");
+    listarReservas.Ejecutar().ForEach(Console.WriteLine);
+    Console.WriteLine();
+
+    // Modificación de reserva
+    modificarReserva.Ejecutar(
+        new Reserva(1, 1, 1, new DateTime(2025, 7, 10, 10, 0, 0), EstadoAsistencia.Presente), Admin);
+
+    // Eliminación de reserva
+    eliminarReserva.Ejecutar(2, Admin);
+
+    // Listado final de reservas
+    Console.WriteLine("Reservas después de modificar y eliminar:");
+    listarReservas.Ejecutar().ForEach(Console.WriteLine);
+    Console.WriteLine();
+
+    // Listar eventos con cupo disponible
+    Console.WriteLine("Eventos con cupo disponible:");
+    listarEventosConCupoDisponible.Ejecutar().ForEach(Console.WriteLine);
+    Console.WriteLine();
+
+    // Prueba de error: intentar eliminar persona inexistente
+    try
+    {
+        eliminarPersona.Ejecutar(99, Admin);
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine("Prueba de error al eliminar persona inexistente: " + ex.Message);
+    }
 }
 catch (Exception e)
 {
-    Console.WriteLine($"Excepción {e}:" + e.Message);
+    Console.WriteLine($"Excepción {e.GetType().Name}:\n" + e.Message);
 }
