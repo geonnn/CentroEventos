@@ -10,27 +10,22 @@ public class RepositorioReserva : IRepositorioReserva
 
     public void AltaReserva(Reserva reserva)
     {
-        using StreamWriter sw = new StreamWriter(_archReservas, true);
-        sw.WriteLine(reserva.ToStringParaTXT(_idGetter.GetNuevoId(_archUltimaId)));
+        using var context = new CentroEventosContext();
+        context.Add(reserva);
+        context.SaveChanges();
     }
 
     public void BajaReserva(int id)
     {
-        List<Reserva> reservas = ListarReservas();
-        reservas.RemoveAt(reservas.FindIndex(p => p.Id == id));
-        using StreamWriter sw = new StreamWriter(_archReservas, false);
-        reservas.ForEach(r => sw.WriteLine(r.ToStringParaTXT()));
+        using var context = new CentroEventosContext();
+        // context.Reservas.Remove(reserva);
+        context.Reservas.Remove(context.Reservas.Where(r => r.Id == id).Single());
+        context.SaveChanges();
     }
 
     public void ModificarReserva(Reserva nuevaReserva)
     {
         List<Reserva> reservas = ListarReservas();
-
-        int index = reservas.FindIndex(r => r.Id == nuevaReserva.Id);
-        reservas[index] = nuevaReserva;
-
-        using StreamWriter sw = new StreamWriter(_archReservas, false);
-        reservas.ForEach(r => sw.WriteLine(r.ToStringParaTXT()));
     }
 
     public List<Reserva> ListarReservas()

@@ -15,24 +15,17 @@ public class RepositorioEventoDeportivo : IRepositorioEventoDeportivo
         context.SaveChanges();
     }
 
-    public void BajaEventoDeportivo(EventoDeportivo evento)
+    public void BajaEventoDeportivo(int id)
     {
         using var context = new CentroEventosContext();
-        context.Remove(evento);
+        // context.Remove(evento);
+        context.EventosDeportivos.Remove(context.EventosDeportivos.Where(e => e.Id == id).Single());
         context.SaveChanges();
-        
     }
 
     public void ModificarEventoDeportivo(EventoDeportivo nuevoEventoDeportivo)
     {
         List<EventoDeportivo> eventosDeportivos = ListarEventoDeportivo();
-
-        int index = eventosDeportivos.FindIndex(e => e.Id == nuevoEventoDeportivo.Id);
-        // no hace falta verificar index != -1, ya se validó que el evento existe.
-        eventosDeportivos[index] = nuevoEventoDeportivo;
-
-        using StreamWriter sw = new StreamWriter(_archEventos, false);
-        eventosDeportivos.ForEach(e => sw.WriteLine(e.ToStringParaTXT()));
     }
 
     public List<EventoDeportivo> ListarEventoDeportivo()

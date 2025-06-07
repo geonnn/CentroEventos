@@ -17,10 +17,11 @@ public class RepositorioPersona : IRepositorioPersona
         context.SaveChanges();
     }
 
-    public void BajaPersona(Persona persona)
+    public void BajaPersona(int id)
     {
         using var context = new CentroEventosContext();
-        context.Personas.Remove(persona);
+        // context.Personas.Remove(persona);
+        context.Personas.Remove(context.Personas.Where(p => p.Id == id).Single());
         context.SaveChanges();
     }
 
@@ -37,12 +38,6 @@ public class RepositorioPersona : IRepositorioPersona
     public void ModificarPersona(Persona nuevaPersona)
     {
         List<Persona> personas = ListarPersonas();
-
-        int index = personas.FindIndex(p => p.Id == nuevaPersona.Id);
-        personas[index] = nuevaPersona;
-
-        using StreamWriter sw = new StreamWriter(_archPersonas, false);
-        personas.ForEach(p => sw.WriteLine(p.ToStringParaTXT()));
     }
 
     // int.TryParse() usa algo como esto para evitar la null warning:
