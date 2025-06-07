@@ -3,8 +3,8 @@ using Entidades;
 
 public interface IRepositorioPersona
 {
-    void AgregarPersona(Persona persona);
-    void EliminarPersona(int id);
+    void AltaPersona(Persona persona);
+    void BajaPersona(int id);
     void ModificarPersona(Persona persona);
     List<Persona> ListarPersonas();
     bool PersonaExiste(int id);

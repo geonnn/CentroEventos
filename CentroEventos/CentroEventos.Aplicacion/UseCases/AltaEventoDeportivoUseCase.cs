@@ -3,11 +3,11 @@ using Interfaces;
 using Entidades;
 using Validadores;
 using Excepciones;
-public class AgregarEventoDeportivoUseCase(IRepositorioEventoDeportivo repo, EventoDeportivoValidador validador, IServicioAutorizacion autorizador)
+public class AltaEventoDeportivoUseCase(IRepositorioEventoDeportivo repo, EventoDeportivoValidador validador, IServicioAutorizacion autorizador)
 {
-    public void Ejecutar(EventoDeportivo evento, int idUsuario)
+    public void Ejecutar(EventoDeportivo evento, int idPersona)
     {
-        if (!autorizador.PoseeElPermiso(idUsuario, Permiso.EventoAlta))
+        if (!autorizador.PoseeElPermiso(idPersona, Permiso.EventoAlta))
             throw new FalloAutorizacionException("No tiene permiso para añadir un evento deportivo.");
 
         if (!validador.ValidarConstruccion(evento, out string mensajeError))
@@ -16,6 +16,6 @@ public class AgregarEventoDeportivoUseCase(IRepositorioEventoDeportivo repo, Eve
         if (!validador.ValidarResponsable(evento.ResponsableId))
             throw new EntidadNotFoundException($"El responsable {evento.ResponsableId} no existe.");
 
-        repo.AgregarEventoDeportivo(evento);               
+        repo.AltaEventoDeportivo(evento);               
     }
 }

@@ -8,9 +8,9 @@ using Validadores;
 
 public class ModificarPersonaUseCase(IRepositorioPersona repo, PersonaValidador validador, IServicioAutorizacion autorizador)
 {
-    public void Ejecutar(Persona persona, int idUsuario) // La persona que recibe esta validada?? de lo contrario pensar como validar
+    public void Ejecutar(Persona persona, int idPersona) // La persona que recibe esta validada?? de lo contrario pensar como validar
     {
-        if (!autorizador.PoseeElPermiso(idUsuario, Permiso.UsuarioModificacion))
+        if (!autorizador.PoseeElPermiso(idPersona, Permiso.PersonaModificacion))
             throw new FalloAutorizacionException("No tiene permiso para modificar una persona.");
 
         {

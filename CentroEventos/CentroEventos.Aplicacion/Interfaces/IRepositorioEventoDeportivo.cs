@@ -3,8 +3,8 @@ using Entidades;
 
 public interface IRepositorioEventoDeportivo
 {
-    void AgregarEventoDeportivo(EventoDeportivo evento);
-    void EliminarEventoDeportivo(int id);
+    void AltaEventoDeportivo(EventoDeportivo evento);
+    void BajaEventoDeportivo(int id);
     void ModificarEventoDeportivo(EventoDeportivo evento);
     List<EventoDeportivo> ListarEventoDeportivo();
     List<EventoDeportivo> ListarEventoDeportivoFuturo(DateTime fecha);

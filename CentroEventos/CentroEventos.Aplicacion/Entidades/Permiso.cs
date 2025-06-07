@@ -7,7 +7,7 @@ public enum Permiso
     ReservaAlta,
     ReservaModificacion,
     ReservaBaja,
-    UsuarioAlta,
-    UsuarioModificacion,
-    UsuarioBaja,
+    PersonaAlta,
+    PersonaModificacion,
+    PersonaBaja,
 }

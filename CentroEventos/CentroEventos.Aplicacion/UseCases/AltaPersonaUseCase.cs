@@ -4,11 +4,11 @@ using Entidades;
 using Excepciones;
 using Validadores;
 
-public class AgregarPersonaUseCase(IRepositorioPersona repo, PersonaValidador validador, IServicioAutorizacion autorizador)
+public class AltaPersonaUseCase(IRepositorioPersona repo, PersonaValidador validador, IServicioAutorizacion autorizador)
 {
-    public void Ejecutar(Persona persona, int idUsuario)
+    public void Ejecutar(Persona persona, int idPersona)
     {
-        if (!autorizador.PoseeElPermiso(idUsuario, Permiso.UsuarioAlta))
+        if (!autorizador.PoseeElPermiso(idPersona, Permiso.PersonaAlta))
             throw new FalloAutorizacionException("No tiene permiso para añadir una persona.");
 
         {
@@ -21,6 +21,6 @@ public class AgregarPersonaUseCase(IRepositorioPersona repo, PersonaValidador va
                 throw new DuplicadoException(mensajeError);
         }
 
-        repo.AgregarPersona(persona);
+        repo.AltaPersona(persona);
     }
 }

@@ -5,11 +5,11 @@ using Excepciones;
 using Validadores;
 
 
-public class EliminarPersonaUseCase(IRepositorioPersona repo, PersonaValidador validador, IServicioAutorizacion autorizador)
+public class BajaPersonaUseCase(IRepositorioPersona repo, PersonaValidador validador, IServicioAutorizacion autorizador)
 {
-    public void Ejecutar(int id, int idUsuario)
+    public void Ejecutar(int id, int idPersona)
     {
-        if (!autorizador.PoseeElPermiso(idUsuario, Permiso.UsuarioBaja))
+        if (!autorizador.PoseeElPermiso(idPersona, Permiso.PersonaBaja))
             throw new FalloAutorizacionException("No tiene permiso para eliminar una persona.");
 
         if (!repo.PersonaExiste(id))
@@ -20,6 +20,6 @@ public class EliminarPersonaUseCase(IRepositorioPersona repo, PersonaValidador v
         if (!validador.ValidarReglas(id, out string mensajeError))
             throw new OperacionInvalidaException(mensajeError);
 
-        repo.EliminarPersona(id);
+        repo.BajaPersona(id);
     }
 }

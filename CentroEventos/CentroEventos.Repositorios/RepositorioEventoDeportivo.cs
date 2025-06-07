@@ -4,34 +4,23 @@ using CentroEventos.Aplicacion.Entidades;
 using CentroEventos.Aplicacion.Excepciones;
 using CentroEventos.Aplicacion.Interfaces;
 
-public class RepositorioEventoDeportivoTXT : IRepositorioEventoDeportivo
+public class RepositorioEventoDeportivo : IRepositorioEventoDeportivo
 {
-    readonly IIdGetter _idgetter;
-    readonly IFileManager _fileManager;
-    readonly string _archEventos = "../../../../CentroEventos.Repositorios/txt_files/eventos_deportivos.txt";
-    readonly string _archUltimaId = "../../../../CentroEventos.Repositorios/txt_files/ultima_id_eventos_deportivos.txt";
+    public RepositorioEventoDeportivo() { }
 
-    public RepositorioEventoDeportivoTXT(IIdGetter idg, IFileManager fm)
+    public void AltaEventoDeportivo(EventoDeportivo evento)
     {
-        _idgetter = idg;
-        _fileManager = fm;
-        _fileManager.InicializarArchivo(_archUltimaId);
-        _fileManager.InicializarRepo(_archEventos);
-
+        using var context = new CentroEventosContext();
+        context.Add(evento);
+        context.SaveChanges();
     }
 
-    public void AgregarEventoDeportivo(EventoDeportivo evento)
+    public void BajaEventoDeportivo(EventoDeportivo evento)
     {
-        using StreamWriter sw = new StreamWriter(_archEventos, true);
-        sw.WriteLine(evento.ToStringParaTXT(_idgetter.GetNuevoId(_archUltimaId)));
-    }
-
-    public void EliminarEventoDeportivo(int id)
-    {
-        List<EventoDeportivo> lista = ListarEventoDeportivo();
-        lista.RemoveAt(lista.FindIndex(e => e.Id == id));
-        using StreamWriter sw = new StreamWriter(_archEventos, false);
-        lista.ForEach(e => sw.WriteLine(e.ToStringParaTXT()));
+        using var context = new CentroEventosContext();
+        context.Remove(evento);
+        context.SaveChanges();
+        
     }
 
     public void ModificarEventoDeportivo(EventoDeportivo nuevoEventoDeportivo)
@@ -48,23 +37,13 @@ public class RepositorioEventoDeportivoTXT : IRepositorioEventoDeportivo
 
     public List<EventoDeportivo> ListarEventoDeportivo()
     {
-        var resultado = new List<EventoDeportivo>();
-        using var sr = new StreamReader(_archEventos);
-
-        while (!sr.EndOfStream)
+        var lista = new List<EventoDeportivo>();
+        using (var context = new CentroEventosContext())
         {
-
-            int eventoId = int.Parse(sr.ReadLine() ?? "");
-            string eventoNombre = sr.ReadLine() ?? "";
-            string personaDescripcion = sr.ReadLine() ?? "";
-            DateTime eventoHoraInicio = DateTime.Parse(sr.ReadLine() ?? "");
-            double eventoDuracion = double.Parse(sr.ReadLine() ?? "");
-            int eventoCupoMaximo = int.Parse(sr.ReadLine() ?? "");
-            int eventoResponsableId = int.Parse(sr.ReadLine() ?? "");
-            var evento = new EventoDeportivo(eventoId, eventoNombre, personaDescripcion, eventoHoraInicio, eventoDuracion, eventoCupoMaximo, eventoResponsableId);
-            resultado.Add(evento);
+            foreach (var e in context.EventosDeportivos)
+                lista.Add(e);
         }
-        return resultado;
+        return lista;
     }
 
     /// <summary>

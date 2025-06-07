@@ -5,11 +5,11 @@ using Excepciones;
 using Interfaces;
 using Validadores;
 
-public class AgregarReservaUseCase(IRepositorioReserva repoReserva, ReservaValidador validador, IServicioAutorizacion autorizador) {
+public class AltaReservaUseCase(IRepositorioReserva repoReserva, ReservaValidador validador, IServicioAutorizacion autorizador) {
     
-    public void Ejecutar(Reserva reserva, int idUsuario) 
+    public void Ejecutar(Reserva reserva, int idPersona) 
     {
-        if (!autorizador.PoseeElPermiso(idUsuario, Permiso.ReservaAlta))
+        if (!autorizador.PoseeElPermiso(idPersona, Permiso.ReservaAlta))
             throw new FalloAutorizacionException("No tiene permiso para añadir una reserva.");
         {
             if (!validador.ValidarConstruccion(reserva, out string mensajeError))
@@ -24,6 +24,6 @@ public class AgregarReservaUseCase(IRepositorioReserva repoReserva, ReservaValid
                 throw new CupoExcedidoException(mensajeError);
         }
 
-        repoReserva.AgregarReserva(reserva);
+        repoReserva.AltaReserva(reserva);
     }
 }

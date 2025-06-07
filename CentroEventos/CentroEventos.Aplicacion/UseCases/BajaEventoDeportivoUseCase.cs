@@ -5,11 +5,11 @@ using Excepciones;
 using Interfaces;
 using Validadores;
 
-public class EliminarEventoDeportivoUseCase(IRepositorioEventoDeportivo repo, EventoDeportivoValidador validador, IServicioAutorizacion autorizador)
+public class BajaEventoDeportivoUseCase(IRepositorioEventoDeportivo repo, EventoDeportivoValidador validador, IServicioAutorizacion autorizador)
 {
-    public void Ejecutar(int id, int idUsuario)
+    public void Ejecutar(int id, int idPersona)
     {
-        if (!autorizador.PoseeElPermiso(idUsuario, Permiso.EventoBaja))
+        if (!autorizador.PoseeElPermiso(idPersona, Permiso.EventoBaja))
             throw new FalloAutorizacionException("No tiene permiso para eliminar un evento deportivo.");
 
         if (!repo.EventoExiste(id))
@@ -18,6 +18,6 @@ public class EliminarEventoDeportivoUseCase(IRepositorioEventoDeportivo repo, Ev
         if (validador.TieneReserva(id))
             throw new OperacionInvalidaException($"No se puede eliminar el evento ID {id} porque tiene reservas.");
 
-        repo.EliminarEventoDeportivo(id);
+        repo.BajaEventoDeportivo(id);
     }
 }
