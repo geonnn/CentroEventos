@@ -8,9 +8,9 @@ using Validadores;
 
 public class ModificarReservaUseCase(IRepositorioReserva repoReserva, ReservaValidador validador, IServicioAutorizacion autorizador)
 {
-    public void Ejecutar(Reserva r, int idPersona)
+    public void Ejecutar(Reserva r, List<Permiso> permisos)
     {
-        if (!autorizador.PoseeElPermiso(idPersona, Permiso.ReservaModificacion))
+        if (!autorizador.PoseeElPermiso(permisos, Permiso.ReservaModificacion))
             throw new FalloAutorizacionException("No tiene permiso para modificar una reserva.");
 
         if (!repoReserva.ReservaExiste(r.Id))

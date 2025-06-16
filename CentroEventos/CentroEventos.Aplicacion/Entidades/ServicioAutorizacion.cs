@@ -3,6 +3,6 @@ using CentroEventos.Aplicacion.Entidades;
 
 public class ServicioAutorizacion : IServicioAutorizacion
 {
-    public bool PoseeElPermiso(int id, Permiso permiso)
-    => id == 1 ;
+    public bool PoseeElPermiso(List<Permiso> permisos, Permiso permiso)
+    => permisos.Exists(p => p.Equals(permiso)) ;
 }

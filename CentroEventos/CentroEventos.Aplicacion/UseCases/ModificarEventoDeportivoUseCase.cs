@@ -6,9 +6,9 @@ using Validadores;
 
 public class ModificarEventoDeportivoUseCase(IRepositorioEventoDeportivo repo, EventoDeportivoValidador validador, IServicioAutorizacion autorizador)
 {
-    public void Ejecutar(EventoDeportivo evento, int idPersona) //el evento que recibe esta validada?? de lo contrario pensar como validar
+    public void Ejecutar(EventoDeportivo evento, List<Permiso> permisos) //el evento que recibe esta validada?? de lo contrario pensar como validar
     {
-        if (!autorizador.PoseeElPermiso(idPersona, Permiso.EventoModificacion))
+        if (!autorizador.PoseeElPermiso(permisos, Permiso.EventoModificacion))
             throw new FalloAutorizacionException("No tiene permiso para modificar un evento deportivo.");
 
         if (!validador.ValidarConstruccion(evento, out string mensajeError))

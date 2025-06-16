@@ -5,9 +5,9 @@ using Validadores;
 using Excepciones;
 public class AltaEventoDeportivoUseCase(IRepositorioEventoDeportivo repo, EventoDeportivoValidador validador, IServicioAutorizacion autorizador)
 {
-    public void Ejecutar(EventoDeportivo evento, int idPersona)
+    public void Ejecutar(EventoDeportivo evento, List<Permiso> permisos)
     {
-        if (!autorizador.PoseeElPermiso(idPersona, Permiso.EventoAlta))
+        if (!autorizador.PoseeElPermiso(permisos, Permiso.EventoAlta))
             throw new FalloAutorizacionException("No tiene permiso para añadir un evento deportivo.");
 
         if (!validador.ValidarConstruccion(evento, out string mensajeError))

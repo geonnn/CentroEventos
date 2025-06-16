@@ -59,20 +59,18 @@ public class PersonaValidador(IRepositorioPersona repoP, IRepositorioEventoDepor
         // comparar contra esa lista.
         // si no hay duplicado enviar persona a modificar.
         // modificar se encarga de insertar la persona modificada en el lugar correcto. 
-
+        
         StringBuilder mensaje = new StringBuilder("");
-        var lista = repoP.ListarPersonas();
-        lista.RemoveAt(lista.FindIndex(pe => pe.Id == p.Id));
+        var lista = repoP.ListarPersonas().Where(per => per.Id != p.Id);
 
-        if (lista.Exists(pe => pe.Dni == p.Dni))
-            mensaje.Append($"El DNI {p.Dni} ya existe.\n");
-
-        if (lista.Exists(pe => pe.Email == p.Email))
+        if (lista.FirstOrDefault(per => per.Email == p.Email) != null)
             mensaje.Append($"El Email {p.Email} ya existe.");
+
+        if (lista.FirstOrDefault(per => per.Dni == p.Dni) != null)
+            mensaje.Append($"El Email {p.Dni} ya existe.");
 
         mensajeError = mensaje.ToString();
         return mensajeError == "";
-
     }
 
     public bool ValidarReglas(int id, out string mensajeError)

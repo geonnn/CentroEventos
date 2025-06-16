@@ -1,0 +1,50 @@
+@page "/"
+@rendermode InteractiveServer
+
+@inject Sesion sesion
+@inject LoginUseCase LoginUseCase
+@inject NavigationManager Navegacion
+
+<PageTitle>Inicio de Sesión</PageTitle>
+
+<h1> Bienvenido! </h1>
+
+<form>
+    <label for="email"></label>
+    <input required placeholder="Email" id="email" type="email" @bind="email" />
+
+    <label for="password"></label>
+    <input required placeholder="Contraseña" id="password" type="@mostrarPassword" @bind="password"/>
+
+    <label for="showpass">Mostrar constraseña</label>
+    <input id="showpass" type="checkbox" @onclick="TogglePw"/>
+
+    <button @onclick="Logear">Ingresar</button>
+
+    <p>Aún no tenés usuario? <a href="/register">Registrarse</a></p>
+    
+</form>
+
+@code {
+    private string email = "";
+    private string password = "";
+    private string mostrarPassword = "password";
+
+    private void TogglePw()
+    {
+        if (mostrarPassword == "password")
+            mostrarPassword = "text";
+        else
+            mostrarPassword = "password";
+    }
+
+    private void Logear()
+    {
+        bool funciono = LoginUseCase.Ejecutar(email, password);
+        if (funciono)
+        {
+            Navegacion.NavigateTo("Home");
+        }
+    }
+
+}

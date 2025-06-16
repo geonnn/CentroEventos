@@ -1,0 +1,43 @@
+﻿@page "/register"
+@rendermode InteractiveServer
+@inject NavigationManager Navigation
+@inject RegistroUseCase registroUseCase
+
+
+<PageTitle>Registro de usuario</PageTitle>
+
+<h1> Bienvenido! </h1>
+
+<form>
+    <label for="nombre">Nombre:</label>
+    <input id="nombre" type="nombre" @bind="nombre" />
+
+    <label for="apellido">Apellido:</label>
+    <input id="apellido" type="apellido" @bind="apellido" />
+
+    <label for="email">Email:</label>
+    <input id="email" type="email" @bind="email" />
+
+    <label for="password">Contraseña:</label>
+    <input id="password" type="password" @bind="password" />
+
+    <button @onclick="Registro">Registrarse</button>
+
+    <p>ya tenés un usuario?<a href="/">login</a></p>
+
+</form>
+
+@code
+{
+    private string nombre = "";
+    private string apellido = "";
+    private string email = "";
+    private string password = "";
+
+    protected void Registro()
+    {
+        Usuario usuario = new Usuario(nombre, apellido, email, password);
+        registroUseCase.Ejecutar(usuario);
+        Navigation.NavigateTo("Home");
+    }
+}

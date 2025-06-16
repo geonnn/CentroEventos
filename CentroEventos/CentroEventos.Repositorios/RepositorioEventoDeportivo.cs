@@ -25,7 +25,9 @@ public class RepositorioEventoDeportivo : IRepositorioEventoDeportivo
 
     public void ModificarEventoDeportivo(EventoDeportivo nuevoEventoDeportivo)
     {
-        List<EventoDeportivo> eventosDeportivos = ListarEventoDeportivo();
+        using var context = new CentroEventosContext();
+        context.EventosDeportivos.Update(nuevoEventoDeportivo);
+        context.SaveChanges();
     }
 
     public List<EventoDeportivo> ListarEventoDeportivo()
@@ -63,8 +65,10 @@ public class RepositorioEventoDeportivo : IRepositorioEventoDeportivo
         return eventos;
     }
 
-    public bool EventoExiste(int id)
-        => ListarEventoDeportivo().Exists(e => e.Id == id);
+    public bool EventoExiste(int id){
+        using (var context = new CentroEventosContext())
+        return context.EventosDeportivos.FirstOrDefault(e => e.Id == id) != null;
+    }
 
     // int.TryParse() usa algo como esto para evitar la null warning:
     private bool TryGetEvento(int id, [System.Diagnostics.CodeAnalysis.NotNullWhen(true)] out EventoDeportivo? ev)
@@ -81,8 +85,10 @@ public class RepositorioEventoDeportivo : IRepositorioEventoDeportivo
         throw new EntidadNotFoundException($"El evento ID {id} no existe.");
     }
 
-    public bool PersonaEsResponsable(int id)
-        => ListarEventoDeportivo().Exists(e => e.ResponsableId == id);
+    public bool PersonaEsResponsable(int id){
+        using (var context = new CentroEventosContext())
+        return context.EventosDeportivos.FirstOrDefault(e => e.ResponsableId == id) != null;
+    }
 
     public int GetCupoMax(int id)
     {

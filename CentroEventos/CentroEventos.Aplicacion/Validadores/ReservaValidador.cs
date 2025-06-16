@@ -38,15 +38,14 @@ public class ReservaValidador(IRepositorioPersona repoP, IRepositorioEventoDepor
     }
 
     public bool ValidarDuplicadoModificar(Reserva r, out string mensajeError)
-    {
-        mensajeError = "";
+    {   
+        StringBuilder mensaje = new StringBuilder("");
+        var lista = repoR.ListarReservas().Where(re => re.Id != r.Id);
 
-        var lista = repoR.ListarReservas();
-        lista.RemoveAt(lista.FindIndex(res => res.Id == r.Id));
+        if (lista.FirstOrDefault(res => res.EventoDeportivoId == r.EventoDeportivoId && res.PersonaId == r.PersonaId) != null)
+            mensaje.Append($"La persona ID {r.PersonaId} ya se encuentra registrada para el evento ID {r.EventoDeportivoId}.");
 
-        if (lista.Exists(res => res.EventoDeportivoId == r.EventoDeportivoId && res.PersonaId == r.PersonaId))
-            mensajeError = $"La persona ID {r.PersonaId} ya se encuentra registrada para el evento ID {r.EventoDeportivoId}.";
-
+        mensajeError = mensaje.ToString();
         return mensajeError == "";
     }
 

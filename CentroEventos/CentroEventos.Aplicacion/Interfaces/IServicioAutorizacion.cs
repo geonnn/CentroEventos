@@ -1,6 +1,7 @@
 namespace CentroEventos.Aplicacion.Interfaces;
 using Entidades;
+
 public interface IServicioAutorizacion
 {
-    bool PoseeElPermiso(int idPersona, Permiso permiso);
+    bool PoseeElPermiso(List<Permiso> permisosUsuario, Permiso permiso);
 }

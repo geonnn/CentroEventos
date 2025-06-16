@@ -7,9 +7,9 @@ using Validadores;
 
 public class BajaPersonaUseCase(IRepositorioPersona repo, PersonaValidador validador, IServicioAutorizacion autorizador)
 {
-    public void Ejecutar(int id, int idPersona)
+    public void Ejecutar(int id, List<Permiso> permisos)
     {
-        if (!autorizador.PoseeElPermiso(idPersona, Permiso.PersonaBaja))
+        if (!autorizador.PoseeElPermiso(permisos, Permiso.PersonaBaja))
             throw new FalloAutorizacionException("No tiene permiso para eliminar una persona.");
 
         if (!repo.PersonaExiste(id))

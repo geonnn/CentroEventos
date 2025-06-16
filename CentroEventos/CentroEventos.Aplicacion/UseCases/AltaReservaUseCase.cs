@@ -7,9 +7,9 @@ using Validadores;
 
 public class AltaReservaUseCase(IRepositorioReserva repoReserva, ReservaValidador validador, IServicioAutorizacion autorizador) {
     
-    public void Ejecutar(Reserva reserva, int idPersona) 
+    public void Ejecutar(Reserva reserva, List<Permiso> permisos) 
     {
-        if (!autorizador.PoseeElPermiso(idPersona, Permiso.ReservaAlta))
+        if (!autorizador.PoseeElPermiso(permisos, Permiso.ReservaAlta))
             throw new FalloAutorizacionException("No tiene permiso para añadir una reserva.");
         {
             if (!validador.ValidarConstruccion(reserva, out string mensajeError))

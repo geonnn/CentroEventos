@@ -1,4 +1,5 @@
 namespace CentroEventos.Aplicacion.Entidades;
+
 public enum Permiso
 {
     EventoAlta,
@@ -10,4 +11,8 @@ public enum Permiso
     PersonaAlta,
     PersonaModificacion,
     PersonaBaja,
+    UsuarioAlta,
+    UsuarioBaja,
+    UsuarioModificacion,
+    OtorgarPermisos,
 }

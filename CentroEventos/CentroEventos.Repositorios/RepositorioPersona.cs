@@ -37,7 +37,9 @@ public class RepositorioPersona : IRepositorioPersona
 
     public void ModificarPersona(Persona nuevaPersona)
     {
-        List<Persona> personas = ListarPersonas();
+        using var context = new CentroEventosContext();
+        context.Personas.Update(nuevaPersona);
+        context.SaveChanges();
     }
 
     // int.TryParse() usa algo como esto para evitar la null warning:
@@ -56,12 +58,18 @@ public class RepositorioPersona : IRepositorioPersona
         throw new EntidadNotFoundException($"La persona ID {id} no existe.");
     }
 
-    public bool PersonaExiste(int id)
-        => ListarPersonas().Exists(p => p.Id == id);
+    public bool PersonaExiste(int id){
+        using (var context = new CentroEventosContext())
+        return context.Personas.FirstOrDefault(p => p.Id == id) != null;
+    }
 
-    public bool DniExiste(string dni)
-        => ListarPersonas().Exists(p => p.Dni == dni);
+    public bool DniExiste(string dni){
+        using (var context = new CentroEventosContext())
+        return context.Personas.FirstOrDefault(p => p.Dni == dni) != null;
+    }
 
-    public bool EmailExiste(string email)
-        => ListarPersonas().Exists(p => p.Email == email);
+    public bool EmailExiste(string email){
+        using (var context = new CentroEventosContext())
+        return context.Usuarios.FirstOrDefault(p => p.Email == email) != null;
+    }
 }

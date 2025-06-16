@@ -6,9 +6,9 @@ using Validadores;
 
 public class AltaPersonaUseCase(IRepositorioPersona repo, PersonaValidador validador, IServicioAutorizacion autorizador)
 {
-    public void Ejecutar(Persona persona, int idPersona)
+    public void Ejecutar(Persona persona, List<Permiso> permisos)
     {
-        if (!autorizador.PoseeElPermiso(idPersona, Permiso.PersonaAlta))
+        if (!autorizador.PoseeElPermiso(permisos, Permiso.PersonaAlta))
             throw new FalloAutorizacionException("No tiene permiso para añadir una persona.");
 
         {

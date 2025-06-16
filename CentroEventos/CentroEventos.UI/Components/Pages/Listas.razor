@@ -1,0 +1,16 @@
+﻿@page "/listas"
+@inject NavigationManager Nav
+@rendermode InteractiveServer
+
+<h3>Listar</h3>
+
+<button @onclick="Personas">Personas</button>
+
+@code {
+
+    protected void Personas()
+    {
+        Nav.NavigateTo("/listas/personas");
+    }
+
+}

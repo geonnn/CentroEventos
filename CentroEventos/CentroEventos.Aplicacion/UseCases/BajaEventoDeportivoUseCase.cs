@@ -7,9 +7,9 @@ using Validadores;
 
 public class BajaEventoDeportivoUseCase(IRepositorioEventoDeportivo repo, EventoDeportivoValidador validador, IServicioAutorizacion autorizador)
 {
-    public void Ejecutar(int id, int idPersona)
+    public void Ejecutar(int id, List<Permiso> permisos)
     {
-        if (!autorizador.PoseeElPermiso(idPersona, Permiso.EventoBaja))
+        if (!autorizador.PoseeElPermiso(permisos, Permiso.EventoBaja))
             throw new FalloAutorizacionException("No tiene permiso para eliminar un evento deportivo.");
 
         if (!repo.EventoExiste(id))
