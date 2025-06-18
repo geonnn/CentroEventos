@@ -41,7 +41,11 @@ public class RepositorioReserva : IRepositorioReserva
     }
 
     public bool PersonaTieneReserva(int id)
-        => ListarReservas().Exists(r => r.PersonaId == id);
+    {
+    // => ListarReservas().Exists(r => r.PersonaId == id);
+        using var context = new CentroEventosContext();
+        return context.Reservas.Any(r => r.PersonaId == id);
+    }
 
     public bool EventoTieneReserva(int id)
         => ListarReservas().Exists(r => r.EventoDeportivoId == id);

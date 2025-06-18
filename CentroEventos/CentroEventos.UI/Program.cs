@@ -55,8 +55,6 @@ builder.Services.AddTransient<ListarAsistenciaAEventoUseCase>();
 
 builder.Services.AddSingleton<Sesion>();
 
-
-
 // builder.Services.AddScoped
 
 var app = builder.Build();

@@ -65,9 +65,15 @@ public class RepositorioEventoDeportivo : IRepositorioEventoDeportivo
         return eventos;
     }
 
-    public bool EventoExiste(int id){
-        using (var context = new CentroEventosContext())
-        return context.EventosDeportivos.FirstOrDefault(e => e.Id == id) != null;
+    /// <summary>
+    /// Devuelve un boolean indicando la existencia de un evento con id recibida por parámetro.
+    /// </summary>
+    /// <param name="id">Id del evento a verificar existencia.</param>
+    /// <returns>True si el evento existe, false si no.</returns>
+    public bool EventoExiste(int id)
+    {
+        using var context = new CentroEventosContext();
+        return context.EventosDeportivos.Any(e => e.Id == id);
     }
 
     // int.TryParse() usa algo como esto para evitar la null warning:
@@ -85,9 +91,10 @@ public class RepositorioEventoDeportivo : IRepositorioEventoDeportivo
         throw new EntidadNotFoundException($"El evento ID {id} no existe.");
     }
 
-    public bool PersonaEsResponsable(int id){
-        using (var context = new CentroEventosContext())
-        return context.EventosDeportivos.FirstOrDefault(e => e.ResponsableId == id) != null;
+    public bool PersonaEsResponsable(int id)
+    {
+        using var context = new CentroEventosContext();
+        return context.EventosDeportivos.Any(e => e.ResponsableId == id);
     }
 
     public int GetCupoMax(int id)

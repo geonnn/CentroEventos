@@ -15,6 +15,7 @@
         <th>Nombre</th>
         <th>Apellido</th>
         <th>Email</th>
+        <th>Acción</th>
     </tr>
     @foreach (var persona in _lista)
     {
@@ -23,6 +24,9 @@
         <td>@persona.Nombre</td>
         <td>@persona.Apellido</td>
         <td>@persona.Email</td>
+        <td>
+            <button class="btn btn-danger" @onclick="()=>ConfirmarEliminacion(persona)">Eliminar</button>
+        </td>
     </tr>
     }
  </table>
@@ -36,5 +40,10 @@
     ModalAlta alta = new();
     private void NuevaPersona() {
         alta.Mostrar();
+    }
+
+    private void ConfirmarEliminacion(Persona p)
+    {
+        
     }
 }
