@@ -2,21 +2,21 @@ namespace CentroEventos.Aplicacion.Entidades;
 
 public class Sesion {
     public Usuario? Usuario {get; private set;}
-    public bool estaIniciado {get; private set;}
+    public bool EstaIniciado { get; private set; } = false;
     
     public Sesion()
     {
-        estaIniciado = false;
+        EstaIniciado = false;
     }
     public void IniciarSesion(Usuario u)
     {
         Usuario = u;
-        estaIniciado = true;
+        EstaIniciado = true;
     }
 
     public void CerrarSesion()
     {
         Usuario = null;    
-        estaIniciado = false;
+        EstaIniciado = false;
     }
 }

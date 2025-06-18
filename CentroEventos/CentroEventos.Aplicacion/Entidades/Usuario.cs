@@ -12,9 +12,9 @@ public class Usuario
     public List<Permiso> Permisos { get; private set; } // nav para Entity Framework
 
     // Constructor para EF
-    #nullable disable
+#nullable disable
     protected Usuario() { }
-    #nullable enable
+#nullable enable
 
     public Usuario(string nom, string ap, string email, string pw)
     {
@@ -34,5 +34,9 @@ public class Usuario
     public void AgregarPermiso(List<Permiso> permisos)
     {
         Permisos = permisos;
+    }
+    public bool PoseeElPermiso(Permiso permisoRequerido)
+    {
+        return Permisos.Contains(permisoRequerido);
     }
 }

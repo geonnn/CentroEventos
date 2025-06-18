@@ -1,7 +1,40 @@
 ﻿@page "/listas/personas"
+@inject Sesion sesion
+@inject ListarPersonaUseCase ListarPersonaUseCase
+@inject BajaPersonaUseCase BajaPersonaUseCase
 
-<h3>ListaPersonas</h3>
+<h3>Personas</h3>
+
+@if (sesion?.Usuario != null && sesion.Usuario.PoseeElPermiso(Permiso.PersonaAlta)){
+    <button @onclick="NuevaPersona">Agregar Persona</button>
+    <ModalAlta @ref=alta/>
+}
+<table>
+    <tr>
+        <th>ID</th>
+        <th>Nombre</th>
+        <th>Apellido</th>
+        <th>Email</th>
+    </tr>
+    @foreach (var persona in _lista)
+    {
+    <tr>
+        <td>@persona.Id</td>
+        <td>@persona.Nombre</td>
+        <td>@persona.Apellido</td>
+        <td>@persona.Email</td>
+    </tr>
+    }
+ </table>
 
 @code {
-
+    List<Persona> _lista = new List<Persona>();
+    protected override void OnInitialized()
+    {
+        _lista = ListarPersonaUseCase.Ejecutar();
+    }
+    ModalAlta alta = new();
+    private void NuevaPersona() {
+        alta.Mostrar();
+    }
 }

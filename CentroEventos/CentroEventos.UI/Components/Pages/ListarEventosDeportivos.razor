@@ -1,0 +1,85 @@
+@page "/listas/eventos-deportivos"
+
+inject 
+@inject ListarEventosConCupoDisponibleUseCase ListarEventosConCupoDisponibleUseCase
+@inject ListarEventoDeportivoUseCase ListarEventoDeportivoUseCase
+
+
+<h3>Eventos Deportivos</h3>
+<table>
+    <tr>
+        <th>ID</th>
+        <th>ID Responsable</th>
+        <th>Nombre</th>
+        <th>Cupo Máximo</th>
+        <th>Duración</th>
+    </tr>
+    @foreach (var eventoDeportivo in _lista)
+    {
+    <tr>
+        <td>@eventoDeportivo.Id</td>
+        <td>@eventoDeportivo.ResponsableId</td>
+        <td>@eventoDeportivo.Nombre</td>
+        <td>@eventoDeportivo.CupoMaximo</td>
+        <td>@eventoDeportivo.DuracionHoras</td>
+        <td>
+
+        @if (eventoDeportivo.FechaHoraInicio.AddHours(eventoDeportivo.DuracionHoras) < DateTime.Now) {
+            <ModalListaAsistentes @ref=@modales[eventoDeportivo.Id] ID=@eventoDeportivo.Id nombre=@eventoDeportivo.Nombre />
+            <button @onclick="() => MostrarModal(eventoDeportivo.Id)">Listar Personas</button>
+            }
+        </td>
+    </tr>
+    }
+ </table>
+
+<h3>Eventos Deportivos Con Cupo</h3>
+<table>
+    <tr>
+        <th>ID</th>
+        <th>ID Responsable</th>
+        <th>Nombre</th>
+        <th>Cupo Máximo</th>
+        <th>Duración</th>
+    </tr>
+    @foreach (var eventoDeportivo in _listaCupos)
+    {
+    <tr>
+        <td>@eventoDeportivo.Id</td>
+        <td>@eventoDeportivo.ResponsableId</td>
+        <td>@eventoDeportivo.Nombre</td>
+        <td>@eventoDeportivo.CupoMaximo</td>
+        <td>@eventoDeportivo.DuracionHoras</td>
+    </tr>
+    }
+ </table>
+ 
+
+
+@code {
+    List<EventoDeportivo> _lista = new List<EventoDeportivo>();
+    List<EventoDeportivo> _listaCupos = new List<EventoDeportivo>();
+    List<Persona> _listaPersonas = new List<Persona>();
+
+    Dictionary<int, ModalListaAsistentes> modales = new();
+
+
+    void MostrarModal(int id)
+    {
+        if (modales.TryGetValue(id, out var modal))
+        {
+            modal.Mostrar();
+        }
+    }
+    
+    protected override void OnInitialized()
+    {
+        _lista = ListarEventoDeportivoUseCase.Ejecutar();
+        _listaCupos = ListarEventosConCupoDisponibleUseCase.Ejecutar();
+        
+    }
+    ModalListaAsistentes modal = null!;
+    void irALista() {
+        modal.Mostrar();
+    }
+}

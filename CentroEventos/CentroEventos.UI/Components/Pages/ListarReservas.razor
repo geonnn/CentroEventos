@@ -1,0 +1,32 @@
+@page "/listas/reservas"
+@inject ListarReservaUseCase ListarReservaUseCase
+
+<h3>Reservas</h3>
+<table>
+    <tr>
+        <th>ID</th>
+        <th>Persona ID</th>
+        @* <th>Nombre Persona</th> *@
+        <th>Evento ID</th>
+        <th>Estado</th>
+    </tr>
+    @foreach (var reserva in _lista)
+    {
+    <tr>
+        <td>@reserva.Id</td>
+        <td>@reserva.PersonaId</td>
+        @* <td>@reserva.PersonaId</td> *@
+        <td>@reserva.EventoDeportivoId</td>
+        <td>@reserva.Estado</td>
+    </tr>
+    }
+ </table>
+
+
+@code {
+    List<Reserva> _lista = new List<Reserva>();
+    protected override void OnInitialized()
+    {
+        _lista = ListarReservaUseCase.Ejecutar();
+    }
+}

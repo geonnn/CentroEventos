@@ -44,19 +44,19 @@ public class RepositorioUsuario : IRepositorioUsuario
     public bool UsuarioExiste(int id)
     {
         using (var context = new CentroEventosContext())
-        return context.Usuarios.FirstOrDefault(u => u.Id == id) != null;
+            return context.Usuarios.FirstOrDefault(u => u.Id == id) != null;
     }
 
     public bool UsuarioExiste(string email)
     {
         using (var context = new CentroEventosContext())
-        return context.Usuarios.FirstOrDefault(u => u.Email == email) != null;
+            return context.Usuarios.FirstOrDefault(u => u.Email == email) != null;
     }
 
     public Usuario ConsultaUsuario(string email)
     {
         using (var context = new CentroEventosContext())
-        return context.Usuarios.First(u => u.Email == email);
+            return context.Usuarios.First(u => u.Email == email);
     }
 
     public void OtorgarPermiso(Usuario usuario, List<Permiso> permisosOtorgados)

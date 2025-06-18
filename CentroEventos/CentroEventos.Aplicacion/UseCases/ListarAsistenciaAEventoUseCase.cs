@@ -18,7 +18,7 @@ public class ListarAsistenciaAEventoUseCase(IRepositorioEventoDeportivo repoEven
         
         foreach (Reserva r in reservas)
         {
-            if (r.EventoDeportivoId == id)
+            if (r.EventoDeportivoId == id && r.Estado == EstadoAsistencia.Presente)
                 asistentes.Add(repoPersona.ConsultaPersona(r.PersonaId));
         }
         return asistentes;

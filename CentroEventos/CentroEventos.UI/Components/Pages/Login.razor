@@ -9,7 +9,7 @@
 
 <h1> Bienvenido! </h1>
 
-<form>
+<form class="formulario">
     <label for="email"></label>
     <input required placeholder="Email" id="email" type="email" @bind="email" />
 
@@ -43,7 +43,7 @@
         bool funciono = LoginUseCase.Ejecutar(email, password);
         if (funciono)
         {
-            Navegacion.NavigateTo("Home");
+            Navegacion.NavigateTo("/home");
         }
     }
 

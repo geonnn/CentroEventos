@@ -4,13 +4,31 @@
 
 <h3>Listar</h3>
 
+<button @onclick="Usuarios">Usuarios</button>
 <button @onclick="Personas">Personas</button>
+<button @onclick="Reservas">Reservas</button>
+<button @onclick="EventosDeportivos">Eventos Deportivos</button>
 
 @code {
 
+    @* protected void Navega(string s) 
+    {
+        Nav.NavigateTo($"/listas/{s}");
+    } *@
+    protected void Usuarios()
+    {
+        Nav.NavigateTo("/listas/usuarios");
+    }
     protected void Personas()
     {
         Nav.NavigateTo("/listas/personas");
     }
-
+    protected void Reservas()
+    {
+        Nav.NavigateTo("/listas/reservas");
+    }
+    protected void EventosDeportivos()
+    {
+        Nav.NavigateTo("/listas/eventos-deportivos");
+    }
 }

@@ -49,3 +49,18 @@ h1:focus {
 .darker-border-checkbox.form-check-input {
     border-color: #929292;
 }
+
+.formulario {
+    display: flex;
+    flex-direction: column;
+    max-width: 24rem;
+    border: 0.5px solid gray;
+    border-radius: 1rem;
+    padding: 2rem;
+    gap: 1rem;
+    margin: 0 auto;
+}
+
+.flex {
+    display: flex;
+}

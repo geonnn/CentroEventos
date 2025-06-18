@@ -1,0 +1,65 @@
+@using CentroEventos.Aplicacion.Entidades
+@inject AltaPersonaUseCase AltaPersonaUseCase
+@inject Sesion sesion
+
+@if(visible)
+{
+    <div class="dialogo-contenedor">
+        <div class="dialogo-contenido">
+            
+            <h3>Alta de Persona</h3>
+            <form @onsubmit="OnSubmitHandler">
+                <div class="mb-2">
+                    <label>DNI:</label>
+                    <input class="form-control" @bind="Dni" />
+                </div>
+                <div class="mb-2">
+                    <label>Nombre:</label>
+                    <input class="form-control" @bind="Nombre" />
+                </div>
+                <div class="mb-2">
+                    <label>Apellido:</label>
+                    <input class="form-control" @bind="Apellido" />
+                </div>
+                <div class="mb-2">
+                    <label>Email:</label>
+                    <input class="form-control" @bind="Email" />
+                </div>
+                <div class="mb-2">
+                    <label>Teléfono:</label>
+                    <input class="form-control" @bind="Telefono" />
+                </div>
+                <button type="submit" class="btn btn-success">Guardar</button>
+                <button type="button" class="btn btn-secondary" @onclick="Cerrar">Cerrar</button>
+            </form>
+        </div>
+    </div>
+}
+
+@code {
+    private bool visible = false;
+    private string Dni = "";
+    private string Nombre = "";
+    private string Apellido = "";
+    private string Email = "";
+    private string Telefono = "";
+
+    public void Mostrar()
+    {
+        visible = true;
+        StateHasChanged();
+    }
+
+    void Cerrar()
+    {
+        visible = false;
+        StateHasChanged();
+    }
+
+    private void OnSubmitHandler()
+    {
+        Persona nuevaPersona = new(Dni,Nombre,Apellido,Email,Telefono);
+        AltaPersonaUseCase.Ejecutar(nuevaPersona,sesion.Usuario.Permisos);
+        Cerrar();
+    }
+}

@@ -49,7 +49,7 @@ public class RepositorioEventoDeportivo : IRepositorioEventoDeportivo
     public List<EventoDeportivo> ListarEventoDeportivoFuturo(DateTime fecha)
     {
         List<EventoDeportivo> eventos = ListarEventoDeportivo();
-        eventos.RemoveAll(e => e.FechaHoraInicio < fecha);
+        eventos.RemoveAll(e => e.FechaHoraInicio < fecha );
         return eventos;
     }
 

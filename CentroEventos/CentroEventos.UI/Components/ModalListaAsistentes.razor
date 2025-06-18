@@ -1,0 +1,52 @@
+@rendermode InteractiveServer
+@inject ListarAsistenciaAEventoUseCase ListarAsistenciaAEventoUseCase
+
+@if(visible)
+{
+    <div class="dialogo-contenedor">
+        <div class="dialogo-contenido">
+            <h3>@nombre (ID: @ID)</h3>
+            <table>
+                <tr>
+                    <th>ID</th>
+                    <th>Nombre</th>
+                    <th>Apellido</th>
+                    <th>Email</th>
+                </tr>
+                @foreach (var persona in _lista)
+                {
+                <tr>
+                    <td>@persona.Id</td>
+                    <td>@persona.Nombre</td>
+                    <td>@persona.Apellido</td>
+                    <td>@persona.Email</td>
+                </tr>
+                }
+            </table>
+    <button class="btn btn-primary" @onclick="Cerrar">Cerrar</button>
+
+        </div>
+    </div>
+
+}
+@code{
+    List<Persona> _lista = new List<Persona>();
+    protected override void OnInitialized()
+    {
+        _lista = ListarAsistenciaAEventoUseCase.Ejecutar(ID);
+    }
+    private bool visible = false;
+    [Parameter]
+    public int ID {get;set;}
+    [Parameter]
+    public string nombre {get;set;} = "";
+    public void Mostrar()
+    {
+        visible=true;  
+        StateHasChanged();
+    }
+    void Cerrar()
+    {
+        visible=false;  
+    }
+}
