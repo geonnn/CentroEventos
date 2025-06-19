@@ -2,6 +2,7 @@
 @rendermode InteractiveServer
 @inject NavigationManager Navigation
 @inject RegistroUseCase registroUseCase
+@inject LoginUseCase loginUseCase
 
 
 <PageTitle>Registro de usuario</PageTitle>
@@ -10,18 +11,18 @@
 
 <form class="formulario">
     <label for="nombre">Nombre:</label>
-    <input id="nombre" type="nombre" @bind="nombre" />
+    <input required id="nombre" type="nombre" @bind="nombre" />
 
     <label for="apellido">Apellido:</label>
-    <input id="apellido" type="apellido" @bind="apellido" />
+    <input required id="apellido" type="apellido" @bind="apellido" />
 
     <label for="email">Email:</label>
-    <input id="email" type="email" @bind="email" />
+    <input required id="email" type="email" @bind="email" />
 
     <label for="password">Contraseña:</label>
-    <input id="password" type="password" @bind="password" />
+    <input required id="password" type="password" @bind="password" />
 
-    <button @onclick="Registro">Registrarse</button>
+    <button type="button" @onclick="Registro">Registrarse</button>
 
     <p>Ya tenés un usuario? <a href="/">login</a></p>
 
@@ -38,6 +39,7 @@
     {
         Usuario usuario = new Usuario(nombre, apellido, email, password);
         registroUseCase.Ejecutar(usuario);
-        Navigation.NavigateTo("Home");
+        loginUseCase.Ejecutar(email, password);
+        Navigation.NavigateTo("/home", true);
     }
 }

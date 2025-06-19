@@ -2,12 +2,15 @@
 @inject NavigationManager Nav
 @rendermode InteractiveServer
 
-<h3>Listar</h3>
+<AuthGuard>
 
-<button @onclick="Usuarios">Usuarios</button>
-<button @onclick="Personas">Personas</button>
-<button @onclick="Reservas">Reservas</button>
-<button @onclick="EventosDeportivos">Eventos Deportivos</button>
+    <h3>Listar</h3>
+
+    <button @onclick="Usuarios">Usuarios</button>
+    <button @onclick="Personas">Personas</button>
+    <button @onclick="Reservas">Reservas</button>
+    <button @onclick="EventosDeportivos">Eventos Deportivos</button>
+</AuthGuard>
 
 @code {
 

@@ -1,4 +1,10 @@
-﻿<div class="top-row ps-3 navbar navbar-dark">
+﻿@inject Sesion sesion
+@rendermode InteractiveServer
+@inject NavigationManager Navegador
+@inject LogoutUseCase CerrarSesionUseCase
+@inject UiNotifier Notifier
+
+<div class="top-row ps-3 navbar navbar-dark">
     <div class="container-fluid">
         <a class="navbar-brand" href="">Campo de Deportes</a>
     </div>
@@ -10,20 +16,48 @@
     <nav class="flex-column">
         <div class="nav-item px-3">
             <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
-                <span class="bi bi-house-door-fill-nav-menu" aria-hidden="true"></span> Login
+                <span class="bi bi-house-door-fill-nav-menu" aria-hidden="true"></span> @textoBtn
             </NavLink>
         </div>
-
+        @if (sesion.EstaIniciado){
         <div class="nav-item px-3">
             <NavLink class="nav-link" href="listas">
-                <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> Listar personas
+                <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> Listas
             </NavLink>
         </div>
         
         <div class="nav-item px-3">
-            <NavLink class="nav-link" href="Agregar persona">
-            <span class="bi bi-plus-square-fill-nav-menu" aria-hidden="true"></span> Counter
-            </NavLink>
+            <button class="nav-link" type="button" @onclick="CerrarSesion">
+            <span class="bi bi-box-arrow-right-nav-menu" aria-hidden="true"></span> Cerrar Sesión
+            </button>
         </div>
+        }
     </nav>
 </div>
+
+@code
+{
+    string textoBtn = "Login";
+    
+    protected override void OnInitialized()
+    {
+        Notifier.OnChange += StateHasChanged;
+        SetTextoBtn();
+    }
+
+    private void SetTextoBtn()
+        => textoBtn = sesion.EstaIniciado ? "Home" : "Login";
+
+
+    private void CerrarSesion() {
+        Console.WriteLine("Cerrar sesión ejecutado");
+        bool funciono = CerrarSesionUseCase.Ejecutar();
+        Notifier.Notify();
+        Navegador.NavigateTo("/", true);
+    }
+
+    private void Dispose()
+    {
+        Notifier.OnChange -= StateHasChanged;
+    }
+}

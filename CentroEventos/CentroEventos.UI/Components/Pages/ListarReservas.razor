@@ -1,7 +1,14 @@
 @page "/listas/reservas"
 @inject ListarReservaUseCase ListarReservaUseCase
+@inject Sesion sesion
+@inject BajaReservaUseCase ReservaBajaUseCase
 
 <h3>Reservas</h3>
+
+@if (sesion?.Usuario != null && sesion.Usuario.PoseeElPermiso(Permiso.ReservaAlta)){
+    <button @onclick="NuevaReserva">Agregar Reserva</button>
+    <ModalAlta @ref=alta/>
+}
 <table>
     <tr>
         <th>ID</th>
@@ -18,6 +25,12 @@
         @* <td>@reserva.PersonaId</td> *@
         <td>@reserva.EventoDeportivoId</td>
         <td>@reserva.Estado</td>
+        <td>
+            <button class="btn btn-danger baja-reserva" @onclick="()=>ConfirmarEliminacion(reserva)">Eliminar</button>
+        </td>
+        <td>
+            <button class="btn btn-danger modificacion-reserva" @onclick="()=>ConfirmarModificacion(reserva)">Modificar</button>
+        </td>
     </tr>
     }
  </table>
@@ -28,5 +41,18 @@
     protected override void OnInitialized()
     {
         _lista = ListarReservaUseCase.Ejecutar();
+    }
+    ModalAlta alta = new();
+    private void NuevaReserva() {
+        alta.Mostrar();
+    }
+
+    private void ConfirmarEliminacion(Reserva r)
+    {
+        
+    }
+    private void ConfirmarModificacion(Reserva r)
+    {
+        
     }
 }

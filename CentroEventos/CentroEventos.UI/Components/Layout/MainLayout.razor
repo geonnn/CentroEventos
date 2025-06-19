@@ -3,18 +3,19 @@
 @inject NavigationManager Navegador
 @inject LogoutUseCase CerrarSesionUseCase
 
-
 <div class="page">
+
     <div class="sidebar">
         <NavMenu />
     </div>
 
     <main>
-            @if (sesion.EstaIniciado) {
+            @if (sesion.EstaIniciado)
+            {
                 <div class="top-row px-4">
                     <div class="flex">
                         <p>@sesion.Usuario.Nombre @sesion.Usuario.Apellido</p>
-                        <button @onclick="CerrarSesion">Cerrar Sesión</button>
+                        <a href="/usuario/@sesion.Usuario.Id">Mi perfil</a>
                     </div>
                 </div>
             }
@@ -30,12 +31,3 @@
     <a href="" class="reload">Reload</a>
     <a class="dismiss">🗙</a>
 </div>
-
-@code {
-    private void CerrarSesion() {
-        bool funciono = CerrarSesionUseCase.Ejecutar();
-        Navegador.NavigateTo("/login");
-    }
-
-
-}

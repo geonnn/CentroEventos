@@ -1,9 +1,10 @@
 namespace CentroEventos.Aplicacion.Entidades;
 
-public class Sesion {
-    public Usuario? Usuario {get; private set;}
+public class Sesion
+{
+    public Usuario Usuario { get; private set; } = new Usuario("", "", "", "");
     public bool EstaIniciado { get; private set; } = false;
-    
+
     public Sesion()
     {
         EstaIniciado = false;
@@ -16,7 +17,7 @@ public class Sesion {
 
     public void CerrarSesion()
     {
-        Usuario = null;    
+        Usuario = new Usuario("", "", "", "");
         EstaIniciado = false;
     }
 }

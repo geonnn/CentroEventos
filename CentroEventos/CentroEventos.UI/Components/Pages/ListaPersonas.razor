@@ -2,6 +2,8 @@
 @inject Sesion sesion
 @inject ListarPersonaUseCase ListarPersonaUseCase
 @inject BajaPersonaUseCase BajaPersonaUseCase
+@inject DialogoConfirmacion DialogoConfirmacion
+@rendermode InteractiveServer
 
 <h3>Personas</h3>
 
@@ -9,6 +11,7 @@
     <button @onclick="NuevaPersona">Agregar Persona</button>
     <ModalAlta @ref=alta/>
 }
+
 <table>
     <tr>
         <th>ID</th>
@@ -25,7 +28,11 @@
         <td>@persona.Apellido</td>
         <td>@persona.Email</td>
         <td>
-            <button class="btn btn-danger" @onclick="()=>ConfirmarEliminacion(persona)">Eliminar</button>
+            <button class="btn btn-primary modificacion-persona" @onclick="()=>ConfirmarModificacion(persona)">Modificar</button>
+        </td>
+        <td>
+            <button class="btn btn-danger baja-persona" @onclick="()=>ConfirmarEliminacion(persona)">Eliminar</button>
+            <DialogoConfirmacion @ref=dialogo Mensaje="Esta seguro que desea elimar esta persona?" />
         </td>
     </tr>
     }
@@ -42,7 +49,12 @@
         alta.Mostrar();
     }
 
+    DialogoConfirmacion dialogo = null!;
     private void ConfirmarEliminacion(Persona p)
+    {
+        dialogo.Mostrar();
+    }
+    private void ConfirmarModificacion(Persona p)
     {
         
     }

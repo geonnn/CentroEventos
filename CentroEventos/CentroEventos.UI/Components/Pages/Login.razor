@@ -4,6 +4,12 @@
 @inject Sesion sesion
 @inject LoginUseCase LoginUseCase
 @inject NavigationManager Navegacion
+@inject UiNotifier Notifier
+
+@if (sesion.EstaIniciado) {
+    <p>Redirigiendo...</p>
+}
+else {
 
 <PageTitle>Inicio de Sesión</PageTitle>
 
@@ -19,12 +25,13 @@
     <label for="showpass">Mostrar constraseña</label>
     <input id="showpass" type="checkbox" @onclick="TogglePw"/>
 
-    <button @onclick="Logear">Ingresar</button>
+    <button type="button" @onclick="()=>Logear()">Ingresar</button>
 
     <p>Aún no tenés usuario? <a href="/register">Registrarse</a></p>
     
 </form>
 
+}
 @code {
     private string email = "";
     private string password = "";
@@ -43,8 +50,15 @@
         bool funciono = LoginUseCase.Ejecutar(email, password);
         if (funciono)
         {
-            Navegacion.NavigateTo("/home");
+            Notifier.Notify();
+            Navegacion.NavigateTo("/home", true);
         }
+    }
+    
+    protected override void OnAfterRender(bool firstRender)
+    {
+        if (firstRender && sesion.EstaIniciado)
+            Navegacion.NavigateTo("/home");
     }
 
 }

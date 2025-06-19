@@ -1,38 +1,56 @@
 @page "/listas/eventos-deportivos"
 
-inject 
 @inject ListarEventosConCupoDisponibleUseCase ListarEventosConCupoDisponibleUseCase
 @inject ListarEventoDeportivoUseCase ListarEventoDeportivoUseCase
-
+@inject Sesion sesion
+@inject BajaEventoDeportivoUseCase BajaEventoDeportivoUseCase
 
 <h3>Eventos Deportivos</h3>
-<table>
-    <tr>
-        <th>ID</th>
-        <th>ID Responsable</th>
-        <th>Nombre</th>
-        <th>Cupo Máximo</th>
-        <th>Duración</th>
-    </tr>
-    @foreach (var eventoDeportivo in _lista)
-    {
-    <tr>
-        <td>@eventoDeportivo.Id</td>
-        <td>@eventoDeportivo.ResponsableId</td>
-        <td>@eventoDeportivo.Nombre</td>
-        <td>@eventoDeportivo.CupoMaximo</td>
-        <td>@eventoDeportivo.DuracionHoras</td>
-        <td>
 
-        @if (eventoDeportivo.FechaHoraInicio.AddHours(eventoDeportivo.DuracionHoras) < DateTime.Now) {
-            <ModalListaAsistentes @ref=@modales[eventoDeportivo.Id] ID=@eventoDeportivo.Id nombre=@eventoDeportivo.Nombre />
-            <button @onclick="() => MostrarModal(eventoDeportivo.Id)">Listar Personas</button>
+@if (sesion.EstaIniciado && sesion.Usuario.PoseeElPermiso(Permiso.EventoAlta)){
+    <button @onclick="NuevoEventoDeportivo">Agregar Evento Deportivo</button>
+    <ModalAlta @ref=alta/>
+}
+@if (sesion.EstaIniciado){
+    <table>
+        <tr>
+            <th>ID</th>
+            <th>ID Responsable</th>
+            <th>Nombre</th>
+            <th>Cupo Máximo</th>
+            <th>Duración</th>
+        </tr>
+        @foreach (var eventoDeportivo in _lista)
+        {
+        <tr>
+            <td>@eventoDeportivo.Id</td>
+            <td>@eventoDeportivo.ResponsableId</td>
+            <td>@eventoDeportivo.Nombre</td>
+            <td>@eventoDeportivo.CupoMaximo</td>
+            <td>@eventoDeportivo.DuracionHoras</td>
+            <td>
+
+            @if (eventoDeportivo.FechaHoraInicio.AddHours(eventoDeportivo.DuracionHoras) < DateTime.Now) {
+                <ModalListaAsistentes @ref=@modales[eventoDeportivo.Id] ID=@eventoDeportivo.Id nombre=@eventoDeportivo.Nombre />
+                <button @onclick="() => MostrarModal(eventoDeportivo.Id)">Listar Personas</button>
+                }
+            </td>
+            @if (sesion.Usuario.PoseeElPermiso(Permiso.EventoModificacion)){
+            <td>
+                <button class="btn btn-danger modificacion-evento-deportivo" @onclick="()=>ConfirmarModificacion(eventoDeportivo)">Modificar</button>
+                
+            </td>
             }
-        </td>
-    </tr>
-    }
- </table>
-
+            @if (sesion.Usuario.PoseeElPermiso(Permiso.EventoBaja)){
+            <td>
+                <button class="btn btn-danger baja-evento-deportivo" @onclick="()=>ConfirmarEliminacion(eventoDeportivo)">Eliminar</button>
+                <DialogoConfirmacion @ref=dialogo Mensaje="Esta seguro que desea elimar este Evento Deportivo?" />
+            </td>
+            }
+        </tr>
+        }
+    </table>
+}
 <h3>Eventos Deportivos Con Cupo</h3>
 <table>
     <tr>
@@ -53,8 +71,6 @@ inject
     </tr>
     }
  </table>
- 
-
 
 @code {
     List<EventoDeportivo> _lista = new List<EventoDeportivo>();
@@ -81,5 +97,18 @@ inject
     ModalListaAsistentes modal = null!;
     void irALista() {
         modal.Mostrar();
+    }
+    ModalAlta alta = new();
+    private void NuevoEventoDeportivo() {
+        alta.Mostrar();
+    }
+    DialogoConfirmacion dialogo = null!;
+    private void ConfirmarEliminacion(EventoDeportivo e)
+    {
+        dialogo.Mostrar();
+    }
+    private void ConfirmarModificacion(EventoDeportivo e)
+    {
+        
     }
 }

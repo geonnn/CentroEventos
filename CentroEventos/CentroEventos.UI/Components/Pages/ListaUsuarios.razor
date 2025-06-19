@@ -1,0 +1,56 @@
+@page "/listas/usuarios"
+@inject Sesion sesion
+@inject ListarUsuarioUseCase ListarUsuarioUseCase
+@inject BajaUsuarioUseCase BajaUsuarioUseCase
+
+<h3>Usuarios</h3>
+
+@if (sesion.EstaIniciado && sesion.Usuario.PoseeElPermiso(Permiso.UsuarioAlta)){
+    <button @onclick="NuevoUsuario">Agregar Usuario</button>
+    <ModalAlta @ref=alta/>
+}
+<table>
+    <tr>
+        <th>ID</th>
+        <th>Nombre</th>
+        <th>Apellido</th>
+        <th>Email</th>
+        <th>Acción</th>
+    </tr>
+    @foreach (var usuario in _lista)
+    {
+    <tr>
+        <td>@usuario.Id</td>
+        <td>@usuario.Nombre</td>
+        <td>@usuario.Apellido</td>
+        <td>@usuario.Email</td>
+        <td>
+            <button class="btn btn-primary modificacion-usuario" @onclick="()=>ConfirmarModificacion(usuario)">Modificar</button>
+        </td>
+        <td>
+            <button class="btn btn-danger baja-usuario" @onclick="()=>ConfirmarEliminacion(usuario)">Eliminar</button>
+        </td>
+    </tr>
+    }
+ </table>
+
+@code {
+    List<Usuario> _lista = new List<Usuario>();
+    protected override void OnInitialized()
+    {
+        _lista = ListarUsuarioUseCase.Ejecutar();
+    }
+    ModalAlta alta = new();
+    private void NuevoUsuario() {
+        alta.Mostrar();
+    }
+
+    private void ConfirmarEliminacion(Usuario u)
+    {
+        
+    }
+    private void ConfirmarModificacion(Usuario u)
+    {
+        
+    }
+}

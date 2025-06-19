@@ -53,9 +53,10 @@ builder.Services.AddTransient<ListarReservaUseCase>();
 builder.Services.AddTransient<ListarEventosConCupoDisponibleUseCase>();
 builder.Services.AddTransient<ListarAsistenciaAEventoUseCase>();
 
-builder.Services.AddSingleton<Sesion>();
+builder.Services.AddSingleton<UiNotifier>();
 
-// builder.Services.AddScoped
+builder.Services.AddScoped<Sesion>();
+// builder.Services.AddProtectedBrowserStorage();
 
 var app = builder.Build();
 
@@ -65,20 +66,21 @@ if (!app.Environment.IsDevelopment())
     app.UseExceptionHandler("/Error", createScopeForErrors: true);
 }
 
-using (var scope = app.Services.CreateScope())
-{
-    using var context = new CentroEventosContext();
-    var otorgarPermiso = scope.ServiceProvider.GetRequiredService<OtorgarPermisoUseCase>();
+// using (var scope = app.Services.CreateScope())
+// {
+//     using var context = new CentroEventosContext();
+//     var otorgarPermiso = scope.ServiceProvider.GetRequiredService<OtorgarPermisoUseCase>();
 
-    if (!context.Usuarios.Any())
-    {
-        var admin = new Usuario("admin", "", "admin@admin", "admin");
-        var todosLosPermisos = Enum.GetValues<Permiso>().ToList();
-        context.Usuarios.Add(admin);
-        context.SaveChanges();
-        otorgarPermiso.Ejecutar(admin,todosLosPermisos,todosLosPermisos);
-    }
-}
+//     if (!context.Usuarios.Any())
+//     {
+//         var admin = new Usuario("admin", "", "admin@admin", "admin");
+//         var todosLosPermisos = Enum.GetValues<Permiso>().ToList();
+//         context.Usuarios.Add(admin);
+//         context.SaveChanges();
+//         otorgarPermiso.Ejecutar(admin,todosLosPermisos,todosLosPermisos);
+//     }
+// }
+
 app.UseStaticFiles();
 app.UseAntiforgery();
 
