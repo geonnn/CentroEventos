@@ -5,6 +5,10 @@
     <ProjectReference Include="..\CentroEventos.Repositorios\CentroEventos.Repositorios.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Components\Modals\" />
+  </ItemGroup>
+
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
