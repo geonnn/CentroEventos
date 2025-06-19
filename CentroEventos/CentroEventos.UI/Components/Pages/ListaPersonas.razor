@@ -7,37 +7,37 @@
 
 <h3>Personas</h3>
 
-@if (sesion?.Usuario != null && sesion.Usuario.PoseeElPermiso(Permiso.PersonaAlta)){
+@if (sesion.EstaIniciado && sesion.Usuario.PoseeElPermiso(Permiso.PersonaAlta)){
     <button @onclick="NuevaPersona">Agregar Persona</button>
     <ModalAlta @ref=alta/>
 }
-
-<table>
-    <tr>
-        <th>ID</th>
-        <th>Nombre</th>
-        <th>Apellido</th>
-        <th>Email</th>
-        <th>Acción</th>
-    </tr>
-    @foreach (var persona in _lista)
-    {
-    <tr>
-        <td>@persona.Id</td>
-        <td>@persona.Nombre</td>
-        <td>@persona.Apellido</td>
-        <td>@persona.Email</td>
-        <td>
-            <button class="btn btn-primary modificacion-persona" @onclick="()=>ConfirmarModificacion(persona)">Modificar</button>
-        </td>
-        <td>
-            <button class="btn btn-danger baja-persona" @onclick="()=>ConfirmarEliminacion(persona)">Eliminar</button>
-            <DialogoConfirmacion @ref=dialogo Mensaje="Esta seguro que desea elimar esta persona?" />
-        </td>
-    </tr>
-    }
- </table>
-
+@if (sesion.EstaIniciado){
+    <table>
+        <tr>
+            <th>ID</th>
+            <th>Nombre</th>
+            <th>Apellido</th>
+            <th>Email</th>
+            <th>Acción</th>
+        </tr>
+        @foreach (var persona in _lista)
+        {
+        <tr>
+            <td>@persona.Id</td>
+            <td>@persona.Nombre</td>
+            <td>@persona.Apellido</td>
+            <td>@persona.Email</td>
+            <td>
+                <button class="btn btn-primary modificacion-persona" @onclick="()=>ConfirmarModificacion(persona)">Modificar</button>
+            </td>
+            <td>
+                <button class="btn btn-danger baja-persona" @onclick="()=>ConfirmarEliminacion(persona)">Eliminar</button>
+                <DialogoConfirmacion @ref=dialogo Mensaje="Esta seguro que desea elimar esta persona?" />
+            </td>
+        </tr>
+        }
+    </table>
+}
 @code {
     List<Persona> _lista = new List<Persona>();
     protected override void OnInitialized()
