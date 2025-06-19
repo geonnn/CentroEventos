@@ -11,10 +11,8 @@ public class LoginUseCase(IRepositorioUsuario repoU, Sesion sesion) {
 
         if (!repoU.UsuarioExiste(email)) 
         {
-            
             return false;
             throw new Exception("El usuario no existe.");
-
         } 
         
         Usuario u = repoU.ConsultaUsuario(email);

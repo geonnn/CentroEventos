@@ -33,30 +33,26 @@ public class RepositorioUsuario : IRepositorioUsuario
 
     public List<Usuario> ListarUsuarios()
     {
-        var lista = new List<Usuario>();
-
-        using (var context = new CentroEventosContext())
-            foreach (var u in context.Usuarios)
-                lista.Add(u);
-        return lista;
+        using var context = new CentroEventosContext();
+        return context.Usuarios.ToList();
     }
 
     public bool UsuarioExiste(int id)
     {
-        using (var context = new CentroEventosContext())
-            return context.Usuarios.FirstOrDefault(u => u.Id == id) != null;
+        using var context = new CentroEventosContext();
+        return context.Usuarios.Any(u => u.Id == id);
     }
 
     public bool UsuarioExiste(string email)
     {
-        using (var context = new CentroEventosContext())
-            return context.Usuarios.FirstOrDefault(u => u.Email == email) != null;
+        using var context = new CentroEventosContext();
+        return context.Usuarios.Any(u => u.Email == email);
     }
 
     public Usuario ConsultaUsuario(string email)
     {
-        using (var context = new CentroEventosContext())
-            return context.Usuarios.First(u => u.Email == email);
+        using var context = new CentroEventosContext();
+        return context.Usuarios.First(u => u.Email == email);
     }
 
     public void OtorgarPermiso(Usuario usuario, List<Permiso> permisosOtorgados)

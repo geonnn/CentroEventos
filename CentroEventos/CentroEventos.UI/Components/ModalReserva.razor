@@ -1,0 +1,78 @@
+@using CentroEventos.Aplicacion.Entidades
+@inject AltaPersonaUseCase AltaPersonaUseCase
+@inject Sesion sesion
+
+@if(visible)
+{
+    <div class="dialogo-contenedor">
+        <div class="dialogo-contenido">
+                
+            <h3>Alta de Reserva</h3>
+            @if (errorEncontrado)
+            {
+                <div class="error">
+                    <p>@mensajeError</p>
+                </div>
+            }
+            <form @onsubmit="OnSubmitHandler">
+                <div class="formulario-campos">
+                    <label>PersonaId:</label>
+                    <input class="form-control" type="number" @bind="PersonaId" />
+                </div>
+                <div class="formulario-campos">
+                    <label>EventoDeportivoId:</label>
+                    <input class="form-control" type="number" @bind="EventoDeportivoId" />
+                </div>
+                <div class="formulario-campos">
+                    <label>Fecha Alta Reserva:</label>
+                    <input class="form-control" type="date" @bind="fechaAltaReserva" />
+                </div>
+                <div class="formulario-campos">
+                    <label>Estado:</label>
+                    <select class="form-control" @bind="Estado">
+                        <option value="Pendiente">Pendiente</option>
+                        <option value="Presente">Presente</option>
+                        <option value="Ausente">Ausente</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-success">Guardar</button>
+                <button type="button" class="btn btn-secondary" @onclick="Cerrar">Cerrar</button>
+            </form>
+        </div>
+    </div>
+}
+
+@code {
+    private bool visible = false;
+    private int PersonaId;
+    private int EventoDeportivoId;
+    private DateTime fechaAltaReserva = DateTime.Now;
+    private EstadoAsistencia Estado = EstadoAsistencia.Pendiente;
+    string mensajeError = "";
+    bool errorEncontrado = false;
+
+
+    [Parameter]
+    public EventCallback OnConfirmado { get; set; }
+    [Parameter] 
+    public Reserva? r { get; set; }
+
+    public void Mostrar()
+    {
+        visible = true;
+        StateHasChanged();
+    }
+
+    void Cerrar()
+    {
+        visible = false;
+        StateHasChanged();
+    }
+
+    private void OnSubmitHandler()
+    {
+        r = new(PersonaId, EventoDeportivoId, fechaAltaReserva, Estado);
+        OnConfirmado.InvokeAsync();
+        Cerrar();
+    }
+}

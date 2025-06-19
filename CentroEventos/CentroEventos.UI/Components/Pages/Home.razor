@@ -5,21 +5,19 @@
 @rendermode InteractiveServer
 <PageTitle>Inicio</PageTitle>
 
-<AuthGuard>
 
 <h1>Hola @sesion.Usuario.Nombre!</h1>
 
 
 Bienvenido al Sistema de Gestión del Centro Deportivo Universitario.
 
-</AuthGuard>
 @code {
     @*
     protected override void OnInitialized()
     {
         if (!sesion.EstaIniciado)
         {
-            Navegacion.NavigateTo("/", true);
+            Navegacion.NavigateTo("/");
         }
     }
     *@

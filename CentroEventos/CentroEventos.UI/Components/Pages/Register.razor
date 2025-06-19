@@ -3,6 +3,7 @@
 @inject NavigationManager Navigation
 @inject RegistroUseCase registroUseCase
 @inject LoginUseCase loginUseCase
+@inject UiNotifier Notifier
 
 
 <PageTitle>Registro de usuario</PageTitle>
@@ -40,6 +41,7 @@
         Usuario usuario = new Usuario(nombre, apellido, email, password);
         registroUseCase.Ejecutar(usuario);
         loginUseCase.Ejecutar(email, password);
-        Navigation.NavigateTo("/home", true);
+        Notifier.Notify();
+        Navigation.NavigateTo("/home");
     }
 }

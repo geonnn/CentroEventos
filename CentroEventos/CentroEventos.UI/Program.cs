@@ -14,7 +14,11 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 
+
+builder.Services.AddSingleton<Sesion>();
+
 builder.Services.AddSingleton<IServicioAutorizacion, ServicioAutorizacion>();
+builder.Services.AddSingleton<UiNotifier>();
 
 builder.Services.AddTransient<IRepositorioPersona, RepositorioPersona>();
 builder.Services.AddTransient<IRepositorioEventoDeportivo, RepositorioEventoDeportivo>();
@@ -53,9 +57,7 @@ builder.Services.AddTransient<ListarReservaUseCase>();
 builder.Services.AddTransient<ListarEventosConCupoDisponibleUseCase>();
 builder.Services.AddTransient<ListarAsistenciaAEventoUseCase>();
 
-builder.Services.AddSingleton<UiNotifier>();
 
-builder.Services.AddScoped<Sesion>();
 // builder.Services.AddProtectedBrowserStorage();
 
 var app = builder.Build();

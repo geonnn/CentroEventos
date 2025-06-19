@@ -1,19 +1,37 @@
 @rendermode InteractiveServer
 @if(visible)
 {
-    <h3>@Mensaje</h3>
-    <button class="btn btn-primary" @onclick="Cerrar">Aceptar</button>
-    <button class="btn btn-secondary" @onclick="Cerrar">Cancelar</button>
+    <div class="dialogo-contenedor">
+        <div class="dialogo-contenido">
+            <h3>@Mensaje</h3>
+            <div class="centro">
+                <button class="btn btn-primary" @onclick="Aceptar">Aceptar</button>
+                <button class="btn btn-secondary" @onclick="Cerrar">Cancelar</button>
+            </div>
+        </div>  
+    </div>
 }
 @code{
     private bool visible = false;
     [Parameter]
     public string Mensaje {get;set;}="";
+    [Parameter]
+    public EventCallback OnConfirmado { get; set; }
+
     public void Mostrar()
     {
         visible=true;
         StateHasChanged();
     }
+    
+    public void Aceptar()
+    {
+        visible=false;
+        OnConfirmado.InvokeAsync();
+        StateHasChanged();
+
+    }
+
     void Cerrar()
     {
         visible=false;

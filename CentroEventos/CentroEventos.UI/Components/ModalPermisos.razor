@@ -1,0 +1,59 @@
+@using CentroEventos.Aplicacion.Entidades
+@rendermode InteractiveServer
+
+@if (visible)
+{
+    <div class="dialogo-contenedor">
+        <div class="dialogo-contenido">
+            <h3>Asignar Permisos</h3>
+            <form @onsubmit="OnSubmitHandler">
+                <div class="formulario-campos">
+                    @foreach (Permiso permiso in Enum.GetValues(typeof(Permiso)))
+                    {
+                        <div>
+                            <input type="checkbox" @bind="Seleccionados[permiso]" id="@permiso" />
+                            <label for="@permiso">@permiso</label>
+                        </div>
+                    }
+                </div>
+                <button type="submit" class="btn btn-success">Guardar</button>
+                <button type="button" class="btn btn-secondary" @onclick="Cerrar">Cerrar</button>
+            </form>
+        </div>
+    </div>
+}
+
+@code {
+    private bool visible = false;
+    private Dictionary<Permiso, bool> Seleccionados = new();
+
+    [Parameter] public EventCallback<List<Permiso>> OnConfirmado { get; set; }
+    
+    [Parameter] public List<Permiso>? PermisosSeleccionados { get; set; }
+
+    public void Mostrar(List<Permiso> permisos)
+    {
+        Seleccionados = Enum.GetValues(typeof(Permiso))
+            .Cast<Permiso>()
+            .ToDictionary(p => p, p => permisos?.Contains(p) ?? false);
+        visible = true;
+        StateHasChanged();
+    }
+
+    void Cerrar()
+    {
+        visible = false;
+        StateHasChanged();
+    }
+
+    private void OnSubmitHandler()
+    {
+        PermisosSeleccionados = Seleccionados
+            .Where(kv => kv.Value)
+            .Select(kv => kv.Key)
+            .ToList();
+
+        OnConfirmado.InvokeAsync();
+        Cerrar();
+    }
+}

@@ -2,6 +2,10 @@ html, body {
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }
 
+h1, h2, h3 {
+    margin: 0 auto;
+}
+
 a, .btn-link {
     color: #006bb7;
 }
@@ -51,14 +55,22 @@ h1:focus {
 }
 
 .formulario {
+  display: flex;
+  flex-direction: column;
+  max-width: 24rem;
+  border: 0.5px solid #8a7777;
+  border-radius: 1rem;
+  padding: 2rem;
+  gap: 1rem;
+  margin: 0 auto;
+  box-shadow: 2px 4px 16px rgba(132, 91, 13, 0.59);
+  background-color: white;
+}
+
+.formulario-campos {
     display: flex;
     flex-direction: column;
-    max-width: 24rem;
-    border: 0.5px solid gray;
-    border-radius: 1rem;
-    padding: 2rem;
-    gap: 1rem;
-    margin: 0 auto;
+    gap: 0.3rem;
 }
 
 .flex {

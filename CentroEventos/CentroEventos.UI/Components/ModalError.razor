@@ -1,0 +1,31 @@
+@rendermode InteractiveServer
+@if(visible)
+{
+    <div class="dialogo-contenedor">
+        <div class="dialogo-contenido">
+                <h3>Error!</h3>
+                <p>@Mensaje</p>
+            <div class="centro">
+                <button class="btn btn-secondary" @onclick="Cerrar">Cerrar</button>
+            </div>
+        </div>  
+    </div>
+}
+@code
+{
+    private bool visible = false;
+    public string Mensaje {get;set;}="";
+    public void Mostrar(string mensajeError)
+    {
+        Mensaje = mensajeError;
+        visible=true;
+        StateHasChanged();
+    }
+    
+    void Cerrar()
+    {
+        visible=false;
+        Mensaje = "";
+        StateHasChanged();
+    }
+}

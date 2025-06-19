@@ -1,16 +1,15 @@
 ﻿@page "/listas"
+@inject Sesion sesion
 @inject NavigationManager Nav
 @rendermode InteractiveServer
 
-<AuthGuard>
-
     <h3>Listar</h3>
-
-    <button @onclick="Usuarios">Usuarios</button>
-    <button @onclick="Personas">Personas</button>
-    <button @onclick="Reservas">Reservas</button>
-    <button @onclick="EventosDeportivos">Eventos Deportivos</button>
-</AuthGuard>
+    <div>
+        <button @onclick="Usuarios">Usuarios</button>
+        <button @onclick="Personas">Personas</button>
+        <button @onclick="Reservas">Reservas</button>
+        <button @onclick="EventosDeportivos">Eventos Deportivos</button>
+    </div>
 
 @code {
 
@@ -20,11 +19,11 @@
     } *@
     protected void Usuarios()
     {
-        Nav.NavigateTo("/listas/usuarios");
+        Nav.NavigateTo("listas/usuarios");
     }
     protected void Personas()
     {
-        Nav.NavigateTo("/listas/personas");
+        Nav.NavigateTo("listas/personas");
     }
     protected void Reservas()
     {

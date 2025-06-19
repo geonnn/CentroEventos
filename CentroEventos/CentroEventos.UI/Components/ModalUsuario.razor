@@ -1,0 +1,72 @@
+﻿@using CentroEventos.Aplicacion.Entidades
+@rendermode InteractiveServer
+@inject Sesion sesion
+
+@if(visible)
+{
+    <div class="dialogo-contenedor">
+        <div class="dialogo-contenido">
+                
+            <h3>Alta de Usuario</h3>
+            @if (errorEncontrado)
+            {
+                <div class="error">
+                    <p>@mensajeError</p>
+                </div>
+            }
+            <form @onsubmit="OnSubmitHandler">
+                <div class="formulario-campos">
+                    <label>Nombre:</label>
+                    <input class="form-control" @bind="Nombre" />
+                </div>
+                <div class="formulario-campos">
+                    <label>Apellido:</label>
+                    <input class="form-control" @bind="Apellido" />
+                </div>
+                <div class="formulario-campos">
+                    <label>Email:</label>
+                    <input class="form-control" @bind="Email" />
+                </div>
+                <div class="formulario-campos">
+                    <label>Contraseña:</label>
+                    <input class="form-control" @bind="Contrasena" />
+                </div>
+                <button type="submit" class="btn btn-success">Guardar</button>
+                <button type="button" class="btn btn-secondary" @onclick="Cerrar">Cerrar</button>
+            </form>
+        </div>
+    </div>
+}
+
+@code {
+    private bool visible = false;
+    private string Nombre = "";
+    private string Apellido = "";
+    private string Email = "";
+    private string Contrasena = "";
+    string mensajeError = "";
+    bool errorEncontrado = false;
+
+    [Parameter] public EventCallback OnConfirmado { get; set; }    
+    [Parameter] public Usuario? u { get; set; }
+
+    public void Mostrar()
+    {
+        visible = true;
+        StateHasChanged();
+    }
+
+    void Cerrar()
+    {
+        visible = false;
+        StateHasChanged();
+    }
+
+    private void OnSubmitHandler()
+    {
+        u = new(Nombre,Apellido,Email,Contrasena);
+        OnConfirmado.InvokeAsync();
+        Cerrar();
+        errorEncontrado = false;
+    }
+}

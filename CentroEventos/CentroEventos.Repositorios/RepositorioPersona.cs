@@ -59,17 +59,18 @@ public class RepositorioPersona : IRepositorioPersona
     }
 
     public bool PersonaExiste(int id){
-        using (var context = new CentroEventosContext())
-        return context.Personas.FirstOrDefault(p => p.Id == id) != null;
+        using var context = new CentroEventosContext();
+        return context.Personas.Any(p => p.Id == id);
     }
 
     public bool DniExiste(string dni){
-        using (var context = new CentroEventosContext())
-        return context.Personas.FirstOrDefault(p => p.Dni == dni) != null;
+        using var context = new CentroEventosContext();
+        return context.Personas.Any(p => p.Dni == dni);
     }
 
-    public bool EmailExiste(string email){
-        using (var context = new CentroEventosContext())
-        return context.Usuarios.FirstOrDefault(p => p.Email == email) != null;
+    public bool EmailExiste(string email)
+    {
+        using var context = new CentroEventosContext();
+        return context.Personas.Any(p => p.Email == email);
     }
 }
