@@ -4,8 +4,6 @@ using Interfaces;
 using Excepciones;
 using Entidades;
 using Validadores;
-using System.Security.Cryptography;
-using System.Text;
 
 public class RegistroUseCase(IRepositorioUsuario repo, UsuarioValidador validador)
 {
@@ -19,7 +17,11 @@ public class RegistroUseCase(IRepositorioUsuario repo, UsuarioValidador validado
             if (!validador.ValidarDuplicado(usuario, out string mensajeError))
                 throw new DuplicadoException(mensajeError);
         }
-    
-        repo.AltaUsuario(usuario);
+
+        if (repo.EsPrimerUsuario())
+            repo.AltaUsuario(usuario, true);
+        else
+            repo.AltaUsuario(usuario);
+
     }
 }

@@ -7,7 +7,7 @@
     <div class="dialogo-contenedor">
         <div class="dialogo-contenido">
                 
-            <h3>Alta de Usuario</h3>
+            <h3>@Title de usuario</h3>
             @if (errorEncontrado)
             {
                 <div class="error">
@@ -17,22 +17,24 @@
             <form @onsubmit="OnSubmitHandler">
                 <div class="formulario-campos">
                     <label>Nombre:</label>
-                    <input class="form-control" @bind="Nombre" />
+                    <input required class="form-control" @bind="Nombre" />
                 </div>
                 <div class="formulario-campos">
                     <label>Apellido:</label>
-                    <input class="form-control" @bind="Apellido" />
+                    <input required class="form-control" @bind="Apellido" />
                 </div>
                 <div class="formulario-campos">
                     <label>Email:</label>
-                    <input class="form-control" @bind="Email" />
+                    <input required class="form-control" @bind="Email" />
                 </div>
                 <div class="formulario-campos">
                     <label>Contraseña:</label>
-                    <input class="form-control" @bind="Contrasena" />
+                    <input required class="form-control" @bind="Contrasena" />
                 </div>
-                <button type="submit" class="btn btn-success">Guardar</button>
-                <button type="button" class="btn btn-secondary" @onclick="Cerrar">Cerrar</button>
+                <div class="flex flex-row-center">
+                    <button type="submit" class="btn btn-success">Guardar</button>
+                    <button type="button" class="btn btn-secondary" @onclick="Cerrar">Cerrar</button>
+                </div>
             </form>
         </div>
     </div>
@@ -46,12 +48,28 @@
     private string Contrasena = "";
     string mensajeError = "";
     bool errorEncontrado = false;
+    public string Title = "";
 
     [Parameter] public EventCallback OnConfirmado { get; set; }    
-    [Parameter] public Usuario? u { get; set; }
+    [Parameter] public Usuario? _usuario { get; set; }
 
     public void Mostrar()
     {
+        Title = "Alta";
+        visible = true;
+        StateHasChanged();
+    }
+
+    public void Mostrar(Usuario u)
+    {
+        _usuario = u;
+        Title = "Modificación";
+
+        // Recuperar campos para que aparezcan en el form.
+        Nombre = u.Nombre;
+        Apellido = u.Apellido;
+        Email = u.Email;
+
         visible = true;
         StateHasChanged();
     }
@@ -64,9 +82,27 @@
 
     private void OnSubmitHandler()
     {
-        u = new(Nombre,Apellido,Email,Contrasena);
+        if (Title.Equals("Modificación"))
+        {
+            Usuario u = new(Nombre,Apellido,Email,Contrasena);
+            u.AgregarPermiso(_usuario!.Permisos);
+            _usuario!.Actualizar(u);
+        }
+        else _usuario = new(Nombre,Apellido,Email,Contrasena);
+        
         OnConfirmado.InvokeAsync();
         Cerrar();
+        LimpiarCampos();
+        errorEncontrado = false;
+    }
+
+    private void LimpiarCampos()
+    {
+        Nombre = "";
+        Apellido = "";
+        Email = "";
+        Contrasena = "";
+        mensajeError = "";
         errorEncontrado = false;
     }
 }

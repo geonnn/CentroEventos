@@ -27,18 +27,17 @@ public class RepositorioPersona : IRepositorioPersona
 
     public List<Persona> ListarPersonas()
     {
-        var lista = new List<Persona>();
-
-        using (var context = new CentroEventosContext())
-        foreach (var p in context.Personas)
-            lista.Add(p);
-        return lista;
+        using var context = new CentroEventosContext();
+        return context.Personas.ToList();
     }
 
     public void ModificarPersona(Persona nuevaPersona)
     {
         using var context = new CentroEventosContext();
-        context.Personas.Update(nuevaPersona);
+        // La persona existe:
+        // En nuevaPersona ya se encuentran los datos modificados y con su respectiva id, entonces, se obtiene la persona con esa misma id, y se actualizan sus datos.
+        Persona p = context.Personas.Find(nuevaPersona.Id)!;
+        p.Actualizar(nuevaPersona);
         context.SaveChanges();
     }
 

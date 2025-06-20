@@ -1,8 +1,5 @@
 namespace CentroEventos.Aplicacion.Entidades;
 
-using CentroEventos.Aplicacion.Interfaces;
-
-
 public class Sesion
 {
     public Usuario Usuario { get; private set; } = new Usuario("", "", "", "");

@@ -42,7 +42,7 @@ public class ReservaValidador(IRepositorioPersona repoP, IRepositorioEventoDepor
         StringBuilder mensaje = new StringBuilder("");
         var lista = repoR.ListarReservas().Where(re => re.Id != r.Id);
 
-        if (lista.FirstOrDefault(res => res.EventoDeportivoId == r.EventoDeportivoId && res.PersonaId == r.PersonaId) != null)
+        if (lista.Any(res => res.EventoDeportivoId == r.EventoDeportivoId && res.PersonaId == r.PersonaId))
             mensaje.Append($"La persona ID {r.PersonaId} ya se encuentra registrada para el evento ID {r.EventoDeportivoId}.");
 
         mensajeError = mensaje.ToString();

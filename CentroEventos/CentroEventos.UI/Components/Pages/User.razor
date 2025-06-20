@@ -1,0 +1,100 @@
+﻿@page "/user"
+
+@inject Sesion sesion
+@inject OtorgarPermisoUseCase otorgarPermisoUseCase
+@inject ModificarUsuarioUseCase modificacionUsuarioUseCase
+@rendermode InteractiveServer
+
+<AuthGuard>
+
+    <PageTitle>Mi perfil</PageTitle>
+
+
+    <h2>Mi perfil</h2>
+
+        <p><strong>Nombre:</strong> @sesion.Usuario.Nombre</p>
+        <p><strong>Apellido:</strong> @sesion.Usuario.Apellido</p>
+        <p><strong>Email:</strong> @sesion.Usuario.Email</p>
+        <p><strong>Permisos:</strong></p>
+        <table>
+            <tr>
+                <th>Permiso</th>
+                <th>Posee el permiso</th>
+            </tr>
+        @foreach (var permiso in Enum.GetValues<Permiso>())
+        {
+            <tr>
+                <td>@permiso</td>
+                <td>
+                    @(sesion.Usuario.Permisos.Contains(permiso) ? "Sí" : "No")
+                </td>
+            </tr>
+        }
+        </table>
+
+        <div>
+            <button class="btn btn-primary modificacion-usuario" @onclick="()=>ModalModificacion(sesion.Usuario)">Modificar datos</button>
+
+            @if (@sesion.Usuario.PoseeElPermiso(Permiso.OtorgarPermisos))
+            {
+                <button class="btn btn-primary modificacion-usuario" @onclick="()=>ModalPermisos(sesion.Usuario)">Modificar permisos</button>
+            }
+        </div>
+
+        <ModalUsuario @ref=modificar OnConfirmado="() => OtorgarModificacion()"/>
+        <ModalPermisos @ref=permisos OnConfirmado="() => OtorgarPermisos()"/>
+
+</AuthGuard>
+
+@code
+{
+    Usuario? _usuarioAOperar = null;
+    ModalUsuario modificar = new();
+    ModalError error = new();
+    ModalPermisos permisos = new();
+
+    private void ModalModificacion(Usuario u)
+    {
+        _usuarioAOperar = u;
+        modificar.Mostrar(_usuarioAOperar);
+    }
+
+    private void OtorgarModificacion()
+    {
+        try
+        {
+            modificacionUsuarioUseCase.Ejecutar(_usuarioAOperar!, sesion.Usuario);
+            sesion.IniciarSesion(_usuarioAOperar!);
+        }
+        catch(Exception e)
+        {
+            error.Mostrar(e.Message);
+        }
+        finally
+        {
+            StateHasChanged();
+        }
+    }
+
+    private void ModalPermisos(Usuario u)
+    {
+        _usuarioAOperar = u;
+        permisos.Mostrar(_usuarioAOperar.Permisos);
+    }
+    private void OtorgarPermisos()
+    {
+        try
+        {
+            otorgarPermisoUseCase.Ejecutar(_usuarioAOperar!, permisos.PermisosSeleccionados!, sesion.Usuario.Permisos);
+            sesion.IniciarSesion(_usuarioAOperar!);
+        }
+        catch(Exception e)
+        {
+            error.Mostrar(e.Message);
+        }
+        finally
+        {
+            StateHasChanged();
+        }
+    }
+}

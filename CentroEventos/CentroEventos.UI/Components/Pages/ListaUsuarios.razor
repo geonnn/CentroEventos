@@ -5,64 +5,72 @@
 @inject BajaUsuarioUseCase BajaUsuarioUseCase
 @inject AltaUsuarioUseCase altaUsuarioUseCase
 @inject OtorgarPermisoUseCase OtorgarPermisoUseCase
+@inject ModificarUsuarioUseCase modificacionUsuarioUseCase
 
-<h3>Usuarios</h3>
+<AuthGuard>
 
-@if (sesion.Usuario.PoseeElPermiso(Permiso.UsuarioAlta))
-{
-    <button @onclick="NuevoUsuario">Agregar Usuario</button>
-    <ModalUsuario @ref=alta OnConfirmado="() => AgregarUsuario()"/>
-}
-<table>
-    <tr>
-        <th>ID</th>
-        <th>Nombre</th>
-        <th>Apellido</th>
-        <th>Email</th>
-        @if (sesion.Usuario.PoseeElPermiso(Permiso.UsuarioModificacion) || sesion.Usuario.PoseeElPermiso(Permiso.UsuarioBaja)){
-            <th>Acción</th>
-        }
-    </tr>
-    @foreach (var usuario in _lista)
-    {
-    <tr>
-        <td>@usuario.Id</td>
-        <td>@usuario.Nombre</td>
-        <td>@usuario.Apellido</td>
-        <td>@usuario.Email</td>
-        @if (sesion.Usuario.Id != usuario.Id)
-        {
-            @if (sesion.Usuario.PoseeElPermiso(Permiso.UsuarioModificacion))
-            {
-                <td>
-                    <button class="btn btn-primary modificacion-usuario" @onclick="()=>ConfirmarModificacion(usuario)">Modificar</button>
-                </td>
-            }
-            @if (sesion.Usuario.PoseeElPermiso(Permiso.OtorgarPermisos))
-            {
-                <td>
-                    <button class="btn btn-primary otorgar-permiso-usuario" @onclick="()=>OtorgarPermiso(usuario)">Otorgar Permisos</button>
-                    <ModalPermisos @ref=permisos OnConfirmado="() => ConfirmarPermiso()"/>
-                </td>
-            }
-            @if (sesion.Usuario.PoseeElPermiso(Permiso.UsuarioBaja))
-            {
-                <td>
-                    <button class="btn btn-danger baja-usuario" @onclick="()=>ConfirmarEliminacion(usuario)">Eliminar</button>
-                    <DialogoConfirmacion @ref=dialogo Mensaje="¿Está seguro que desea eliminar este usuario?" OnConfirmado="() => EliminarUsuario()" />
-                </td>
-            }
-        }
-    </tr>
+    <PageTitle>Listado de usuarios</PageTitle>
+
+    <h3>Usuarios</h3>
+
+    @if (sesion.Usuario.PoseeElPermiso(Permiso.UsuarioAlta))
+    {   <div class="flex ">
+            <button class="btn btn-success" @onclick="NuevoUsuario">Agregar usuario</button>
+        </div>
+        <ModalUsuario @ref=alta OnConfirmado="() => AgregarUsuario()"/>
     }
- </table>
-
- <ModalError @ref=error/>
+    <table>
+        <tr>
+            <th>ID</th>
+            <th>Nombre</th>
+            <th>Apellido</th>
+            <th>Email</th>
+            @if (sesion.Usuario.PoseeElPermiso(Permiso.UsuarioModificacion) || sesion.Usuario.PoseeElPermiso(Permiso.UsuarioBaja)){
+                <th>Acción</th>
+            }
+        </tr>
+        @foreach (var usuario in _lista)
+        {
+        <tr>
+            <td>@usuario.Id</td>
+            <td>@usuario.Nombre</td>
+            <td>@usuario.Apellido</td>
+            <td>@usuario.Email</td>
+            @if (sesion.Usuario.Id != usuario.Id)
+            {
+                <td class="flex flex-row-center">
+                @if (sesion.Usuario.PoseeElPermiso(Permiso.UsuarioModificacion))
+                {
+                        <button class="btn btn-primary modificacion-usuario" @onclick="()=>ConfirmarModificacion(usuario)">Modificar</button>
+                }
+                @if (sesion.Usuario.PoseeElPermiso(Permiso.OtorgarPermisos))
+                {
+                    
+                        <button class="btn btn-primary otorgar-permiso-usuario" @onclick="()=>OtorgarPermiso(usuario)">Otorgar Permisos</button>
+                }
+                @if (sesion.Usuario.PoseeElPermiso(Permiso.UsuarioBaja))
+                {
+                        <button class="btn btn-danger baja-usuario" @onclick="()=>ConfirmarEliminacion(usuario)">Eliminar</button>
+                }
+                </td>
+            }
+        </tr>
+        }
+    </table>
+    
+    <ModalUsuario @ref=modificar OnConfirmado="() => OtorgarModificacion()"/>
+    <DialogoConfirmacion @ref=dialogo Mensaje="¿Está seguro que desea eliminar este usuario?" OnConfirmado="() => EliminarUsuario()" />
+    <ModalPermisos @ref=permisos OnConfirmado="() => ConfirmarPermiso()"/>
+    <ModalError @ref=error/>
  
+</AuthGuard>
+
+
 @code {
     List<Usuario> _lista = new List<Usuario>();
     ModalError error = new ModalError();
     ModalUsuario alta = new();
+    ModalUsuario modificar = new();
     ModalPermisos permisos = new();
     DialogoConfirmacion dialogo = new();
     Usuario? _usuarioAOperar = null;
@@ -70,9 +78,6 @@
     protected override void OnInitialized()
     {
         _lista = ListarUsuarioUseCase.Ejecutar();
-    }
-    private void NuevoUsuario() {
-        alta.Mostrar();
     }
     
     private void ConfirmarEliminacion(Usuario u)
@@ -97,14 +102,32 @@
     
     private void ConfirmarModificacion(Usuario u)
     {
-        
+        _usuarioAOperar = u;
+        modificar.Mostrar(_usuarioAOperar);
     }
 
+    private void OtorgarModificacion()
+    {
+        try
+        {
+            modificacionUsuarioUseCase.Ejecutar(_usuarioAOperar!, sesion.Usuario);
+            _lista = ListarUsuarioUseCase.Ejecutar();
+            StateHasChanged();
+        }
+        catch(Exception e)
+        {
+            error.Mostrar(e.Message);
+        }
+    }
+
+    private void NuevoUsuario() {
+        alta.Mostrar();
+    }
     private void AgregarUsuario()
     {
         try
         {
-            altaUsuarioUseCase.Ejecutar(alta.u!, sesion.Usuario.Permisos);
+            altaUsuarioUseCase.Ejecutar(alta._usuario!, sesion.Usuario.Permisos);
             _lista = ListarUsuarioUseCase.Ejecutar();
             StateHasChanged();
         }
@@ -117,14 +140,14 @@
     private void OtorgarPermiso(Usuario u)
     {
         _usuarioAOperar = u;
-        permisos.Mostrar(u.Permisos.ToList());
+        permisos.Mostrar(u.Permisos);
     }
     
     private void ConfirmarPermiso()
     {
         try
         {
-            OtorgarPermisoUseCase.Ejecutar(_usuarioAOperar!, permisos.PermisosSeleccionados.ToList(), sesion.Usuario.Permisos);
+            OtorgarPermisoUseCase.Ejecutar(_usuarioAOperar!, permisos.PermisosSeleccionados!, sesion.Usuario.Permisos);
             _lista = ListarUsuarioUseCase.Ejecutar();
             StateHasChanged();
             // TODO: Actualizar sesión.

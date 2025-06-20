@@ -6,30 +6,32 @@
     <div class="dialogo-contenedor">
         <div class="dialogo-contenido">
                 
-            <h3>Alta de Persona</h3>
+            <h3>@Title de persona</h3>
             <form @onsubmit="OnSubmitHandler">
                 <div class="formulario-campos">
                     <label>DNI:</label>
-                    <input class="form-control" @bind="Dni" />
+                    <input class="form-control" type="text" @bind="Dni" />
                 </div>
                 <div class="formulario-campos">
-                    <label>Nombre:</label>
-                    <input class="form-control" @bind="Nombre" />
+                    <label for="nombre">Nombre:</label>
+                    <input required type="text" id="Nombre" class="form-control" @bind="Nombre" />
                 </div>
                 <div class="formulario-campos">
                     <label>Apellido:</label>
-                    <input class="form-control" @bind="Apellido" />
+                    <input required type="text" class="form-control" @bind="Apellido" />
                 </div>
                 <div class="formulario-campos">
-                    <label>Email:</label>
-                    <input class="form-control" @bind="Email" />
+                    <label for="email">Email:</label>
+                    <input required type="email" id="email" class="form-control" @bind="Email" />
                 </div>
                 <div class="formulario-campos">
-                    <label>Teléfono:</label>
-                    <input class="form-control" @bind="Telefono" />
+                    <label for="telefono">Teléfono:</label>
+                    <input type="number" id="telefono" class="form-control" @bind="Telefono" />
                 </div>
-                <button type="submit" class="btn btn-success">Guardar</button>
-                <button type="button" class="btn btn-secondary" @onclick="Cerrar">Cerrar</button>
+                <div class="flex flex-row-center">
+                    <button type="submit" class="btn btn-success">Guardar</button>
+                    <button type="button" class="btn btn-secondary" @onclick="Cerrar">Cerrar</button>
+                </div>
             </form>
         </div>
     </div>
@@ -42,14 +44,48 @@
     private string Apellido = "";
     private string Email = "";
     private string Telefono = "";
+    private string Title = "";
 
     [Parameter] public EventCallback OnConfirmado { get; set; }   
-    [Parameter] public Persona? p { get; set; }
+    [Parameter] public Persona? _persona { get; set; }
 
+    // Alta (inicializa con los campos vacíos).
     public void Mostrar()
     {
+        Title = "Alta";
         visible = true;
         StateHasChanged();
+    }
+
+    // Modificación (recupera los datos de la persona a modificar para mostrarlos en el form).
+    public void Mostrar(Persona p)
+    {
+        _persona = p; // Recibe la persona completa sin modificar.
+        Title = "Modificación";
+        Dni = p.Dni;
+        Nombre = p.Nombre;
+        Apellido = p.Apellido;
+        Email = p.Email;
+        Telefono = p.Telefono!;
+        
+        visible = true;
+        StateHasChanged();
+    }
+
+    private void OnSubmitHandler()
+    {
+        if(Title.Equals("Modificación"))
+        {
+            Persona p = new(Dni, Nombre, Apellido, Email, Telefono);
+            _persona!.Actualizar(p); // Actualiza los datos de la persona sin modificar Id.
+        }
+        else
+            // Alta persona
+            _persona = new(Dni, Nombre, Apellido, Email, Telefono);
+
+        OnConfirmado.InvokeAsync();
+        Cerrar();
+        LimpiarCampos();
     }
 
     void Cerrar()
@@ -58,10 +94,12 @@
         StateHasChanged();
     }
 
-    private void OnSubmitHandler()
+    private void LimpiarCampos()
     {
-        p = new(Dni,Nombre,Apellido,Email,Telefono);
-        OnConfirmado.InvokeAsync();
-        Cerrar();
+        Dni = "";
+        Nombre = "";
+        Apellido = "";
+        Email = "";
+        Telefono = "";
     }
 }

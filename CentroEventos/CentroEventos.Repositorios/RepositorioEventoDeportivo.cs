@@ -32,13 +32,14 @@ public class RepositorioEventoDeportivo : IRepositorioEventoDeportivo
 
     public List<EventoDeportivo> ListarEventoDeportivo()
     {
-        var lista = new List<EventoDeportivo>();
-        using (var context = new CentroEventosContext())
-        {
-            foreach (var e in context.EventosDeportivos)
-                lista.Add(e);
-        }
-        return lista;
+        using var context = new CentroEventosContext();
+        return context.EventosDeportivos.ToList();
+    }
+
+    public List<Reserva> ListarReservasDeEvento(int id)
+    {
+        using var context = new CentroEventosContext();
+        return context.EventosDeportivos.First(e => e.Id == id).Reservas!.ToList();
     }
 
     /// <summary>
@@ -47,11 +48,7 @@ public class RepositorioEventoDeportivo : IRepositorioEventoDeportivo
     /// <param name="fecha">Fecha desde la cual se consideran los eventos como futuros.</param>
     /// <returns>Lista de eventos deportivos con fecha de inicio igual o posterior a la fecha especificada.</returns>
     public List<EventoDeportivo> ListarEventoDeportivoFuturo(DateTime fecha)
-    {
-        List<EventoDeportivo> eventos = ListarEventoDeportivo();
-        eventos.RemoveAll(e => e.FechaHoraInicio < fecha );
-        return eventos;
-    }
+        => ListarEventoDeportivo().Where(e => e.FechaHoraInicio >= fecha).ToList();
 
     /// <summary>
     /// Devuelve una lista de eventos deportivos cuya fecha de inicio es anterior a la fecha recibida como parámetro.
@@ -59,11 +56,7 @@ public class RepositorioEventoDeportivo : IRepositorioEventoDeportivo
     /// <param name="fecha">Fecha hasta la cual se consideran los eventos como pasados.</param>
     /// <returns>Lista de eventos deportivos con fecha de inicio anterior a la fecha especificada.</returns>
     public List<EventoDeportivo> ListarEventoDeportivoPasado(DateTime fecha)
-    {
-        List<EventoDeportivo> eventos = ListarEventoDeportivo();
-        eventos.RemoveAll(e => e.FechaHoraInicio >= fecha);
-        return eventos;
-    }
+        => ListarEventoDeportivo().Where(e => e.FechaHoraInicio < fecha).ToList();
 
     /// <summary>
     /// Devuelve un boolean indicando la existencia de un evento con id recibida por parámetro.

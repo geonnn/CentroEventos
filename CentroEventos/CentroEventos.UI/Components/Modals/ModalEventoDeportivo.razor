@@ -6,15 +6,15 @@
 {
     <div class="dialogo-contenedor">
         <div class="dialogo-contenido">
-            <h3>Alta de Evento Deportivo</h3>
+            <h3>@Title de Evento Deportivo</h3>
             <form @onsubmit="OnSubmitHandler">
                 <div class="formulario-campos">
-                    <label>Nombre:</label>
-                    <input class="form-control" @bind="Nombre" />
+                    <label for="nombre">Nombre:</label>
+                    <input required id="nombre" type="text"  class="form-control" @bind="Nombre" />
                 </div>
                 <div class="formulario-campos">
                     <label>Descripción:</label>
-                    <input class="form-control" @bind="Descripcion" />
+                    <input class="form-control" type="text" @bind="Descripcion" />
                 </div>
                 <div class="formulario-campos">
                     <label>Fecha y Hora de Inicio:</label>
@@ -22,18 +22,20 @@
                 </div>
                 <div class="formulario-campos">
                     <label>Duración (horas):</label>
-                    <input type="number" step="0.1" class="form-control" @bind="DuracionHoras" />
+                    <input required type="number" step="0.1" class="form-control" @bind="DuracionHoras" />
                 </div>
                 <div class="formulario-campos">
                     <label>Cupo Máximo:</label>
-                    <input type="number" class="form-control" @bind="CupoMaximo" />
+                    <input required type="number" class="form-control" @bind="CupoMaximo" />
                 </div>
                 <div class="formulario-campos">
                     <label>ID Responsable:</label>
-                    <input type="number" class="form-control" @bind="ResponsableId" />
+                    <input required type="number" class="form-control" @bind="ResponsableId" />
                 </div>
-                <button type="submit" class="btn btn-success">Guardar</button>
-                <button type="button" class="btn btn-secondary" @onclick="Cerrar">Cerrar</button>
+                <div class="flex flex-row-center">
+                    <button type="submit" class="btn btn-success">Guardar</button>
+                    <button type="button" class="btn btn-secondary" @onclick="Cerrar">Cerrar</button>
+                </div>
             </form>
         </div>
     </div>
@@ -47,15 +49,47 @@
     private double DuracionHoras;
     private int CupoMaximo;
     private int ResponsableId;
+    private string Title = "";
 
-    [Parameter]
-    public EventCallback OnConfirmado { get; set; }
-    [Parameter] public EventoDeportivo? eventoDeportivo { get; set;}
+    [Parameter] public EventCallback OnConfirmado { get; set; }
+    [Parameter] public EventoDeportivo? _eventoDeportivo { get; set;}
 
     public void Mostrar()
     {
+        Title = "Alta";
         visible = true;
         StateHasChanged();
+    }
+
+    public void Mostrar(EventoDeportivo e)
+    {
+        _eventoDeportivo = e;
+        Title = "Modificación";
+
+        // Recuperar campos para que aparezcan en el form.
+        Nombre = e.Nombre;
+        Descripcion = e.Descripcion;
+        FechaHoraInicio = e.FechaHoraInicio;
+        DuracionHoras = e.DuracionHoras;
+        CupoMaximo = e.CupoMaximo;
+        ResponsableId = e.ResponsableId;
+
+        visible = true;
+        StateHasChanged();
+    }
+
+    private void OnSubmitHandler()
+    {
+        if(Title.Equals("Modificación"))
+        {
+            EventoDeportivo e = new(Nombre,Descripcion,FechaHoraInicio,DuracionHoras,CupoMaximo,ResponsableId);
+            _eventoDeportivo!.Actualizar(e);
+        }
+        else _eventoDeportivo = new(Nombre,Descripcion,FechaHoraInicio,DuracionHoras,CupoMaximo,ResponsableId);
+        
+        OnConfirmado.InvokeAsync();
+        Cerrar();
+        LimpiarCampos();
     }
 
     void Cerrar()
@@ -64,10 +98,13 @@
         StateHasChanged();
     }
 
-    private void OnSubmitHandler()
+    private void LimpiarCampos()
     {
-        eventoDeportivo = new(Nombre,Descripcion,FechaHoraInicio,DuracionHoras,CupoMaximo,ResponsableId);
-        OnConfirmado.InvokeAsync();
-        Cerrar();
+        Nombre = "";
+        Descripcion = "";
+        FechaHoraInicio = DateTime.Today;
+        DuracionHoras = 0;
+        CupoMaximo = 0;
+        ResponsableId = 0;
     }
 }

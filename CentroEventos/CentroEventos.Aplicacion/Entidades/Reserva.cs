@@ -21,6 +21,14 @@ public class Reserva
         Estado = estado;
     }
 
+    public void Actualizar(Reserva r)
+    {
+        this.PersonaId = r.PersonaId;
+        this.EventoDeportivoId = r.EventoDeportivoId;
+        this.FechaAltaReserva = r.FechaAltaReserva;
+        this.Estado = r.Estado;
+    }
+
     public override string ToString()
     {
         return $"Reserva [Id: {Id}, PersonaId: {PersonaId}, EventoDeportivoId: {EventoDeportivoId}, FechaAltaReserva: {FechaAltaReserva:dd/MM/yyyy}, Estado: {Estado}]";

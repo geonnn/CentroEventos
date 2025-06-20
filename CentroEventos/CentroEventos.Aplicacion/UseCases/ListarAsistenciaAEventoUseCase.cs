@@ -4,7 +4,7 @@ using Entidades;
 using Excepciones;
 using Interfaces;
 
-public class ListarAsistenciaAEventoUseCase(IRepositorioEventoDeportivo repoEventoDeportivo, IRepositorioReserva repoReserva,IRepositorioPersona repoPersona)
+public class ListarAsistenciaAEventoUseCase(IRepositorioEventoDeportivo repoEventoDeportivo,IRepositorioReserva repoReserva, IRepositorioPersona repoPersona)
 {
     public List<Persona> Ejecutar(int id)
     {
@@ -15,10 +15,10 @@ public class ListarAsistenciaAEventoUseCase(IRepositorioEventoDeportivo repoEven
         
         List<Reserva> reservas = repoReserva.ListarReservas();
         List<Persona> asistentes = new List<Persona>();
-        
+
         foreach (Reserva r in reservas)
         {
-            if (r.EventoDeportivoId == id && r.Estado == EstadoAsistencia.Presente)
+            if (r.Estado == EstadoAsistencia.Presente && r.EventoDeportivoId == id)
                 asistentes.Add(repoPersona.ConsultaPersona(r.PersonaId));
         }
         return asistentes;

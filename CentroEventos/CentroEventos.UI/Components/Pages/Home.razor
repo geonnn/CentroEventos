@@ -3,13 +3,16 @@
 @inject Sesion sesion
 @inject NavigationManager Navegacion
 @rendermode InteractiveServer
-<PageTitle>Inicio</PageTitle>
 
+<AuthGuard>
 
-<h1>Hola @sesion.Usuario.Nombre!</h1>
+    <PageTitle>Inicio</PageTitle>
 
+    <h1>Hola @sesion.Usuario.Nombre!</h1>
 
-Bienvenido al Sistema de Gestión del Centro Deportivo Universitario.
+    <p>Bienvenido al Sistema de Gestión del Centro Deportivo Universitario.</p>
+
+</AuthGuard>
 
 @code {
     @*

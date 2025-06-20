@@ -4,142 +4,181 @@
 @inject Sesion sesion
 @inject BajaEventoDeportivoUseCase BajaEventoDeportivoUseCase
 @inject AltaEventoDeportivoUseCase altaEventoDeportivoUseCase
+@inject ModificarEventoDeportivoUseCase modificarEventoDeportivoUseCase
 @rendermode InteractiveServer
 
-<h3>Eventos Deportivos</h3>
+<AuthGuard>
 
-@if (sesion.Usuario.PoseeElPermiso(Permiso.EventoAlta)){
-    <button @onclick="NuevoEventoDeportivo">Agregar Evento Deportivo</button>
-    <ModalEventoDeportivo @ref=alta OnConfirmado="() => AgregarEventoDeportivo()" />
-}
-<table>
-    <tr>
-        <th>ID</th>
-        <th>ID Responsable</th>
-        <th>Nombre</th>
-        <th>Cupo Máximo</th>
-        <th>Duración</th>
-        @if (sesion.Usuario.PoseeElPermiso(Permiso.EventoModificacion) || sesion.Usuario.PoseeElPermiso(Permiso.EventoBaja)){
-            <th>Acción</th>
-        }   
-    </tr>
-    @foreach (var eventoDeportivo in _lista)
-    {
-    <tr>
-        <td>@eventoDeportivo.Id</td>
-        <td>@eventoDeportivo.ResponsableId</td>
-        <td>@eventoDeportivo.Nombre</td>
-        <td>@eventoDeportivo.CupoMaximo</td>
-        <td>@eventoDeportivo.DuracionHoras</td>
-        <td>
+    <PageTitle>Listado de eventos deportivos</PageTitle>
 
-        @if (eventoDeportivo.FechaHoraInicio.AddHours(eventoDeportivo.DuracionHoras) < DateTime.Now) {
-            <ModalListaAsistentes @ref=@modales[eventoDeportivo.Id] ID=@eventoDeportivo.Id nombre=@eventoDeportivo.Nombre />
-            <button @onclick="() => MostrarModal(eventoDeportivo.Id)">Listar Personas</button>
-            }
-        </td>
-        @if (sesion.Usuario.PoseeElPermiso(Permiso.EventoModificacion)){
-        <td>
-            <button class="btn btn-primary modificacion-evento-deportivo" @onclick="()=>ConfirmarModificacion(eventoDeportivo)">Modificar</button>
+    <h3>Eventos Deportivos</h3>
+
+    @if (sesion.Usuario.PoseeElPermiso(Permiso.EventoAlta)){
+        <div class="flex ">
+            <button class="btn btn-success" @onclick="NuevoEventoDeportivo">Agregar evento deportivo</button>       
+        </div>
+        <ModalEventoDeportivo @ref=alta OnConfirmado="() => AgregarEventoDeportivo()" />
+    }
+    <table>
+        <tr>
+            <th>ID</th>
+            <th>ID Responsable</th>
+            <th>Nombre</th>
+            <th>Cupo Máximo</th>
+            <th>Duración</th>
+            @if (sesion.Usuario.PoseeElPermiso(Permiso.EventoModificacion) || sesion.Usuario.PoseeElPermiso(Permiso.EventoBaja)){
+                <th>Acción</th>
+            }   
+        </tr>
+        @foreach (var eventoDeportivo in _lista)
+        {
+        <tr>
+            <td>@eventoDeportivo.Id</td>
+            <td>@eventoDeportivo.ResponsableId</td>
+            <td>@eventoDeportivo.Nombre</td>
+            <td>@eventoDeportivo.CupoMaximo</td>
+            <td>@eventoDeportivo.DuracionHoras</td>
             
-        </td>
+            @if (sesion.Usuario.PoseeElPermiso(Permiso.EventoModificacion) || sesion.Usuario.PoseeElPermiso(Permiso.EventoBaja)){
+                <td class="flex flex-row-center">
+                    @if (eventoDeportivo.FechaHoraInicio.AddHours(eventoDeportivo.DuracionHoras) < DateTime.Now)
+                    {
+                        <button @onclick="() => Modal(eventoDeportivo.Id,eventoDeportivo.Nombre)">Listar Personas</button>
+                    }
+                    @if (sesion.Usuario.PoseeElPermiso(Permiso.EventoModificacion) && eventoDeportivo.FechaHoraInicio.AddHours(eventoDeportivo.DuracionHoras) > DateTime.Now){
+                        <button class="btn btn-primary modificacion-evento-deportivo" @onclick="()=>ModalModificacion(eventoDeportivo)">Modificar</button>
+                    }
+                    @if (sesion.Usuario.PoseeElPermiso(Permiso.EventoBaja)){
+                        <button class="btn btn-danger baja-evento-deportivo" @onclick="()=>ConfirmarEliminacion(eventoDeportivo)">Eliminar</button>
+                    }
+                </td>
+            }
+        </tr>
         }
-        @if (sesion.Usuario.PoseeElPermiso(Permiso.EventoBaja)){
-        <td>
-            <button class="btn btn-danger baja-evento-deportivo" @onclick="()=>ConfirmarEliminacion(eventoDeportivo)">Eliminar</button>
-            <DialogoConfirmacion @ref=dialogo Mensaje="Esta seguro que desea elimar este Evento Deportivo?" OnConfirmado="() => EliminarEventoDeportivo()"/>
-        </td>
+    </table>
+
+    <h3>Eventos Deportivos Con Cupo</h3>
+    <table>
+        <tr>
+            <th>ID</th>
+            <th>ID Responsable</th>
+            <th>Nombre</th>
+            <th>Cupo Máximo</th>
+            <th>Duración</th>
+        </tr>
+        @foreach (var eventoDeportivo in _listaCupos)
+        {
+        <tr>
+            <td>@eventoDeportivo.Id</td>
+            <td>@eventoDeportivo.ResponsableId</td>
+            <td>@eventoDeportivo.Nombre</td>
+            <td>@eventoDeportivo.CupoMaximo</td>
+            <td>@eventoDeportivo.DuracionHoras</td>
+        </tr>
         }
-    </tr>
-    }
-</table>
+    </table>
 
-<h3>Eventos Deportivos Con Cupo</h3>
-<table>
-    <tr>
-        <th>ID</th>
-        <th>ID Responsable</th>
-        <th>Nombre</th>
-        <th>Cupo Máximo</th>
-        <th>Duración</th>
-    </tr>
-    @foreach (var eventoDeportivo in _listaCupos)
-    {
-    <tr>
-        <td>@eventoDeportivo.Id</td>
-        <td>@eventoDeportivo.ResponsableId</td>
-        <td>@eventoDeportivo.Nombre</td>
-        <td>@eventoDeportivo.CupoMaximo</td>
-        <td>@eventoDeportivo.DuracionHoras</td>
-    </tr>
-    }
-</table>
+    <ModalListaAsistentes @ref=modalListaAsistentes />
+    <ModalEventoDeportivo @ref=modificar OnConfirmado="() => ModificarEventoDeportivo()" />
+    <DialogoConfirmacion @ref=dialogo Mensaje="Esta seguro que desea elimar este Evento Deportivo?" OnConfirmado="() => EliminarEventoDeportivo()"/>
+    <ModalError @ref=error/>
 
-<ModalError @ref=error/>
+</AuthGuard>
 @code {
     List<EventoDeportivo> _lista = new List<EventoDeportivo>();
     List<EventoDeportivo> _listaCupos = new List<EventoDeportivo>();
     List<Persona> _listaPersonas = new List<Persona>();
-
-    Dictionary<int, ModalListaAsistentes> modales = new();
+    DialogoConfirmacion dialogo = new();
+    ModalListaAsistentes modalListaAsistentes = new();
+    ModalEventoDeportivo alta = new();
+    ModalEventoDeportivo modificar = new();
     ModalError error = new();
     EventoDeportivo? _EventoAOperar = null;
-
-
-    void MostrarModal(int id)
-    {
-        if (modales.TryGetValue(id, out var modal))
-        {
-            modal.Mostrar();
-        }
-    }
     
     protected override void OnInitialized()
     {
         _lista = ListarEventoDeportivoUseCase.Ejecutar();
         _listaCupos = ListarEventosConCupoDisponibleUseCase.Ejecutar();
-        
     }
-    ModalListaAsistentes modal = new();
-    void irALista() {
-        modal.Mostrar();
+
+    private void ActualizarLista()
+    {
+        _lista = ListarEventoDeportivoUseCase.Ejecutar();
+        StateHasChanged();
     }
-    ModalEventoDeportivo alta = new();
-    private void NuevoEventoDeportivo() {
+    
+    // Alta
+    private void NuevoEventoDeportivo() 
+    {
         alta.Mostrar();
     }
-    DialogoConfirmacion dialogo = new();
+    
+    private void AgregarEventoDeportivo()
+    {
+        try
+        {
+            altaEventoDeportivoUseCase.Ejecutar(alta._eventoDeportivo!, sesion.Usuario.Permisos);
+        }
+        catch(Exception e)
+        {
+            error.Mostrar(e.Message);
+        }
+        finally
+        {
+            ActualizarLista();
+        }
+    }
+
+    private void Modal(int id, String nombre)
+    {
+        modalListaAsistentes.Mostrar(id, nombre);
+    }
+    
+    // Modificación
+    private void ModalModificacion(EventoDeportivo e)
+    {
+        _EventoAOperar = e;
+        modificar.Mostrar(_EventoAOperar);
+    }
+
+    private void ModificarEventoDeportivo()
+    {
+        try
+        {
+            _EventoAOperar = modificar._eventoDeportivo;
+            modificarEventoDeportivoUseCase.Ejecutar(_EventoAOperar!, sesion.Usuario.Permisos);
+        }
+        catch(Exception e)
+        {
+            error.Mostrar(e.Message);
+        }
+        finally
+        {
+            ActualizarLista();
+        }
+    }
+
+    // Baja
     private void ConfirmarEliminacion(EventoDeportivo e)
     {
         _EventoAOperar = e;
         dialogo.Mostrar();
     }
-    private void ConfirmarModificacion(EventoDeportivo e)
+
+    private void EliminarEventoDeportivo()
     {
-        
-    }
-    private void AgregarEventoDeportivo(){
-        try
-        {
-            altaEventoDeportivoUseCase.Ejecutar(alta.eventoDeportivo!, sesion.Usuario.Permisos);
-            _lista = ListarEventoDeportivoUseCase.Ejecutar();
-            StateHasChanged();
-        }
-        catch(Exception e)
-        {
-            error.Mostrar(e.Message);
-        }
-    }
-    private void EliminarEventoDeportivo(){
         try
         {
             BajaEventoDeportivoUseCase.Ejecutar(_EventoAOperar!.Id, sesion.Usuario.Permisos);
-            _lista = ListarEventoDeportivoUseCase.Ejecutar();
-            StateHasChanged();
         }
         catch(Exception e)
         {
             error.Mostrar(e.Message);
         }
+        finally
+        {
+            ActualizarLista();
+        }
     }
+
 }

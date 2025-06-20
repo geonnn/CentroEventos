@@ -2,17 +2,21 @@ namespace CentroEventos.Repositorios;
 
 using CentroEventos.Aplicacion.Entidades;
 using CentroEventos.Aplicacion.Interfaces;
-
+using Microsoft.EntityFrameworkCore;
 
 public class RepositorioUsuario : IRepositorioUsuario
 {
-
     public RepositorioUsuario() { }
 
-    public void AltaUsuario(Usuario usuario)
+    public void AltaUsuario(Usuario usuario, bool primerUsuario = false)
     {
         using var context = new CentroEventosContext();
         context.Add(usuario);
+        if (primerUsuario)
+        {
+            var todosLosPermisos = Enum.GetValues<Permiso>().ToList();
+            usuario.AgregarPermiso(todosLosPermisos);
+        }
         context.SaveChanges();
     }
 
@@ -27,7 +31,8 @@ public class RepositorioUsuario : IRepositorioUsuario
     public void ModificarUsuario(Usuario nuevoUsuario)
     {
         using var context = new CentroEventosContext();
-        context.Usuarios.Update(nuevoUsuario);
+        Usuario u = context.Usuarios.Find(nuevoUsuario.Id)!;
+        u.Actualizar(nuevoUsuario);
         context.SaveChanges();
     }
 
@@ -59,5 +64,11 @@ public class RepositorioUsuario : IRepositorioUsuario
     {
         usuario.AgregarPermiso(permisosOtorgados);
         ModificarUsuario(usuario);
+    }
+
+    public bool EsPrimerUsuario()
+    {
+        using var context = new CentroEventosContext();
+        return !context.Usuarios.Any();
     }
 }

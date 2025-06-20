@@ -7,7 +7,7 @@
     <div class="dialogo-contenedor">
         <div class="dialogo-contenido">
                 
-            <h3>Alta de Reserva</h3>
+            <h3>@Title de Reserva</h3>
             @if (errorEncontrado)
             {
                 <div class="error">
@@ -17,26 +17,28 @@
             <form @onsubmit="OnSubmitHandler">
                 <div class="formulario-campos">
                     <label>PersonaId:</label>
-                    <input class="form-control" type="number" @bind="PersonaId" />
+                    <input required class="form-control" type="number" @bind="PersonaId" />
                 </div>
                 <div class="formulario-campos">
                     <label>EventoDeportivoId:</label>
-                    <input class="form-control" type="number" @bind="EventoDeportivoId" />
+                    <input required class="form-control" type="number" @bind="EventoDeportivoId" />
                 </div>
                 <div class="formulario-campos">
                     <label>Fecha Alta Reserva:</label>
-                    <input class="form-control" type="date" @bind="fechaAltaReserva" />
+                    <input required class="form-control" type="date" @bind="fechaAltaReserva" />
                 </div>
                 <div class="formulario-campos">
                     <label>Estado:</label>
-                    <select class="form-control" @bind="Estado">
+                    <select required class="form-control" @bind="Estado">
                         <option value="Pendiente">Pendiente</option>
                         <option value="Presente">Presente</option>
                         <option value="Ausente">Ausente</option>
                     </select>
                 </div>
-                <button type="submit" class="btn btn-success">Guardar</button>
-                <button type="button" class="btn btn-secondary" @onclick="Cerrar">Cerrar</button>
+                <div class="flex flex-row-center">
+                    <button type="submit" class="btn btn-success">Guardar</button>
+                    <button type="button" class="btn btn-secondary" @onclick="Cerrar">Cerrar</button>
+                </div>
             </form>
         </div>
     </div>
@@ -50,17 +52,47 @@
     private EstadoAsistencia Estado = EstadoAsistencia.Pendiente;
     string mensajeError = "";
     bool errorEncontrado = false;
+    public string Title = "";
 
 
     [Parameter]
     public EventCallback OnConfirmado { get; set; }
     [Parameter] 
-    public Reserva? r { get; set; }
+    public Reserva? _reserva { get; set; }
 
     public void Mostrar()
     {
+        Title = "Alta";
         visible = true;
         StateHasChanged();
+    }
+
+    public void Mostrar(Reserva r)
+    {
+        _reserva = r;
+        Title = "Modificación";
+
+        // Recuperar campos para que aparezcan en el form.
+        PersonaId = r.PersonaId;
+        EventoDeportivoId = r.EventoDeportivoId;
+        fechaAltaReserva = r.FechaAltaReserva;
+        Estado = r.Estado;
+
+        visible = true;
+        StateHasChanged();
+    }
+    private void OnSubmitHandler()
+    {
+        if (Title.Equals("Modificación"))
+        {
+            Reserva r = new(PersonaId, EventoDeportivoId, fechaAltaReserva, Estado);
+            _reserva!.Actualizar(r);
+        }
+        else
+            _reserva = new(PersonaId, EventoDeportivoId, fechaAltaReserva, Estado);
+        OnConfirmado.InvokeAsync();
+        Cerrar();
+        LimpiarCampos();
     }
 
     void Cerrar()
@@ -69,10 +101,13 @@
         StateHasChanged();
     }
 
-    private void OnSubmitHandler()
+    private void LimpiarCampos()
     {
-        r = new(PersonaId, EventoDeportivoId, fechaAltaReserva, Estado);
-        OnConfirmado.InvokeAsync();
-        Cerrar();
+        PersonaId = 0;
+        EventoDeportivoId = 0;
+        fechaAltaReserva = DateTime.Now;
+        Estado = EstadoAsistencia.Pendiente;
+        mensajeError = "";
+        errorEncontrado = false;
     }
 }

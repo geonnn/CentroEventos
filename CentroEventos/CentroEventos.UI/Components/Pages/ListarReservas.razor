@@ -4,47 +4,57 @@
 @inject Sesion sesion
 @inject BajaReservaUseCase ReservaBajaUseCase
 @inject AltaReservaUseCase ReservaAltaUseCase
+@inject ModificarReservaUseCase ModificarReservaUseCase
 
-<h3>Reservas</h3>
+<AuthGuard>
 
-@if (sesion.Usuario.PoseeElPermiso(Permiso.ReservaAlta)){
-    <button @onclick="NuevaReserva">Agregar Reserva</button>
-    <ModalReserva @ref=alta OnConfirmado="() => AgregarReserva()" />
-}
-<table>
-    <tr>
-        <th>ID</th>
-        <th>Persona ID</th>
-        @* <th>Nombre Persona</th> *@
-        <th>Evento ID</th>
-        <th>Estado</th>
-        @if (sesion.Usuario.PoseeElPermiso(Permiso.ReservaModificacion) || sesion.Usuario.PoseeElPermiso(Permiso.ReservaBaja)){
-            <th>Acción</th>
-        }   
-    </tr>
-    @foreach (var reserva in _lista)
-    {
-    <tr>
-        <td>@reserva.Id</td>
-        <td>@reserva.PersonaId</td>
-        @* <td>@reserva.PersonaId</td> *@
-        <td>@reserva.EventoDeportivoId</td>
-        <td>@reserva.Estado</td>
-        @if (sesion.Usuario.PoseeElPermiso(Permiso.ReservaModificacion)){
-        <td>
-            <button class="btn btn-primary modificacion-reserva" @onclick="()=>ConfirmarModificacion(reserva)">Modificar</button>
-        </td>
-        }
-        @if (sesion.Usuario.PoseeElPermiso(Permiso.ReservaBaja)){
-            <td>
-                <button class="btn btn-danger baja-reserva" @onclick="()=>ConfirmarEliminacion(reserva)">Eliminar</button>
-                <DialogoConfirmacion @ref=dialogo Mensaje="¿Está seguro que desea eliminar esta reserva?" OnConfirmado="() => EliminarReserva()" />
-            </td>
-        }
-    </tr>
+    <PageTitle>Listado de reservas</PageTitle>
+
+    <h3>Reservas</h3>
+
+    @if (sesion.Usuario.PoseeElPermiso(Permiso.ReservaAlta)){
+        <div class="flex " >
+            <button class="btn btn-success" @onclick="NuevaReserva">Agregar reserva</button>
+            <ModalReserva @ref=alta OnConfirmado="() => AgregarReserva()" />
+        </div>
     }
-</table>
-<ModalError @ref=error/>
+    <table>
+        <tr>
+            <th>ID</th>
+            <th>Persona ID</th>
+            @* <th>Nombre Persona</th> *@
+            <th>Evento ID</th>
+            <th>Estado</th>
+            @if (sesion.Usuario.PoseeElPermiso(Permiso.ReservaModificacion) || sesion.Usuario.PoseeElPermiso(Permiso.ReservaBaja)){
+                <th>Acción</th>
+            }   
+        </tr>
+        @foreach (var reserva in _lista)
+        {
+        <tr>
+            <td>@reserva.Id</td>
+            <td>@reserva.PersonaId</td>
+            <td>@reserva.EventoDeportivoId</td>
+            <td>@reserva.Estado</td>
+            @if (sesion.Usuario.PoseeElPermiso(Permiso.ReservaModificacion) || sesion.Usuario.PoseeElPermiso(Permiso.ReservaBaja)){
+                <td class="flex flex-row-center">
+                @if (sesion.Usuario.PoseeElPermiso(Permiso.ReservaModificacion)){
+                    <button class="btn btn-primary modificacion-reserva" @onclick="()=>ConfirmarModificacion(reserva)">Modificar</button>
+                }
+                @if (sesion.Usuario.PoseeElPermiso(Permiso.ReservaBaja)){
+                        <button class="btn btn-danger baja-reserva" @onclick="()=>ConfirmarEliminacion(reserva)">Eliminar</button>
+                }
+                </td>
+            }
+        </tr>
+        }
+    </table>
+    
+    <ModalReserva @ref=modificar OnConfirmado="() => ModificarReserva()" />
+    <DialogoConfirmacion @ref=dialogo Mensaje="¿Está seguro que desea eliminar esta reserva?" OnConfirmado="() => EliminarReserva()" />
+    <ModalError @ref=error/>
+
+</AuthGuard>
 
 
 @code {
@@ -54,6 +64,7 @@
         _lista = ListarReservaUseCase.Ejecutar();
     }
     ModalReserva alta = new();
+    ModalReserva modificar = new();
     DialogoConfirmacion dialogo = new();
     ModalError error = new();
     Reserva? _ReservaAOperar = null;
@@ -61,15 +72,41 @@
     private void NuevaReserva() {
         alta.Mostrar();
     }
-
+    private void AgregarReserva()
+    {   
+        try
+        {
+            ReservaAltaUseCase.Ejecutar(alta._reserva!, sesion.Usuario.Permisos);
+            _lista = ListarReservaUseCase.Ejecutar();
+            StateHasChanged();
+        }
+        catch(Exception e)
+        {
+            error.Mostrar(e.Message);
+        }
+    }
+    private void ConfirmarModificacion(Reserva r)
+    {
+        _ReservaAOperar = r;
+        modificar.Mostrar(_ReservaAOperar);
+    }
+    private void ModificarReserva()
+    {
+        try
+        {
+            ModificarReservaUseCase.Ejecutar(_ReservaAOperar!, sesion.Usuario.Permisos);
+            _lista = ListarReservaUseCase.Ejecutar();
+            StateHasChanged();
+        }
+        catch(Exception e)
+        {
+            error.Mostrar(e.Message);
+        }
+    }
     private void ConfirmarEliminacion(Reserva r)
     {
         _ReservaAOperar = r;
         dialogo.Mostrar();
-    }
-    private void ConfirmarModificacion(Reserva r)
-    {
-        
     }
     private void EliminarReserva()
     {
@@ -84,17 +121,5 @@
             error.Mostrar(e.Message);
         }
     }
-    private void AgregarReserva()
-    {   
-        try
-        {
-            ReservaAltaUseCase.Ejecutar(alta.r!, sesion.Usuario.Permisos);
-            _lista = ListarReservaUseCase.Ejecutar();
-            StateHasChanged();
-        }
-        catch(Exception e)
-        {
-            error.Mostrar(e.Message);
-        }
-    }
+    
 }

@@ -9,8 +9,9 @@ z-index: 1;
 display: flex;
 align-items: center;
 justify-content: center;
+padding: 2rem;
 }
-.dialogo-contenido{
+.dialogo-error{
 padding: 20px;
 background-color: white;
 color: rgb(171, 30, 30);

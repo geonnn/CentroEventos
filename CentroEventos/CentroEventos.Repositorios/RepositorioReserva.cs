@@ -1,7 +1,6 @@
 ﻿namespace CentroEventos.Repositorios;
 
 using CentroEventos.Aplicacion.Entidades;
-using CentroEventos.Aplicacion.Excepciones;
 using CentroEventos.Aplicacion.Interfaces;
 
 public class RepositorioReserva : IRepositorioReserva
@@ -25,37 +24,44 @@ public class RepositorioReserva : IRepositorioReserva
 
     public void ModificarReserva(Reserva nuevaReserva)
     {
-        List<Reserva> reservas = ListarReservas();
+        using var context = new CentroEventosContext();
+        context.Reservas.Update(nuevaReserva);
+        context.SaveChanges();
     }
 
     public List<Reserva> ListarReservas()
     {
-        var lista = new List<Reserva>();
-
-        using (var context = new CentroEventosContext())
-        {
-            foreach (var r in context.Reservas)
-                lista.Add(r);
-        }
-        return lista;
+        using var context = new CentroEventosContext();
+        return context.Reservas.ToList();
     }
 
     public bool PersonaTieneReserva(int id)
     {
-    // => ListarReservas().Exists(r => r.PersonaId == id);
         using var context = new CentroEventosContext();
         return context.Reservas.Any(r => r.PersonaId == id);
     }
 
     public bool EventoTieneReserva(int id)
-        => ListarReservas().Exists(r => r.EventoDeportivoId == id);
+    {
+        using var context = new CentroEventosContext();
+        return context.Reservas.Any(r => r.EventoDeportivoId == id);
+    }
 
     public bool PersonaReservoEvento(int pId, int eId)
-        => ListarReservas().Exists(r => r.PersonaId == pId && r.EventoDeportivoId == eId);
+    {
+        using var context = new CentroEventosContext();
+        return context.Reservas.Any(r => r.PersonaId == pId && r.EventoDeportivoId == eId);
+    }
 
     public bool EventoTieneCupo(int eId, int cupoMax)
-        => ListarReservas().FindAll(e => e.Id == eId).Count < cupoMax;
+    {
+        using var context = new CentroEventosContext();
+        return context.Reservas.Where(r => r.EventoDeportivoId == eId).Count() < cupoMax;
+    }
 
     public bool ReservaExiste(int id)
-        => ListarReservas().Exists(r => r.Id == id);
+    {
+        using var context = new CentroEventosContext();
+        return context.Reservas.Any(r => r.Id == id);
+    }
 }

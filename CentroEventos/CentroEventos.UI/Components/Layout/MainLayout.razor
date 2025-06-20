@@ -9,16 +9,6 @@
     </div>
 
     <main>
-            @if (sesion.EstaIniciado)
-            {
-                <div class="top-row px-4">
-                    <div class="flex">
-                        <p>@sesion.Usuario.Nombre @sesion.Usuario.Apellido</p>
-                        <a href="/usuario/@sesion.Usuario.Id">Mi perfil</a>
-                    </div>
-                </div>
-            }
-
         <article class="content px-4">
             @Body
         </article>

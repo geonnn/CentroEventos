@@ -10,7 +10,7 @@
 
 <h1> Bienvenido! </h1>
 
-<form class="formulario">
+<form class="formulario" @onsubmit="OnSubmitRegister">
     <label for="nombre">Nombre:</label>
     <input required id="nombre" type="nombre" @bind="nombre" />
 
@@ -23,9 +23,13 @@
     <label for="password">Contraseña:</label>
     <input required id="password" type="password" @bind="password" />
 
-    <button type="button" @onclick="Registro">Registrarse</button>
+    <label for="showpass">Mostrar constraseña
+        <input id="showpass" type="checkbox" @onclick="TogglePw" />
+    </label>
 
-    <p>Ya tenés un usuario? <a href="/">login</a></p>
+    <button type="submit" class="btn btn-primary">Registrarse</button>
+
+    <p>¿Ya tenés un usuario? <a href="/">Login</a></p>
 
 </form>
 
@@ -35,13 +39,30 @@
     private string apellido = "";
     private string email = "";
     private string password = "";
+    private string mostrarPassword = "password";
+
+
+    private Task OnSubmitRegister()
+    {
+        Registro();
+        return Task.CompletedTask;
+    }
 
     protected void Registro()
     {
+
         Usuario usuario = new Usuario(nombre, apellido, email, password);
         registroUseCase.Ejecutar(usuario);
         loginUseCase.Ejecutar(email, password);
         Notifier.Notify();
         Navigation.NavigateTo("/home");
+    }
+
+    private void TogglePw()
+    {
+        if (mostrarPassword == "password")
+            mostrarPassword = "text";
+        else
+            mostrarPassword = "password";
     }
 }

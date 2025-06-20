@@ -4,12 +4,19 @@
 @inject ListarPersonaUseCase listarPersonaUseCase
 @inject AltaPersonaUseCase altaPersonaUseCase
 @inject BajaPersonaUseCase bajaPersonaUseCase
+@inject ModificarPersonaUseCase modificarPersonaUseCase
 @inject NavigationManager Nav
 
+<AuthGuard>
+
+    <PageTitle>Listado de personas</PageTitle>
+    
     <h3>Personas</h3>
 
     @if (sesion.Usuario.PoseeElPermiso(Permiso.PersonaAlta)){
-        <button @onclick="NuevaPersona">Agregar Persona</button>
+        <div class="flex ">
+            <button class="btn btn-success" @onclick="Modal">Agregar persona</button>
+        </div>
         <ModalPersona @ref=alta OnConfirmado="() => AgregarPersona()" />
     }
     <table>
@@ -17,7 +24,9 @@
             <th>ID</th>
             <th>Nombre</th>
             <th>Apellido</th>
+            <th>DNI</th>
             <th>Email</th>
+            <th>Teléfono</th>
             @if (sesion.Usuario.PoseeElPermiso(Permiso.UsuarioModificacion) || sesion.Usuario.PoseeElPermiso(Permiso.UsuarioBaja)){
                 <th>Acción</th>
             }   
@@ -28,78 +37,107 @@
             <td>@persona.Id</td>
             <td>@persona.Nombre</td>
             <td>@persona.Apellido</td>
+            <td>@persona.Dni</td>
             <td>@persona.Email</td>
+            <td>@persona.Telefono</td>
+            <td class="flex flex-row-center">
             @if (sesion.Usuario.PoseeElPermiso(Permiso.PersonaModificacion)){
-                <td>
-                    <button class="btn btn-primary modificacion-persona" @onclick="()=>ConfirmarModificacion(persona)">Modificar</button>
-                </td>
+                    <button class="btn btn-primary modificacion-persona" @onclick="()=>Modal(persona)">Modificar</button>
             }
-            <td>
-                <button class="btn btn-danger baja-persona" @onclick="() => ConfirmarEliminacion(persona)">Eliminar</button>
-                <DialogoConfirmacion @ref=dialogo Mensaje="¿Está seguro que desea eliminar esta persona?" OnConfirmado="() => EliminarPersona()" />
+                <button class="btn btn-danger baja-persona" @onclick="() => Confirmacion(persona)">Eliminar</button>
             </td>
         
         </tr>
         }
     </table>
 
+    <ModalPersona @ref=modificar OnConfirmado="() => ModificarPersona()" />
+    <DialogoConfirmacion @ref=dialogo Mensaje="¿Está seguro que desea eliminar esta persona?" OnConfirmado="() => EliminarPersona()" />
     <ModalError @ref=error/>
     
+</AuthGuard>
 @code {
 
     List<Persona> _lista = new List<Persona>();
     DialogoConfirmacion dialogo = new();
+    
     ModalPersona alta = new();
+    ModalPersona modificar = new();
     Persona? _PersonaAOperar = null;
-
     ModalError error = new();
+
     protected override void OnInitialized()
     {
         _lista = listarPersonaUseCase.Ejecutar();
     }
 
-    private void NuevaPersona() {
-        alta.Mostrar();
+    private void ActualizarLista(){
         _lista = listarPersonaUseCase.Ejecutar();
         StateHasChanged();
     }
 
-    private void ConfirmarEliminacion(Persona p)
-    {
-        _PersonaAOperar = p;
-        dialogo.Mostrar();
+    // Alta
+    private void Modal() {
+        alta.Mostrar();
     }
-    
-    private void ConfirmarModificacion(Persona p)
-    {
-        
-    }
-    private void EliminarPersona()
-    {
-        try
-        {
-            bajaPersonaUseCase.Ejecutar(_PersonaAOperar!.Id, sesion.Usuario.Permisos);
-            _lista = listarPersonaUseCase.Ejecutar();
-            StateHasChanged();
-        }
-        catch(Exception e)
-        {
-            error.Mostrar(e.Message);
-        }
-    }
+
     private void AgregarPersona()
     {
         try
         {
-            altaPersonaUseCase.Ejecutar(alta.p!, sesion.Usuario.Permisos);
-            _lista = listarPersonaUseCase.Ejecutar();
-            StateHasChanged();
+            altaPersonaUseCase.Ejecutar(alta._persona!, sesion.Usuario.Permisos);
         }
         catch (Exception e)
         {
             error.Mostrar(e.Message);
         }
-        
+        finally
+        {
+            ActualizarLista();
+        }
+    }
+
+    // Modificación
+    private void Modal(Persona p)
+    {
+        _PersonaAOperar = p;
+        modificar.Mostrar(_PersonaAOperar);
+    }
+    
+    private void ModificarPersona()
+    {
+        try
+        {
+            modificarPersonaUseCase.Ejecutar(modificar._persona!, sesion.Usuario.Permisos);
+        }
+        catch (Exception e)
+        {
+            error.Mostrar(e.Message);
+        }
+        finally
+        {
+            ActualizarLista();
+        }
+    }
+
+    // Baja
+    private void Confirmacion(Persona p)
+    {
+        _PersonaAOperar = p;
+        dialogo.Mostrar();
+    }
+
+    private void EliminarPersona()
+    {
+        try
+        {
+            bajaPersonaUseCase.Ejecutar(_PersonaAOperar!.Id, sesion.Usuario.Permisos);
+            ActualizarLista();
+        }
+        catch(Exception e)
+        {
+            error.Mostrar(e.Message);
+        }
     }
     
 }

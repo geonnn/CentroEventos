@@ -22,15 +22,18 @@ public class Usuario
         Apellido = ap;
         Email = email;
         Permisos = new();
-
-        using (SHA256 sha256 = SHA256.Create())
-        {
-            byte[] bytes = Encoding.UTF8.GetBytes(pw);
-            byte[] hash = sha256.ComputeHash(bytes);
-            pw = Convert.ToHexString(hash);
-        }
-        Password = pw;
+        Password = Hash(pw);
     }
+
+    public void Actualizar(Usuario u)
+    {
+        this.Nombre = u.Nombre;
+        this.Apellido = u.Apellido;
+        this.Email = u.Email;
+        this.Permisos = u.Permisos;
+        this.Password = u.Password;
+    }
+
     public void AgregarPermiso(List<Permiso> permisos)
     {
         Permisos = permisos;
@@ -38,5 +41,14 @@ public class Usuario
     public bool PoseeElPermiso(Permiso permisoRequerido)
     {
         return Permisos.Contains(permisoRequerido);
+    }
+
+    private static string Hash(string pass)
+    {
+        using SHA256 sha256 = SHA256.Create();
+        byte[] bytes = Encoding.UTF8.GetBytes(pass);
+        byte[] hash = sha256.ComputeHash(bytes);
+        pass = Convert.ToHexString(hash);
+        return pass;
     }
 }

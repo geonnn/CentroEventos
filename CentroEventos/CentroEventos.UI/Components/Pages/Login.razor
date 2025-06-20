@@ -15,19 +15,20 @@ else {
 
 <h1> Bienvenido! </h1>
 
-<form class="formulario">
+<form class="formulario" @onsubmit="OnSubmitLogin">
     <label for="email"></label>
     <input required placeholder="Email" id="email" type="email" @bind="email" />
 
     <label for="password"></label>
     <input required placeholder="Contraseña" id="password" type="@mostrarPassword" @bind="password"/>
 
-    <label for="showpass">Mostrar constraseña</label>
-    <input id="showpass" type="checkbox" @onclick="TogglePw"/>
+    <label for="showpass">Mostrar constraseña
+        <input id="showpass" type="checkbox" @onclick="TogglePw" />
+    </label>
 
-    <button type="button" @onclick="()=>Logear()">Ingresar</button>
+    <button class="btn btn-primary" type="submit">Ingresar</button>
 
-    <p>Aún no tenés usuario? <a href="/register">Registrarse</a></p>
+    <p>¿Aún no tenés usuario? <a href="/register">Registrarse</a></p>
     
 </form>
 
@@ -45,14 +46,17 @@ else {
             mostrarPassword = "password";
     }
 
+    private Task OnSubmitLogin()
+    {
+        Logear();
+        return Task.CompletedTask;
+    }
+
     private void Logear()
     {
         bool funciono = LoginUseCase.Ejecutar(email, password);
-        if (funciono)
-        {
-            Notifier.Notify();
-            Navegacion.NavigateTo("/home");
-        }
+        Notifier.Notify();
+        Navegacion.NavigateTo("/home");
     }
     
     protected override void OnAfterRender(bool firstRender)

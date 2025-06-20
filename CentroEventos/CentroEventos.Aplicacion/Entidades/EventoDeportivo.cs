@@ -9,7 +9,7 @@ public class EventoDeportivo
     public double DuracionHoras {get; private set; }
     public int CupoMaximo {get; private set; }
     public int ResponsableId {get; private set;}
-    public List<Reserva>? Reservas { get; private set; }
+    public List<Reserva>? Reservas { get; private set; }= new();
 
     // Constructor vacío para Entity Framework
     #nullable disable
@@ -24,6 +24,16 @@ public class EventoDeportivo
         DuracionHoras = duracion;
         CupoMaximo = cupoMax;
         ResponsableId = respId;
+    }
+
+    public void Actualizar(EventoDeportivo e)
+    {
+        this.Nombre = e.Nombre;
+        this.Descripcion = e.Descripcion;
+        this.FechaHoraInicio = e.FechaHoraInicio;
+        this.DuracionHoras = e.DuracionHoras;
+        this.CupoMaximo = e.CupoMaximo;
+        this.ResponsableId = e.ResponsableId;
     }
 
     public override string ToString()

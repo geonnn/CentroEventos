@@ -3,7 +3,7 @@ using Entidades;
 
 public interface IRepositorioUsuario
 {
-    void AltaUsuario(Usuario usuario);
+    void AltaUsuario(Usuario usuario, bool primerUsuario = false);
     void BajaUsuario(int id);
     void ModificarUsuario(Usuario usuario);
     List<Usuario> ListarUsuarios();
@@ -11,4 +11,5 @@ public interface IRepositorioUsuario
     bool UsuarioExiste(string email);
     public Usuario ConsultaUsuario(string email);
     void OtorgarPermiso(Usuario usuario, List<Permiso> permisosOtorgados);
+    bool EsPrimerUsuario();
 }

@@ -76,3 +76,44 @@ h1:focus {
 .flex {
     display: flex;
 }
+
+.flex-row-center {
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 2rem;
+}
+
+table {
+    border-collapse: collapse;
+    width: 100%;
+    border: 1px solid #8a7777;
+}
+
+th, td {
+    border: 1px solid #8a7777;
+    padding: 0.5rem;
+}
+
+th {
+    background-color: #f5f5f5;
+}
+
+.dialogo-contenedor {
+position: fixed;
+top:0;
+left: 0;
+right: 0;
+bottom:0;
+background-color: rgba(0, 0, 0, 0.5);
+z-index: 1;
+display: flex;
+align-items: center;
+justify-content: center;
+padding: 2rem;
+border-radius: 4px;
+}
+.dialogo-contenido{
+padding: 20px;
+background-color: white;
+}

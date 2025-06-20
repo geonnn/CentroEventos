@@ -63,11 +63,11 @@ public class PersonaValidador(IRepositorioPersona repoP, IRepositorioEventoDepor
         StringBuilder mensaje = new StringBuilder("");
         var lista = repoP.ListarPersonas().Where(per => per.Id != p.Id);
 
-        if (lista.FirstOrDefault(per => per.Email == p.Email) != null)
+        if (lista.Any(per => per.Email == p.Email))
             mensaje.Append($"El Email {p.Email} ya existe.");
 
-        if (lista.FirstOrDefault(per => per.Dni == p.Dni) != null)
-            mensaje.Append($"El Email {p.Dni} ya existe.");
+        if (lista.Any(per => per.Dni == p.Dni))
+            mensaje.Append($"El DNI {p.Dni} ya existe.");
 
         mensajeError = mensaje.ToString();
         return mensajeError == "";

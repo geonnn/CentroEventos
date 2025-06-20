@@ -23,30 +23,29 @@
                 </tr>
                 }
             </table>
-    <button class="btn btn-primary" @onclick="Cerrar">Cerrar</button>
-
+            <button class="btn btn-primary" @onclick="Cerrar">Cerrar</button>
         </div>
     </div>
 
 }
 @code{
     List<Persona> _lista = new List<Persona>();
-    protected override void OnInitialized()
-    {
-        _lista = ListarAsistenciaAEventoUseCase.Ejecutar(ID);
-    }
     private bool visible = false;
     [Parameter]
     public int ID {get;set;}
     [Parameter]
     public string nombre {get;set;} = "";
-    public void Mostrar()
+    public void Mostrar(int id, String nombreE)
     {
+        ID = id;
+        nombre = nombreE;
+        _lista = ListarAsistenciaAEventoUseCase.Ejecutar(id);
         visible=true;  
         StateHasChanged();
     }
     void Cerrar()
     {
-        visible=false;  
+        visible=false; 
+        StateHasChanged();
     }
 }

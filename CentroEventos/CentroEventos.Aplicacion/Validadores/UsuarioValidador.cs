@@ -6,6 +6,9 @@ using Interfaces;
 
 public class UsuarioValidador(IRepositorioUsuario repoU)
 {
+
+    private string hashBlanco = "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855";
+
     public bool ValidarConstruccion(Usuario u, out string mensajeError)
     {
         StringBuilder mensaje = new StringBuilder("");
@@ -24,8 +27,7 @@ public class UsuarioValidador(IRepositorioUsuario repoU)
         {
             mensaje.Append("El email no puede estar vacío o ser null.\n");
         }
-
-        if (string.IsNullOrWhiteSpace(u.Password))
+        if (u.Password.Equals(hashBlanco))
         {
             mensaje.Append("La constraseña no puede estar vacía o ser null.\n");
         }
@@ -58,7 +60,7 @@ public class UsuarioValidador(IRepositorioUsuario repoU)
         StringBuilder mensaje = new StringBuilder("");
         var lista = repoU.ListarUsuarios().Where(us => us.Id != u.Id);
 
-        if (lista.FirstOrDefault(us => us.Email == u.Email) != null)
+        if (lista.Any(us => us.Email == u.Email))
             mensaje.Append($"El Email {u.Email} ya existe.");
 
         mensajeError = mensaje.ToString();

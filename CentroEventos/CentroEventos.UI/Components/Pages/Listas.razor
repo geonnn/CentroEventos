@@ -3,13 +3,17 @@
 @inject NavigationManager Nav
 @rendermode InteractiveServer
 
+<AuthGuard>
+
     <h3>Listar</h3>
-    <div>
+    <div class="flex flex-row-center">
         <button @onclick="Usuarios">Usuarios</button>
         <button @onclick="Personas">Personas</button>
         <button @onclick="Reservas">Reservas</button>
         <button @onclick="EventosDeportivos">Eventos Deportivos</button>
     </div>
+
+</AuthGuard>
 
 @code {
 

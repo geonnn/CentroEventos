@@ -1,9 +1,9 @@
 ﻿@inject Sesion sesion
 @inject NavigationManager Nav
 
-@if (sesion.EstaIniciado)
+@if (!sesion.EstaIniciado)
 {
-    <p>Redirigiendo al login...</p>
+    <p>Redirigiendo...</p>
 }
 else
 {
